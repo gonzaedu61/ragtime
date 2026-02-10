@@ -54,33 +54,21 @@ class Semantic_Chunker:
         chunks = self.load_structural_chunks()
         print('Chunks loaded ...')
 
-        # 2. Embed
-        texts = [c.text for c in chunks]
 
-        print('Starting embeddings ...')
-
-        embeddings = self.embedder.embed(texts)
-
-        print('Embedding created ...')
-        #print(embeddings)
-
-
-        # 3. Store in vector DB
+        # 2. Adjust JSON chunks
+        # IDs
         ids = [c.chunk_id for c in chunks]
-        metadata = [c.metadata for c in chunks]
-
         ids = [str(i) for i in ids]
-        embeddings = [e.detach().cpu().numpy() for e in embeddings]
 
-        # Fix metadata
+        # Metadata images: Remove empty image paths to avoid storing empty lists in vector DB
+        metadata = [c.metadata for c in chunks]
         for m in metadata:
             if "image_paths" in m and not m["image_paths"]:
                 del m["image_paths"]
 
-
+        # Metadata blocks: Remove spans and convert to JSON string to avoid storing complex nested structures in vector DB
         for m in metadata:
             if "blocks" in m:
-                # Remove spans
                 cleaned_blocks = []
                 for block in m["blocks"]:
                     cleaned_block = {
@@ -96,9 +84,18 @@ class Semantic_Chunker:
                 m["blocks"] = json.dumps(cleaned_blocks)
 
 
+        # 3. Create embeddings and convert to list of lists
+        print('Starting embeddings ...')
+        texts = [c.text for c in chunks]
+        embeddings = self.embedder.embed(texts)
+        embeddings = [e.detach().cpu().numpy() for e in embeddings]
+        print('Embedding created ...')
 
+
+        # 4. Store in vector DB
         self.vectordb.add(ids, embeddings, metadata)
 
 
+        # Return stored chunks 
         return len(chunks)
 

@@ -12,6 +12,7 @@ os.environ["DISABLE_TRANSFORMERS_AVX_CHECK"] = "1"
 embedder = HFEmbeddingBackend("C:/Models/multilingual-e5-large")
 print('Embedder created ...')
 
+
 # Initialize vector DB backend (Chroma or others)
 print('Initializing vector DB ...')
 vectordbName = "chroma"
@@ -24,11 +25,13 @@ vectordb = create_vectordb(
 )
 print('Vector DB Object created ...')
 
+
 # Initialize Semantic Chunker
 print('Creating Semantic_Chunker ...')
 json_path="./DATA/PDFs/chunks/auf_pos_vor103.pdf_chunks.json"
 semantic_chunker = Semantic_Chunker(json_path, embedder, vectordb, collection_name, persist_dir)
 print('Semantic_Chunker created ...')
+
 
 # Embed and store chunks
 print('About to embed and store chunks ...')

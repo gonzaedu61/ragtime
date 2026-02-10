@@ -1,0 +1,10 @@
+setup.cfg
+setup.py
+src/PDF_Chunker/PDF_Chunker.py
+src/PDF_Chunker/__init__.py
+src/PDF_Chunker/json_export.py
+src/PDF_Chunker/models.py
+src/PDF_Chunker.egg-info/PKG-INFO
+src/PDF_Chunker.egg-info/SOURCES.txt
+src/PDF_Chunker.egg-info/dependency_links.txt
+src/PDF_Chunker.egg-info/top_level.txt

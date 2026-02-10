@@ -1,0 +1,90 @@
+
+import json
+import sys
+import uuid
+from dataclasses import dataclass
+from typing import List, Dict, Any
+from .vectordb_factory import create_vectordb
+from .embedding_backends import HFEmbeddingBackend
+
+
+@dataclass
+class StructuralChunk:
+    chunk_id: str
+    text: str
+    metadata: Dict[str, Any]
+
+
+class Semantic_Chunker:
+    def __init__(self,
+                 json_path: str, 
+                 embedder: HFEmbeddingBackend, 
+                 vectordbName: str, 
+                 collection_name: str, 
+                 persist_dir: str):
+        self.json_path = json_path
+        self.embedder = embedder
+        self.vectordbName = vectordbName
+        self.collection_name = collection_name
+        self.persist_dir = persist_dir
+
+        # Initialize vector DB backend (Chroma or others)
+        print('Initializing vector DB ...')
+        self.vectordb = create_vectordb(
+            backend=self.vectordbName,
+            collection_name=self.collection_name,
+            persist_dir=self.persist_dir
+        )
+        print('Vector DB Object created ...')
+
+
+
+
+    def load_structural_chunks(self) -> List[StructuralChunk]:
+        with open(self.json_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        chunks = []
+        for item in data:
+            chunk_id = item.get("chunk_id") or str(uuid.uuid4())
+            text = item.get("text", "").strip()
+            metadata = {k: v for k, v in item.items() if k not in ("text", "chunk_id")}
+            chunks.append(
+                StructuralChunk(
+                    chunk_id=chunk_id,
+                    text=text,
+                    metadata=metadata
+                )
+            )
+
+        return chunks
+
+
+    def embed_and_store(self):
+
+        # 1. Load structural chunks
+        chunks = self.load_structural_chunks()
+        print('Chunks loaded ...')
+
+        # 2. Embed
+        texts = [c.text for c in chunks]
+
+        print('Starting embeddings ...')
+
+        embeddings = self.embedder.embed(texts)
+
+        print('Embedding created ...')
+        print(embeddings)
+
+
+        sys.exit()
+
+
+        # 3. Store in vector DB
+        ids = [c.chunk_id for c in chunks]
+        metadata = [c.metadata for c in chunks]
+        self.vectordb.add(ids, embeddings, metadata)
+
+
+        return len(chunks)
+

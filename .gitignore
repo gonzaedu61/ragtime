@@ -1,0 +1,9 @@
+.vscode/
+*.zip
+*.pyc
+DATA/
+*.log
+Lib/
+__pycache__/
+venv/
+.env

@@ -50,6 +50,13 @@ class ChromaBackend:
             metadatas=metadata
         )
 
+    def get(self):
+        return self.collection.get(
+            include=["documents", "embeddings", "metadatas"]
+        )
+
+
+
     def query(self, query_embedding: List[float], top_k: int):
         """
         Perform a semantic search in the vector DB.

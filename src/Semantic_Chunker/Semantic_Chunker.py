@@ -45,28 +45,17 @@ class Semantic_Chunker:
                 )
             )
 
-        return chunks
-
-
-    def embed_and_store(self):
-
-        # 1. Load structural chunks
-        chunks = self.load_structural_chunks()
-        print('Chunks loaded ...')
-
-
-        # 2. Adjust JSON chunks
-        # IDs
+        # Get chunk IDs
         ids = [c.chunk_id for c in chunks]
         ids = [str(i) for i in ids]
 
-        # Metadata images: Remove empty image paths to avoid storing empty lists in vector DB
+        # Adjust Metadata images: Remove empty image paths to avoid storing empty lists in vector DB
         metadata = [c.metadata for c in chunks]
         for m in metadata:
             if "image_paths" in m and not m["image_paths"]:
                 del m["image_paths"]
 
-        # Metadata blocks: Remove spans and convert to JSON string to avoid storing complex nested structures in vector DB
+        # Adjust Metadata blocks: Remove spans and convert to JSON string to avoid storing complex nested structures in vector DB
         for m in metadata:
             if "blocks" in m:
                 cleaned_blocks = []
@@ -83,19 +72,30 @@ class Semantic_Chunker:
                 # Convert list of dicts → JSON string
                 m["blocks"] = json.dumps(cleaned_blocks)
 
+        # Get texts for embedding
+        texts = [c.text for c in chunks]
+
+        return texts, ids, metadata
+
+
+    def embed_and_store(self):
+
+        # 1. Load structural chunks
+        texts, ids, metadata = self.load_structural_chunks()
+        print('Chunks loaded ...')
 
         # 3. Create embeddings and convert to list of lists
         print('Starting embeddings ...')
-        texts = [c.text for c in chunks]
         embeddings = self.embedder.embed(texts)
         embeddings = [e.detach().cpu().numpy() for e in embeddings]
         print('Embedding created ...')
 
 
         # 4. Store in vector DB
+        print('Storing in vector DB ...')
         self.vectordb.add(ids, embeddings, metadata)
-
+        print('Stored in vector DB')
 
         # Return stored chunks 
-        return len(chunks)
+        return len(ids)
 

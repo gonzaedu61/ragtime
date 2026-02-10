@@ -35,7 +35,7 @@ class HFEmbeddingBackend:
     def embed(self, texts: List[str]) -> List[List[float]]:
         return self.model.encode(
             texts,
-            show_progress_bar=False,
+            show_progress_bar=True,
             convert_to_numpy=False
         )
 

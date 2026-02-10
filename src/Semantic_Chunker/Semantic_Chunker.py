@@ -74,15 +74,41 @@ class Semantic_Chunker:
         embeddings = self.embedder.embed(texts)
 
         print('Embedding created ...')
-        print(embeddings)
-
-
-        sys.exit()
+        #print(embeddings)
 
 
         # 3. Store in vector DB
         ids = [c.chunk_id for c in chunks]
         metadata = [c.metadata for c in chunks]
+
+        ids = [str(i) for i in ids]
+        embeddings = [e.detach().cpu().numpy() for e in embeddings]
+
+        # Fix metadata
+        for m in metadata:
+            if "image_paths" in m and not m["image_paths"]:
+                del m["image_paths"]
+
+
+        for m in metadata:
+            if "blocks" in m:
+                # Remove spans
+                cleaned_blocks = []
+                for block in m["blocks"]:
+                    cleaned_block = {
+                        "kind": block.get("kind"),
+                        "text": block.get("text"),
+                        "page_num": block.get("page_num"),
+                        "heading_level": block.get("heading_level"),
+                        "is_process_step": block.get("is_process_step"),
+                    }
+                    cleaned_blocks.append(cleaned_block)
+
+                # Convert list of dicts → JSON string
+                m["blocks"] = json.dumps(cleaned_blocks)
+
+
+
         self.vectordb.add(ids, embeddings, metadata)
 
 

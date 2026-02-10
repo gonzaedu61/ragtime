@@ -8,3 +8,8 @@ src/PDF_Chunker.egg-info/PKG-INFO
 src/PDF_Chunker.egg-info/SOURCES.txt
 src/PDF_Chunker.egg-info/dependency_links.txt
 src/PDF_Chunker.egg-info/top_level.txt
+src/Semantic_Chunker/Semantic_Chunker.py
+src/Semantic_Chunker/__init__.py
+src/Semantic_Chunker/embedding_backends.py
+src/Semantic_Chunker/vectordb_backends.py
+src/Semantic_Chunker/vectordb_factory.py

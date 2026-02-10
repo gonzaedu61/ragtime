@@ -57,11 +57,9 @@ class ChromaBackend:
 
 
 
-    def query(self, query_embedding: List[float], top_k: int):
-        """
-        Perform a semantic search in the vector DB.
-        """
+    def query(self, query_embeddings, n_results=5):
         return self.collection.query(
-            query_embeddings=[query_embedding],
-            n_results=top_k
+            query_embeddings=query_embeddings,
+            n_results=n_results,
+            include=["documents", "metadatas", "distances"]
         )

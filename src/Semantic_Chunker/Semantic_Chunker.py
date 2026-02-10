@@ -52,7 +52,9 @@ class Semantic_Chunker:
             id_source = text if text else " ".join(image_paths)
             chunk_id = deterministic_id(id_source)
 
-            metadata = {k: v for k, v in item.items() if k not in ("text", "chunk_id")}
+            # Keep all metadata except text, and preserve original chunk_id
+            metadata = {k: v for k, v in item.items() if k != "text"}
+            metadata["original_chunk_id"] = item.get("chunk_id")
 
             chunks.append(
                 StructuralChunk(

@@ -4,7 +4,6 @@ import sys
 import uuid
 from dataclasses import dataclass
 from typing import List, Dict, Any
-from .vectordb_factory import create_vectordb
 from .embedding_backends import HFEmbeddingBackend
 
 
@@ -19,25 +18,14 @@ class Semantic_Chunker:
     def __init__(self,
                  json_path: str, 
                  embedder: HFEmbeddingBackend, 
-                 vectordbName: str, 
+                 vectordb, 
                  collection_name: str, 
                  persist_dir: str):
         self.json_path = json_path
         self.embedder = embedder
-        self.vectordbName = vectordbName
+        self.vectordb = vectordb
         self.collection_name = collection_name
         self.persist_dir = persist_dir
-
-        # Initialize vector DB backend (Chroma or others)
-        print('Initializing vector DB ...')
-        self.vectordb = create_vectordb(
-            backend=self.vectordbName,
-            collection_name=self.collection_name,
-            persist_dir=self.persist_dir
-        )
-        print('Vector DB Object created ...')
-
-
 
 
     def load_structural_chunks(self) -> List[StructuralChunk]:

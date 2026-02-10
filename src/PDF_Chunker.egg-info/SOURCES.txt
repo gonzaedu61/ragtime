@@ -11,5 +11,6 @@ src/PDF_Chunker.egg-info/top_level.txt
 src/Semantic_Chunker/Semantic_Chunker.py
 src/Semantic_Chunker/__init__.py
 src/Semantic_Chunker/embedding_backends.py
-src/Semantic_Chunker/vectordb_backends.py
-src/Semantic_Chunker/vectordb_factory.py
+src/VectorDB_Factory/VectorDB_Factory.py
+src/VectorDB_Factory/__init__.py
+src/VectorDB_Factory/vectordb_backends.py

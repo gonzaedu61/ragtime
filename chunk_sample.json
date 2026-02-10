@@ -1,0 +1,163 @@
+    {
+        "document_name": "auf_pos_vor103.pdf",
+        "chunk_id": 4,
+        "pages": [
+            5
+        ],
+        "heading_path": [
+            "2 Allgemeines"
+        ],
+        "text": "Für die Abwicklung eines Auftrages über Artikel werden in der Maske Artikelpositionen (Foldertab „Positionen“ im Auftrag) die entsprechenden Artikel geführt. In den Auftragspositionen ist nur das Eintragen von Artikeln (Materialart „Artikel“ im Materialstamm) zulässig. In diesem Workshop sind die Maske „Positionen“ und deren Funktionen beschrieben. Die Positionskalkulation und die Abwicklung von Aufträgen mit Hilfe von Kontrakt, Produktionsauftrag und Abrufen (KPA) sind in separaten Workshops beschrieben (auf_poskalk bzw. auf_kpa) .",
+        "token_count": 124,
+        "chunk_type": "text",
+        "image_paths": [],
+        "blocks": [
+            {
+                "kind": "paragraph",
+                "text": "Für die Abwicklung eines Auftrages über Artikel werden in der Maske Artikelpositionen (Foldertab „Positionen“ im Auftrag) die entsprechenden Artikel geführt.",
+                "page_num": 5,
+                "heading_level": null,
+                "is_process_step": false,
+                "spans": [
+                    {
+                        "text": "Für die Abwicklung eines Auftrages über Artikel werden in der Maske Artikelpositionen ",
+                        "font_size": 9.960000038146973,
+                        "bold": false,
+                        "bbox": [
+                            85.2239990234375,
+                            98.40618133544922,
+                            469.4609680175781,
+                            109.51158142089844
+                        ],
+                        "block_no": 3,
+                        "line_no": 0,
+                        "page_num": 5,
+                        "column_id": 0
+                    },
+                    {
+                        "text": "(Foldertab „Positionen“ im Auftrag) die entsprechenden Artikel geführt.  ",
+                        "font_size": 9.960000038146973,
+                        "bold": false,
+                        "bbox": [
+                            85.2239990234375,
+                            109.92620086669922,
+                            402.10888671875,
+                            121.03160095214844
+                        ],
+                        "block_no": 3,
+                        "line_no": 1,
+                        "page_num": 5,
+                        "column_id": 0
+                    }
+                ]
+            },
+            {
+                "kind": "paragraph",
+                "text": "In den Auftragspositionen ist nur das Eintragen von Artikeln (Materialart „Artikel“ im Materialstamm) zulässig.",
+                "page_num": 5,
+                "heading_level": null,
+                "is_process_step": false,
+                "spans": [
+                    {
+                        "text": "In den Auftragspositionen ist nur das Eintragen von Artikeln (Materialart „Artikel“ im ",
+                        "font_size": 9.960000038146973,
+                        "bold": false,
+                        "bbox": [
+                            85.2239990234375,
+                            127.44622039794922,
+                            454.91644287109375,
+                            138.55162048339844
+                        ],
+                        "block_no": 4,
+                        "line_no": 0,
+                        "page_num": 5,
+                        "column_id": 0
+                    },
+                    {
+                        "text": "Materialstamm) zulässig.  ",
+                        "font_size": 9.960000038146973,
+                        "bold": false,
+                        "bbox": [
+                            85.2239990234375,
+                            138.9661865234375,
+                            201.4188690185547,
+                            150.0715789794922
+                        ],
+                        "block_no": 4,
+                        "line_no": 1,
+                        "page_num": 5,
+                        "column_id": 0
+                    }
+                ]
+            },
+            {
+                "kind": "paragraph",
+                "text": "In diesem Workshop sind die Maske „Positionen“ und deren Funktionen beschrieben. Die Positionskalkulation und die Abwicklung von Aufträgen mit Hilfe von Kontrakt, Produktionsauftrag und Abrufen (KPA) sind in separaten Workshops beschrieben (auf_poskalk bzw. auf_kpa) .",
+                "page_num": 5,
+                "heading_level": null,
+                "is_process_step": false,
+                "spans": [
+                    {
+                        "text": "In diesem Workshop sind die Maske „Positionen“ und deren Funktionen beschrieben.       ",
+                        "font_size": 9.960000038146973,
+                        "bold": false,
+                        "bbox": [
+                            85.2239990234375,
+                            156.4862060546875,
+                            481.908935546875,
+                            167.5915985107422
+                        ],
+                        "block_no": 5,
+                        "line_no": 0,
+                        "page_num": 5,
+                        "column_id": 0
+                    },
+                    {
+                        "text": "Die Positionskalkulation und die Abwicklung von Aufträgen mit Hilfe von Kontrakt, ",
+                        "font_size": 9.960000038146973,
+                        "bold": false,
+                        "bbox": [
+                            85.2239990234375,
+                            167.88616943359375,
+                            447.8778076171875,
+                            178.99156188964844
+                        ],
+                        "block_no": 5,
+                        "line_no": 1,
+                        "page_num": 5,
+                        "column_id": 0
+                    },
+                    {
+                        "text": "Produktionsauftrag und Abrufen (KPA) sind in separaten Workshops beschrieben ",
+                        "font_size": 9.960000038146973,
+                        "bold": false,
+                        "bbox": [
+                            85.2239990234375,
+                            179.40618896484375,
+                            447.521484375,
+                            190.51158142089844
+                        ],
+                        "block_no": 5,
+                        "line_no": 2,
+                        "page_num": 5,
+                        "column_id": 0
+                    },
+                    {
+                        "text": "(auf_poskalk bzw. auf_kpa) .     ",
+                        "font_size": 9.960000038146973,
+                        "bold": false,
+                        "bbox": [
+                            85.2239990234375,
+                            190.92620849609375,
+                            223.73887634277344,
+                            202.03160095214844
+                        ],
+                        "block_no": 5,
+                        "line_no": 3,
+                        "page_num": 5,
+                        "column_id": 0
+                    }
+                ]
+            }
+        ]
+    }

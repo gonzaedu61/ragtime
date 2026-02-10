@@ -38,22 +38,11 @@ class Semantic_Chunker:
         with open(self.json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
-        # Extract chunks data
         chunks = []
         for item in data:
             text = item.get("text", "").strip()
-            image_paths = item.get("image_paths", [])
-
-            # Skip only if both text AND images are missing
-            if not text and not image_paths:
-                continue
-
-            # Use text if available, otherwise use image paths to generate a stable ID
-            id_source = text if text else " ".join(image_paths)
-            chunk_id = deterministic_id(id_source)
-
+            chunk_id = deterministic_id(text)
             metadata = {k: v for k, v in item.items() if k not in ("text", "chunk_id")}
-
             chunks.append(
                 StructuralChunk(
                     chunk_id=chunk_id,
@@ -61,7 +50,6 @@ class Semantic_Chunker:
                     metadata=metadata
                 )
             )
-
 
         # Get texts for embedding
         texts = [c.text for c in chunks]

@@ -9,6 +9,14 @@ import os
 from .models import TextSpan, LogicalBlock, StructuralChunk
 from .json_export import spans_to_json, blocks_to_json, chunks_to_json
 from collections import Counter
+import glob
+import re
+
+
+KBs_DIR = "DATA/KBs"
+PDF_DIR="PDFs"
+DOCUMENT_NAME="*.pdf"
+OUTPUT_DIR="structural_chunks"
 
 # ---------------------------------------------------------
 # PDF_Chunker v1.1
@@ -103,6 +111,38 @@ def find_bytes(path, obj):  # Find bytes within a JSON structure for debugging
         for i, v in enumerate(obj):
             find_bytes(f"{path}[{i}]", v)
 
+# ---------------------------------------------------------
+def _resolve_input_files(dir, pattern) -> List[str]:
+    """
+    Resolves document_name into a list of PDF file paths.
+    Supports:
+    - exact filename
+    - wildcard patterns (*.pdf)
+    - regex (if document_name starts with 're:')
+    """
+
+    # Case 1: regex pattern
+    if pattern.startswith("re:"):
+        regex = re.compile(pattern[3:])
+        files = [
+            os.path.join(dir, f)
+            for f in os.listdir(dir)
+            if regex.match(f)
+        ]
+        return files
+
+    # Case 2: wildcard pattern
+    wildcard_path = os.path.join(dir, pattern)
+    files = glob.glob(wildcard_path)
+    if files:
+        return files
+
+    # Case 3: exact file
+    exact_path = os.path.join(dir, pattern)
+    if os.path.exists(exact_path):
+        return [exact_path]
+
+    raise FileNotFoundError(f"No PDF files match: {pattern}")
 
 # ---------------------------------------------------------
 # Parser Class
@@ -111,32 +151,29 @@ class PDF_Chunker:
 
     def __init__(
             self,
-            pdf_path: str,
-            document_name: Optional[str] = None,
-            output_dir: Optional[str] = None,
-            export_spans: bool = False,
-            export_blocks: bool = False
+            kb_name: str,
+            kbs_dir: Optional[str] = KBs_DIR,
+            pdf_dir: Optional[str] = PDF_DIR,
+            document_name: Optional[str] = DOCUMENT_NAME,
+            output_dir: Optional[str] = OUTPUT_DIR,
+            export_spans: Optional[bool] = False,
+            export_blocks: Optional[bool] = False,
+            verbose: bool = False
         ):
 
-        # If document_name is provided, treat pdf_path as a directory
-        if document_name:
-            full_pdf_path = os.path.join(pdf_path, document_name)
-        else:
-            full_pdf_path = pdf_path
-
-        # Normalize path (Windows-safe)
-        full_pdf_path = os.path.abspath(full_pdf_path)
+        self.verbose = verbose
 
         # Store paths
-        self.pdf_path = full_pdf_path
-        self.document_name = document_name or os.path.basename(full_pdf_path)
+        self.kb_path = os.path.abspath(kbs_dir + '/' + kb_name)
+        self.pdf_path = os.path.abspath(self.kb_path + '/' + pdf_dir)
 
-        # Open the PDF
-        self.doc = fitz.open(self.pdf_path)
+        # document_name may be a wildcard or regex
+        self.document_name = document_name
 
         # Output directory
-        self.output_dir = output_dir or os.path.dirname(full_pdf_path)
-        os.makedirs(self.output_dir, exist_ok=True)   # ← NEW
+        self.output_dir = os.path.abspath(self.kb_path + '/' + output_dir)
+        os.makedirs(self.output_dir, exist_ok=True)
+
 
         # Export flags
         self.export_spans = export_spans
@@ -343,7 +380,7 @@ class PDF_Chunker:
         jsonBlocks = {}
 
         # Create a subfolder for this specific PDF
-        pdf_base_name = os.path.splitext(self.document_name)[0]
+        pdf_base_name = self.document_base_name
 
         img_dir = os.path.join(
             os.path.dirname(self.pdf_path),
@@ -894,7 +931,7 @@ class PDF_Chunker:
             # Append image paths to metadata, but do not let them affect token count
             chunks.append(
                 StructuralChunk(
-                    document_name=self.document_name,
+                    document_name=self.document_base_name,
                     chunk_id=chunk_id,
                     pages=sorted(current_pages),
                     heading_path=heading_path.copy(),
@@ -1001,10 +1038,10 @@ class PDF_Chunker:
         return chunks
 
     # -----------------------------------------------------
-    # Main entry point
+    # One file parser
     # -----------------------------------------------------
 
-    def parse(self) -> List[StructuralChunk]:
+    def parse_document(self, pdf_pathName: str) -> List[StructuralChunk]:
         """
         Full pipeline:
         1. Extract spans
@@ -1018,6 +1055,11 @@ class PDF_Chunker:
         9. Chunk blocks
         10. Save chunks JSON
         """
+
+
+        # Open the PDF
+        self.doc = fitz.open(pdf_pathName)
+        self.document_base_name = os.path.splitext(os.path.basename(pdf_pathName))[0]
 
         spans = self.extract_spans()
         spans = self.filter_headers_footers(spans)
@@ -1060,9 +1102,26 @@ class PDF_Chunker:
         json_chunks = chunks_to_json(chunks)
         chunks_path = os.path.join(
             self.output_dir,
-            f"{self.document_name}_chunks.json"
+            f"{self.document_base_name}_chunks.json"
         )
         with open(chunks_path, "w", encoding="utf-8") as f:
             json.dump(json_chunks, f, indent=4, ensure_ascii=False)
         
         return chunks
+    
+
+    # -----------------------------------------------------
+    # Main entry point: Parse multiple files
+    # -----------------------------------------------------
+
+    def parse(self):
+        """ Main entry point. Processes one or multiple PDF files. """
+        
+        pdf_files = _resolve_input_files(self.pdf_path, self.document_name)
+
+        for pdf_pathName in pdf_files: 
+            if self.verbose: print(f"Chunking {os.path.basename(pdf_pathName)} ... ", end="", flush=True)
+            chunks = self.parse_document(pdf_pathName)
+            if self.verbose: print(len(chunks))
+
+

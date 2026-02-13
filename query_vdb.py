@@ -1,7 +1,8 @@
 import argparse
+import sys
 import numpy as np
 from VectorDB_Factory import create_vectordb
-from Semantic_Chunker import HFEmbeddingBackend
+from Embedder import HFEmbeddingBackend
 
 
 
@@ -15,6 +16,11 @@ def query_chroma(vectordb, embedder, query_text: str, n_results: int = 5):
         query_embeddings=[query_emb],
         n_results=n_results
     )
+
+
+    print(results)
+    sys.exit()
+
 
     # 3. Pretty-print results
     print("\n=== Query Results ===")
@@ -47,14 +53,14 @@ def main():
     parser.add_argument(
         "--persist",
         type=str,
-        default="./DATA/chroma_store",
+        default="./DATA/KBs/Test_KB/4_Vector_DB",
         help="Path to Chroma persistence directory."
     )
 
     parser.add_argument(
         "--collection",
         type=str,
-        default="default_collection",
+        default="Structural_Chunks",
         help="Chroma collection name."
     )
 

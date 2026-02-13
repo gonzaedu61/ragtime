@@ -10,13 +10,14 @@ from .models import TextSpan, LogicalBlock, StructuralChunk
 from .json_export import spans_to_json, blocks_to_json, chunks_to_json
 from collections import Counter
 import glob
-import re
 
 
 KBs_DIR = "DATA/KBs"
-PDF_DIR="PDFs"
+PDF_DIR="1_PDFs"
 DOCUMENT_NAME="*.pdf"
-OUTPUT_DIR="structural_chunks"
+OUTPUT_DIR="2_Structural_Chunks"
+IMAGES_FOLDER = "3_Extracted_Images"
+
 
 # ---------------------------------------------------------
 # PDF_Chunker v1.1
@@ -82,8 +83,6 @@ PROCESS_STEP_REGEX = re.compile(r"^\s*(Step\s*[0-9]+:|[0-9]+\.)\s+")
 CAPTION_REGEX = re.compile(r"^(Figure|Fig\.|Table)\s*\d+[:.\-]")
 NUMBERED_HEADING_PREFIX = re.compile(r"^\s*(\d+(?:\.\d+)*)(?:[.)])?\s+")
 
-# Image extraction folder
-IMAGES_FOLDER = "extracted_images"
 
 # Header/footer removal settings
 REMOVE_HEADERS = True

@@ -3,6 +3,9 @@ import json
 from dataclasses import dataclass
 from typing import List, Dict, Any
 from .embedding_backends import HFEmbeddingBackend
+from Utilities.File_Utilities import expand_files_pattern
+import os
+
 
 
 @dataclass
@@ -17,23 +20,26 @@ import hashlib
 def deterministic_id(text: str) -> str:
     return hashlib.md5(text.encode("utf-8")).hexdigest()
 #=================================================================================================================================
-class Semantic_Chunker:
+class Embedder:
     def __init__(self,
-                 json_path: str, 
-                 embedder: HFEmbeddingBackend, 
+                 chunks_path: str, 
+                 chunk_files_pattern: str,
+                 embedding_backend: HFEmbeddingBackend, 
                  vectordb, 
-                 collection_name: str, 
-                 persist_dir: str):
-        self.json_path = json_path
-        self.embedder = embedder
+                 collection_name: str,
+                 verbose: bool = False):
+
+        self.chunks_path = chunks_path
+        self.chunk_files_pattern = chunk_files_pattern
+        self.embedding_backend = embedding_backend
         self.vectordb = vectordb
         self.collection_name = collection_name
-        self.persist_dir = persist_dir
+        self.verbose = verbose
 
     #-----------------------------------------------------------------------------------------------------------------------------
 
-    def load_structural_chunks(self) -> List[StructuralChunk]:
-        with open(self.json_path, "r", encoding="utf-8") as f:
+    def load_structural_chunks(self, json_path: str) -> List[StructuralChunk]:
+        with open(json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         # Extract chunks data
@@ -52,7 +58,7 @@ class Semantic_Chunker:
 
             # Keep all metadata except text, and preserve original chunk_id
             metadata = {k: v for k, v in item.items() if k != "text"}
-            metadata["original_chunk_id"] = item.get("chunk_id")
+            metadata["chunk_number"] = item.get("chunk_id")
 
             chunks.append(
                 StructuralChunk(
@@ -97,25 +103,47 @@ class Semantic_Chunker:
 
     #-----------------------------------------------------------------------------------------------------------------------------
 
-    def embed_and_store(self):
+    def embed_and_store_single_file_chunks(self, chunks_file):
+
 
         # 1. Load structural chunks
-        texts, ids, metadata = self.load_structural_chunks()
-        print('Chunks loaded ...')
+        texts, ids, metadata = self.load_structural_chunks(chunks_file)
+        if self.verbose: print(f'{os.path.basename(chunks_file)} --> {len(ids)} chunks')
 
-        # 3. Create embeddings and convert to list of lists
-        print('Starting embeddings ...')
-        embeddings = self.embedder.embed(texts)
+        # 2. Create embeddings
+        embeddings = self.embedding_backend.embed(texts)
         embeddings = [e.detach().cpu().numpy() for e in embeddings]
-        print('Embedding created ...')
 
+        # 3. Remove duplicates while keeping everything aligned
+        unique = {}
+        for i, id_ in enumerate(ids):
+            unique[id_] = (embeddings[i], metadata[i])
+
+        ids = list(unique.keys())
+        embeddings = [v[0] for v in unique.values()]
+        metadata = [v[1] for v in unique.values()]
 
         # 4. Store in vector DB
-        print('Storing in vector DB ...')
-        self.vectordb.add(ids, embeddings, metadata)
-        print('Stored in vector DB')
+        self.vectordb.upsert(
+            ids,
+            embeddings,
+            metadata,
+            scope={"document_name": os.path.basename(chunks_file)}
+        )
 
-        # Return stored chunks 
         return len(ids)
+    
+
+    # -----------------------------------------------------
+    # Main entry point: Embed multiple files
+    # -----------------------------------------------------
+
+    def embed_and_store(self):
+        """ Main entry point. Processes one or multiple JSON chunk files. """
+        chunk_files = expand_files_pattern(self.chunks_path, self.chunk_files_pattern)
+        for chunks_file in chunk_files: 
+            self.embed_and_store_single_file_chunks(chunks_file)
+
+
 
 #=================================================================================================================================

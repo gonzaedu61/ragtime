@@ -47,8 +47,7 @@ def compute_summary(results):
         meta = results["metadatas"][0][i]
         doc = meta.get("document_name", "Unknown Document")
         summary[doc] = summary.get(doc, 0) + 1
-    total = sum(summary.values())
-    return summary, total
+    return summary
 
 
 # -----------------------------
@@ -84,13 +83,10 @@ def export_json(results, filepath, short=False):
         }
         data.append(extract_fields(full_entry, short))
 
-    summary, total = compute_summary(results)
+    summary = compute_summary(results)
 
     output = {
-        "summary": {
-            "per_document": summary,
-            "total_chunks": total
-        },
+        "summary": summary,
         "chunks": data
     }
 
@@ -101,9 +97,9 @@ def export_json(results, filepath, short=False):
 def export_markdown(results, filepath, short=False):
     filepath = Path(filepath)
 
-    summary, total = compute_summary(results)
+    summary = compute_summary(results)
     blocks = ["# Summary\n"]
-    blocks.append(f"- **Total chunks:** {total}")
+
     for doc, count in summary.items():
         blocks.append(f"- **{doc}**: {count} chunks")
 
@@ -128,7 +124,7 @@ def export_markdown(results, filepath, short=False):
 # -----------------------------
 # Main query logic
 # -----------------------------
-def query_chroma(vectordb, embedder, query_text, n_results=None,
+def query_chroma(vectordb, embedder, query_text, n_results=5,
                  markdown=False, short=False,
                  export_json_path=None, export_md_path=None,
                  max_distance=None):
@@ -138,12 +134,9 @@ def query_chroma(vectordb, embedder, query_text, n_results=None,
 
     # Determine retrieval count
     if max_distance is not None:
-        if n_results is not None:
-            retrieval_count = n_results
-        else:
-            retrieval_count = 500  # large number for distance filtering
+        retrieval_count = 500  # large number for distance filtering
     else:
-        retrieval_count = n_results if n_results is not None else 5
+        retrieval_count = n_results
 
     results = vectordb.query(
         query_embeddings=[query_emb],
@@ -178,9 +171,8 @@ def query_chroma(vectordb, embedder, query_text, n_results=None,
 
     # Markdown printing
     if markdown and no_export:
-        summary, total = compute_summary(results)
+        summary = compute_summary(results)
         print("# Summary\n")
-        print(f"- **Total chunks:** {total}")
         for doc, count in summary.items():
             print(f"- **{doc}**: {count} chunks")
 
@@ -218,8 +210,7 @@ def main():
     )
 
     parser.add_argument("query", type=str, help="The text query to search for.")
-    parser.add_argument("--top", type=int, default=None,
-                        help="Number of top results to retrieve.")
+    parser.add_argument("--top", type=int, default=5)
     parser.add_argument("--persist", type=str, default="./DATA/KBs/Test_KB/4_Vector_DB")
     parser.add_argument("--collection", type=str, default="Structural_Chunks")
 

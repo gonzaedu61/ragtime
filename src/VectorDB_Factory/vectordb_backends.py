@@ -39,9 +39,10 @@ class ChromaBackend:
             metadata={"hnsw:space": "cosine"}
         )
 
-    def add(self, ids: List[str], embeddings: List[List[float]], metadata: List[Dict[str, Any]]):
+    def add(self, ids: List[str], texts: List[str], embeddings: List[List[float]], metadata: List[Dict[str, Any]]):
         self.collection.add(
             ids=ids,
+            documents=texts,
             embeddings=embeddings,
             metadatas=metadata
         )
@@ -62,7 +63,7 @@ class ChromaBackend:
         return len(ids_to_delete)
     
 
-    def upsert(self, ids, embeddings, metadata, scope: Dict[str, Any]):
+    def upsert(self, ids, texts, embeddings, metadata, scope: Dict[str, Any]):
 
         # Ensure input IDs are unique
         if len(ids) != len(set(ids)):
@@ -75,6 +76,7 @@ class ChromaBackend:
         try:
             self.collection.add(
                 ids=ids,
+                documents=texts,
                 embeddings=embeddings,
                 metadatas=metadata
             )
@@ -96,6 +98,7 @@ class ChromaBackend:
                 # Retry insertion
                 self.collection.add(
                     ids=ids,
+                    documents=texts,
                     embeddings=embeddings,
                     metadatas=metadata
                 )

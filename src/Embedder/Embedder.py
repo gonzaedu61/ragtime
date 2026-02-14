@@ -58,7 +58,6 @@ class Embedder:
 
             # Keep all metadata except text, and preserve original chunk_id
             metadata = {k: v for k, v in item.items() if k != "text"}
-            metadata["chunk_number"] = item.get("chunk_id")
 
             chunks.append(
                 StructuralChunk(
@@ -82,9 +81,13 @@ class Embedder:
             if "image_paths" in m and not m["image_paths"]:
                 del m["image_paths"]
 
-        # Adjust Metadata blocks: Remove spans and convert to JSON string to avoid storing complex nested structures in vector DB
+        # Process Metadata blocks
         for m in metadata:
             if "blocks" in m:
+                del m["blocks"]  # Remove original blocks to avoid storing complex nested structures in vector DB
+
+                '''
+                # Adjust Metadata blocks: Remove spans and convert to JSON string to avoid storing complex nested structures in vector DB
                 cleaned_blocks = []
                 for block in m["blocks"]:
                     cleaned_block = {
@@ -98,40 +101,48 @@ class Embedder:
 
                 # Convert list of dicts → JSON string
                 m["blocks"] = json.dumps(cleaned_blocks)
+                '''                
 
         return texts, ids, metadata
 
     #-----------------------------------------------------------------------------------------------------------------------------
-
     def embed_and_store_single_file_chunks(self, chunks_file):
-
 
         # 1. Load structural chunks
         texts, ids, metadata = self.load_structural_chunks(chunks_file)
-        if self.verbose: print(f'{os.path.basename(chunks_file)} --> {len(ids)} chunks')
+        if self.verbose:
+            print(f'{os.path.basename(chunks_file)} --> {len(ids)} chunks')
 
         # 2. Create embeddings
         embeddings = self.embedding_backend.embed(texts)
         embeddings = [e.detach().cpu().numpy() for e in embeddings]
 
-        # 3. Remove duplicates while keeping everything aligned
-        unique = {}
-        for i, id_ in enumerate(ids):
-            unique[id_] = (embeddings[i], metadata[i])
+        # 3. Remove duplicates by TEXT while keeping alignment
+        seen_texts = set()
+        unique_ids = []
+        unique_texts = []
+        unique_embeddings = []
+        unique_metadata = []
 
-        ids = list(unique.keys())
-        embeddings = [v[0] for v in unique.values()]
-        metadata = [v[1] for v in unique.values()]
+        for i, text in enumerate(texts):
+            if text not in seen_texts:
+                seen_texts.add(text)
+                unique_ids.append(ids[i])
+                unique_texts.append(text)
+                unique_embeddings.append(embeddings[i])
+                unique_metadata.append(metadata[i])
 
         # 4. Store in vector DB
         self.vectordb.upsert(
-            ids,
-            embeddings,
-            metadata,
+            unique_ids,
+            unique_texts,
+            unique_embeddings,
+            unique_metadata,
             scope={"document_name": os.path.basename(chunks_file)}
         )
 
-        return len(ids)
+        return len(unique_ids)
+
     
 
     # -----------------------------------------------------

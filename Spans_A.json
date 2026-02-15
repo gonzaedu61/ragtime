@@ -1,0 +1,198 @@
+[
+    {
+        "text": "COMIX-WORKSHOP ",
+        "font_size": 32.040000915527344,
+        "bold": true,
+        "bbox": [
+            136.6999969482422,
+            86.70381164550781,
+            453.24713134765625,
+            122.42841339111328
+        ],
+        "block_no": 2,
+        "line_no": 0,
+        "page_num": 1
+    },
+    {
+        "text": "Artikelpositionen ",
+        "font_size": 21.959999084472656,
+        "bold": true,
+        "bbox": [
+            200.69000244140625,
+            138.3061981201172,
+            386.57489013671875,
+            162.79159545898438
+        ],
+        "block_no": 3,
+        "line_no": 0,
+        "page_num": 1
+    },
+    {
+        "text": "1 ",
+        "font_size": 15.960000038146973,
+        "bold": true,
+        "bbox": [
+            85.2239990234375,
+            74.25621032714844,
+            98.54087829589844,
+            92.0516128540039
+        ],
+        "block_no": 2,
+        "line_no": 0,
+        "page_num": 4
+    },
+    {
+        "text": "Vorwort ",
+        "font_size": 15.960000038146973,
+        "bold": true,
+        "bbox": [
+            127.69999694824219,
+            74.25621032714844,
+            192.64688110351562,
+            92.0516128540039
+        ],
+        "block_no": 2,
+        "line_no": 1,
+        "page_num": 4
+    },
+    {
+        "text": "In die Unterlagen sind zusätzlich Notiz- und Skizzenbereiche integriert, in denen Sie ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            98.40618133544922,
+            459.1135559082031,
+            109.51158142089844
+        ],
+        "block_no": 3,
+        "line_no": 0,
+        "page_num": 4
+    },
+    {
+        "text": "individuell Ergänzungen nach Ihren Erfordernissen einbringen können. ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            109.92620086669922,
+            400.0688781738281,
+            121.03160095214844
+        ],
+        "block_no": 3,
+        "line_no": 1,
+        "page_num": 4
+    },
+    {
+        "text": "Eine Seminarunterlage, die alle denkbaren individuellen Anforderungen abdeckt, wäre zu ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            127.44622039794922,
+            481.8893737792969,
+            138.55162048339844
+        ],
+        "block_no": 4,
+        "line_no": 0,
+        "page_num": 4
+    },
+    {
+        "text": "umfangreich. Deswegen kann die Anpassung an Ihren persönlichen Bedarf erst im Seminar ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            138.9661865234375,
+            492.9091796875,
+            150.0715789794922
+        ],
+        "block_no": 4,
+        "line_no": 1,
+        "page_num": 4
+    },
+    {
+        "text": "erfolgen. Die Unterlagen dienen zur Unterstützung der Schulung und sollen/können diese ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            150.4862060546875,
+            482.9764404296875,
+            161.5915985107422
+        ],
+        "block_no": 4,
+        "line_no": 2,
+        "page_num": 4
+    },
+    {
+        "text": "Schulungen nicht ersetzen. ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            162.0062255859375,
+            208.61888122558594,
+            173.1116180419922
+        ],
+        "block_no": 4,
+        "line_no": 3,
+        "page_num": 4
+    },
+    {
+        "text": "Ihre Notizen ergänzen die COMIX-Teachware und machen sie dadurch zu einer wertvollen ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            179.40618896484375,
+            489.1440734863281,
+            190.51158142089844
+        ],
+        "block_no": 5,
+        "line_no": 0,
+        "page_num": 4
+    },
+    {
+        "text": "Arbeitsreferenz. ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            190.92620849609375,
+            158.5488739013672,
+            202.03160095214844
+        ],
+        "block_no": 5,
+        "line_no": 1,
+        "page_num": 4
+    },
+    {
+        "text": "Für Ihre Anregungen und Verbesserungsvorschläge sind wir jederzeit dankbar. ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            208.44622802734375,
+            437.1488952636719,
+            219.55162048339844
+        ],
+        "block_no": 6,
+        "line_no": 0,
+        "page_num": 4
+    },
+    {
+        "text": "Ihre ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            243.51617431640625,
+            105.26888275146484,
+            254.62156677246094
+        ],
+        "block_no": 8,
+        "line_no": 0,
+        "page_num": 4
+    }
+]

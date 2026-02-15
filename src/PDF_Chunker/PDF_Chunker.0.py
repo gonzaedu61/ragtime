@@ -1,7 +1,6 @@
 import json
 import fitz
 import re
-from numpy import block
 import tiktoken
 from typing import List, Dict, Any, Optional
 import io
@@ -776,12 +775,12 @@ class PDF_Chunker:
             if (
                 s.block_no != current_block_no
                 or s.page_num != current_page
-                #or getattr(s, "column_id", None) != current_col
+                or getattr(s, "column_id", None) != current_col
             ):
                 flush()
                 current_block_no = s.block_no
                 current_page = s.page_num
-                #current_col = getattr(s, "column_id", None)
+                current_col = getattr(s, "column_id", None)
 
             current.append(s)
 
@@ -815,10 +814,6 @@ class PDF_Chunker:
 
     def detect_sidebars(self, blocks: List[LogicalBlock], page_width: float):
         for block in blocks:
-
-            if block.kind == "heading": 
-                continue # headings must never become sidebars
-
             x0, y0, x1, y1 = block.spans[0].bbox
             width = x1 - x0
             if width < page_width * 0.4:

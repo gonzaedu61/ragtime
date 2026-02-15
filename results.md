@@ -1,72 +1,17 @@
 # Summary
 
-- **Total chunks:** 40
-- **auf_lief**: 7 chunks
-- **auf_rech**: 4 chunks
-- **ang_basis_v92**: 2 chunks
-- **auf_pos_vor103**: 12 chunks
-- **auf_kpa**: 11 chunks
-- **auf_poskalk_vor103**: 4 chunks
+- **Total chunks:** 43
+- **ang_basis_v92**: 3 chunks
+- **auf_pos_vor103**: 16 chunks
+- **auf_kpa**: 14 chunks
+- **auf_poskalk_vor103**: 6 chunks
+- **auf_rech**: 2 chunks
+- **auf_lief**: 1 chunks
+- **auf_lade**: 1 chunks
 
 # Query Results
 
 ## Chunk 1
-
-- **Document Name:** auf_lief
-- **Pages:** [13]
-- **Chunk Type:** text
-- **Heading Path:** ['COMIX-WORKSHOP', 'Lieferschein']
-
-### Text
-3.2.3 Artikelpositionen
-
-- **Distance:** 0.0746152400970459
-
----
-
-## Chunk 2
-
-- **Document Name:** auf_rech
-- **Pages:** [6]
-- **Chunk Type:** text
-- **Heading Path:** ['COMIX-WORKSHOP', 'Rechnung']
-
-### Text
-2.4 Auftragspositionen
-
-- **Distance:** 0.07932162284851074
-
----
-
-## Chunk 3
-
-- **Document Name:** auf_lief
-- **Pages:** [5]
-- **Chunk Type:** text
-- **Heading Path:** ['COMIX-WORKSHOP', 'Lieferschein']
-
-### Text
-2.2 Auftragspositionen
-
-- **Distance:** 0.08086717128753662
-
----
-
-## Chunk 4
-
-- **Document Name:** auf_rech
-- **Pages:** [25]
-- **Chunk Type:** text
-- **Heading Path:** ['COMIX-WORKSHOP', 'Rechnung']
-
-### Text
-5.1 Artikelpositionen
-
-- **Distance:** 0.08648025989532471
-
----
-
-## Chunk 5
 
 - **Document Name:** ang_basis_v92
 - **Pages:** [109]
@@ -80,21 +25,7 @@ Bei Verwendung von Artikeln, werden diese hier eingetragen. Ausführliche Inform
 
 ---
 
-## Chunk 6
-
-- **Document Name:** auf_lief
-- **Pages:** [9]
-- **Chunk Type:** text
-- **Heading Path:** ['COMIX-WORKSHOP', 'Lieferschein']
-
-### Text
-3.2.2.2 aus Auftrag
-
-- **Distance:** 0.10970038175582886
-
----
-
-## Chunk 7
+## Chunk 2
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [7]
@@ -108,21 +39,7 @@ Positionstext vorhanden
 
 ---
 
-## Chunk 8
-
-- **Document Name:** auf_lief
-- **Pages:** [30]
-- **Chunk Type:** text
-- **Heading Path:** ['COMIX-WORKSHOP', 'Lieferschein', 'Lagerbuchung', 'Lieferscheinformular']
-
-### Text
-6.1.1 Bezug auf Auftrag
-
-- **Distance:** 0.1144111156463623
-
----
-
-## Chunk 9
+## Chunk 3
 
 - **Document Name:** auf_kpa
 - **Pages:** [6]
@@ -136,7 +53,7 @@ Kundenauftrag für einen oder mehrere Artikel. In einer Position eines Kontrakte
 
 ---
 
-## Chunk 10
+## Chunk 4
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [12]
@@ -150,7 +67,7 @@ Hängen an einer Auftragsposition Artikelpositionstexte oder Z-Files, können Si
 
 ---
 
-## Chunk 11
+## Chunk 5
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [5]
@@ -164,7 +81,7 @@ Für die Abwicklung eines Auftrages über Artikel werden in der Maske Artikelpos
 
 ---
 
-## Chunk 12
+## Chunk 6
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [26]
@@ -178,7 +95,7 @@ Nach Aufruf der Maske „Artikelpositionen“ werden die benötigten Artikel in 
 
 ---
 
-## Chunk 13
+## Chunk 7
 
 - **Document Name:** auf_kpa
 - **Pages:** [35]
@@ -192,21 +109,7 @@ Es erscheint eine Übersicht über bereits vorhandene Aufträge (Kontrakt oder A
 
 ---
 
-## Chunk 14
-
-- **Document Name:** auf_rech
-- **Pages:** [40]
-- **Chunk Type:** text
-- **Heading Path:** ['COMIX-WORKSHOP', 'Rechnung', 'Sperre', 'Aktion Beschreibung']
-
-### Text
-11.2 Rechnungspositionen
-
-- **Distance:** 0.1296825408935547
-
----
-
-## Chunk 15
+## Chunk 8
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [13]
@@ -220,7 +123,7 @@ Es erscheint eine Übersicht über bereits vorhandene Aufträge (Kontrakt oder A
 
 ---
 
-## Chunk 16
+## Chunk 9
 
 - **Document Name:** auf_kpa
 - **Pages:** [32, 33]
@@ -234,7 +137,7 @@ Es erscheint eine Übersicht über bereits vorhandene Aufträge (Kontrakt oder A
 
 ---
 
-## Chunk 17
+## Chunk 10
 
 - **Document Name:** auf_kpa
 - **Pages:** [45]
@@ -248,7 +151,7 @@ Befindet sich der Anwender in den Positionen der Abrufaufträge, kann er unter �
 
 ---
 
-## Chunk 18
+## Chunk 11
 
 - **Document Name:** auf_kpa
 - **Pages:** [28]
@@ -262,7 +165,7 @@ In der Auftragsposition unter „Ändern“ wird die Positionsmaske des Produkti
 
 ---
 
-## Chunk 19
+## Chunk 12
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [10]
@@ -276,21 +179,7 @@ In der Auftragsposition unter „Ändern“ wird die Positionsmaske des Produkti
 
 ---
 
-## Chunk 20
-
-- **Document Name:** auf_lief
-- **Pages:** [31]
-- **Chunk Type:** text
-- **Heading Path:** ['COMIX-WORKSHOP', 'Lieferschein', 'Lagerbuchung', 'Lieferscheinformular']
-
-### Text
-6.1.2 Bezug Artikel
-
-- **Distance:** 0.13552170991897583
-
----
-
-## Chunk 21
+## Chunk 13
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [16]
@@ -304,21 +193,7 @@ Eingabefeld der Menge für die Auftragsposition. Die Menge wird beim Eintrag der
 
 ---
 
-## Chunk 22
-
-- **Document Name:** auf_rech
-- **Pages:** [18]
-- **Chunk Type:** text
-- **Heading Path:** ['COMIX-WORKSHOP', 'Rechnung']
-
-### Text
-3.2.9 Rückmeldung an Auftrag
-
-- **Distance:** 0.1363428831100464
-
----
-
-## Chunk 23
+## Chunk 14
 
 - **Document Name:** auf_kpa
 - **Pages:** [19]
@@ -332,7 +207,7 @@ In der Auftragsposition unter „Ändern“ wird die Positionsmaske des Produkti
 
 ---
 
-## Chunk 24
+## Chunk 15
 
 - **Document Name:** ang_basis_v92
 - **Pages:** [78]
@@ -346,7 +221,7 @@ In der Auftragsposition unter „Ändern“ wird die Positionsmaske des Produkti
 
 ---
 
-## Chunk 25
+## Chunk 16
 
 - **Document Name:** auf_kpa
 - **Pages:** [9]
@@ -360,7 +235,7 @@ In einem Kontrakt können mehrere Positionen eingetragen werden. Das folgende Be
 
 ---
 
-## Chunk 26
+## Chunk 17
 
 - **Document Name:** auf_kpa
 - **Pages:** [39, 40]
@@ -374,7 +249,7 @@ In einem Kontrakt können mehrere Positionen eingetragen werden. Das folgende Be
 
 ---
 
-## Chunk 27
+## Chunk 18
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [6]
@@ -388,7 +263,7 @@ In einem Kontrakt können mehrere Positionen eingetragen werden. Das folgende Be
 
 ---
 
-## Chunk 28
+## Chunk 19
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [16]
@@ -402,7 +277,7 @@ Für die Beschreibung des Artikels im Angebot können das Feld „Text“ der Ar
 
 ---
 
-## Chunk 29
+## Chunk 20
 
 - **Document Name:** auf_kpa
 - **Pages:** [41]
@@ -416,7 +291,7 @@ Abrufe können auch auf einer anderen Art generiert werden. Ähnlich wie bei Pro
 
 ---
 
-## Chunk 30
+## Chunk 21
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [33, 34]
@@ -430,7 +305,7 @@ separate Rechnungspositionen übernommen. Bei der Druckausgabe der Rechnung kön
 
 ---
 
-## Chunk 31
+## Chunk 22
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [19]
@@ -444,7 +319,7 @@ Anzeigefelder der Daten aus dem Artikelstamm.
 
 ---
 
-## Chunk 32
+## Chunk 23
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [19]
@@ -458,35 +333,21 @@ Anzeigefeld, ob bereits Auftragspositionstexte über die Funktion „Text“ fü
 
 ---
 
-## Chunk 33
+## Chunk 24
 
-- **Document Name:** auf_lief
-- **Pages:** [34]
+- **Document Name:** auf_rech
+- **Pages:** [12]
 - **Chunk Type:** text
-- **Heading Path:** ['COMIX-WORKSHOP', 'Lieferschein', 'Lagerbuchung', 'Lieferscheinformular']
+- **Heading Path:** ['3 Rechnung', '3.2 Positionen', '3.2.2 Sonderfunktionen', '3.2.2.5 Beleg übernehmen']
 
 ### Text
-8.2 Lieferschein Positionen auswerten
+Zu jeder Rechnungsposition können Texte hinterlegt werden. Hierbei steht die Möglichkeit zur Verfügung Beschreibungen aus dem aktuellen Auftrag zu übernehmen, oder auch Textbausteine mit Standardtexten einzuspielen. 3.2.2.5 Beleg übernehmen
 
-- **Distance:** 0.14115142822265625
+- **Distance:** 0.14146357774734497
 
 ---
 
-## Chunk 34
-
-- **Document Name:** auf_lief
-- **Pages:** [7]
-- **Chunk Type:** text
-- **Heading Path:** ['COMIX-WORKSHOP', 'Lieferschein']
-
-### Text
-3.2 Positionen 3.2.1 Allgemeines
-
-- **Distance:** 0.14211642742156982
-
----
-
-## Chunk 35
+## Chunk 25
 
 - **Document Name:** auf_kpa
 - **Pages:** [38]
@@ -500,7 +361,7 @@ Mit „Ändern“ können die Positionen des Abrufauftrages geöffnet werden. Di
 
 ---
 
-## Chunk 36
+## Chunk 26
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [9]
@@ -514,7 +375,7 @@ Angaben zu Optionen der Positionskalkulation.
 
 ---
 
-## Chunk 37
+## Chunk 27
 
 - **Document Name:** auf_kpa
 - **Pages:** [24]
@@ -528,7 +389,7 @@ Mit „Ändern“ kann die Positionsmaske des Auftrages geöffnet werden. Die ko
 
 ---
 
-## Chunk 38
+## Chunk 28
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [37]
@@ -542,7 +403,7 @@ Die Summe der Gesamtwerte aus den einzelnen Auftragspositionen wird als Anzeigef
 
 ---
 
-## Chunk 39
+## Chunk 29
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [35]
@@ -556,7 +417,7 @@ Die tatsächlich gewünschte Menge wird vom Anwender eingetragen. (hier 50.000 f
 
 ---
 
-## Chunk 40
+## Chunk 30
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [9]
@@ -567,5 +428,187 @@ Die tatsächlich gewünschte Menge wird vom Anwender eingetragen. (hier 50.000 f
 Übersicht für eine Artikelposition über die bereits gefertigten Waren, das heißt die Zugangsbuchungen über die Buchungsart Zugang Intern.
 
 - **Distance:** 0.1460605263710022
+
+---
+
+## Chunk 31
+
+- **Document Name:** auf_pos_vor103
+- **Pages:** [19]
+- **Chunk Type:** text
+- **Heading Path:** ['4 Bearbeitungsmaske Auftragspositionen', '4.2 Spalten/Felder', 'Kz Artikelposition', 'Kz Positionsart', 'KZ ArtPos (KZ Druck)', 'Menge bestellt', 'Kz Z-Files']
+
+### Text
+Anzeigefeld, ob bereits Z-Files über die Funktion „Z-Files“ an die Auftragsposition angehängt sind. Infos zu den Auftragspositionstexten siehe Kapitel „Texte und Zfiles“ in diesem Workshop.
+
+- **Distance:** 0.14661061763763428
+
+---
+
+## Chunk 32
+
+- **Document Name:** ang_basis_v92
+- **Pages:** [65, 66]
+- **Chunk Type:** mixed
+- **Heading Path:** ['6 Spezifikation', '6.4 Material und Fremdleistung (M-Maske)', '6.4.6 Einzelpreis', '6.4.6.4 Preisliste Angebot/Auftrag']
+
+### Text
+6.4.6.4 Preisliste Angebot/Auftrag
+
+- **Distance:** 0.14670872688293457
+
+---
+
+## Chunk 33
+
+- **Document Name:** auf_poskalk_vor103
+- **Pages:** [30]
+- **Chunk Type:** text
+- **Heading Path:** ['6 Auftrag']
+
+### Text
+Die Auftragsverwaltung wird ausschließlich über die Masken „Auftragsstamm“ und der „Artikelpositionen“ gesteuert. Auftragsstamm Bei ausschließlichem Einsatz der Positionskalkulation können die Angaben zur Menge (Menge, Mengeneinheit, Mehrlieferung) aus der Stammmaske der Angebots- bzw. Auftragsverwaltung entfallen. Artikelpositionen siehe Beschreibung unten
+
+- **Distance:** 0.1470705270767212
+
+---
+
+## Chunk 34
+
+- **Document Name:** auf_lief
+- **Pages:** [10]
+- **Chunk Type:** text
+- **Heading Path:** ['3 Lieferschein', '3.2 Positionen', '3.2.2 Sonderfunktionen', '3.2.2.5 Beleg übernehmen']
+
+### Text
+Zu jeder Lieferscheinposition können Texte hinterlegt werden. Hierbei steht die Möglichkeit zur Verfügung Beschreibungen aus dem aktuellen Auftrag zu übernehmen, oder auch Textbausteine mit Standardtexten einzuspielen. 3.2.2.5 Beleg übernehmen
+
+- **Distance:** 0.14708101749420166
+
+---
+
+## Chunk 35
+
+- **Document Name:** auf_rech
+- **Pages:** [15]
+- **Chunk Type:** text
+- **Heading Path:** ['3 Rechnung', '3.2 Positionen', '3.2.6 Rechnungsartikel: Zu- / Abschlag, Zwischensummen']
+
+### Text
+Zur automatischen Bildung von Zu- und Abschlägen bzw. von Zwischensumme können spezielle Artikel angelegt werden. Im Artikelstamm muss hierfür ein eigenes Kennzeichen gesetzt werden. Diese Rechnungsartikel können nur in der Rechnungsverwaltung eingesetzt werden. (Weitere Informationen zur Anlage siehe Workshop „Stammdaten Material“) Die Rechnungsposition wird mit der Zeilenart Artikel und der Auftragsposition 0 eingetragen. Folgende Funktionen stehen zur Verfügung:
+
+- **Distance:** 0.14712035655975342
+
+---
+
+## Chunk 36
+
+- **Document Name:** auf_kpa
+- **Pages:** [39]
+- **Chunk Type:** text
+- **Heading Path:** ['6 Abrufauftrag', '6.1 Anlegen von Abrufaufträgen', '6.1.1 Generieren von Abrufaufträgen mit dem Programm „Generieren Abrufe“', '6.1.1.3 Eintragen eines Artikels, der bereits in mehreren Kontrakten angelegt ist']
+
+### Text
+Aufgrund der Verknüpfung des Abrufauftrages zum Kontrakt wird die abgerufene Menge in der Positionszeile des Kontraktes unter „Abruf“ und „offen Abruf“ vermerkt. Der Vorteil des Programms „Generieren Abruf“ ist, dass auch mehrere Artikelpositionen unabhängig vom Kontrakt eingetragen und in einem Abrufauftrag generiert werden können. 6.1.1.3 Eintragen eines Artikels, der bereits in mehreren Kontrakten angelegt ist
+
+- **Distance:** 0.14756131172180176
+
+---
+
+## Chunk 37
+
+- **Document Name:** auf_lade
+- **Pages:** [36]
+- **Chunk Type:** text
+- **Heading Path:** ['7 Generieren Ladeliste', '7.3 Generieren aus Auftragspositionen (Fertigware)', 'Prüfung Beschreibung']
+
+### Text
+Auftrag Nicht fertiggemeldet Artikel Kz „Ohne Bestand“ = nein (0) Auftragsposition Kennzeichen „Verkauf“ Auftragsposition Datum laut Vorgabe Auftragsposition nicht bereits in einer Ladeliste ( auch wenn nur Teilmenge aus Auftragsposition in Ladelistenposition ) Auftragsposition nicht bereits in einem Lieferschein ( auch wenn nur Teilmenge aus Auftragsposition in Lieferscheinposition )
+
+- **Distance:** 0.14791524410247803
+
+---
+
+## Chunk 38
+
+- **Document Name:** auf_pos_vor103
+- **Pages:** [9]
+- **Chunk Type:** text
+- **Heading Path:** ['3 Übersicht Auftragspositionen', '3.4 Funktionen Info', '3.4.2 Info Lieferung']
+
+### Text
+Übersicht der Lieferscheine der aktuellen Artikelposition.
+
+- **Distance:** 0.1483370065689087
+
+---
+
+## Chunk 39
+
+- **Document Name:** auf_kpa
+- **Pages:** [46, 47]
+- **Chunk Type:** mixed
+- **Heading Path:** ['6 Abrufauftrag', '6.1 Anlegen von Abrufaufträgen', '6.1.4 Manuelles Eintragen von Abrufpositionen', '6.1.4.2 Eintragen eines Artikels ohne offene Artikelposition']
+
+### Text
+6.1.4.2 Eintragen eines Artikels ohne offene Artikelposition
+
+- **Distance:** 0.1485961675643921
+
+---
+
+## Chunk 40
+
+- **Document Name:** auf_pos_vor103
+- **Pages:** [19]
+- **Chunk Type:** text
+- **Heading Path:** ['4 Bearbeitungsmaske Auftragspositionen', '4.2 Spalten/Felder', 'Kz Artikelposition', 'Kz Positionsart', 'KZ ArtPos (KZ Druck)', 'Menge bestellt', 'Kz PosKalk']
+
+### Text
+Anzeigefeld ob es sich um einen Artikel mit Positionskalkulation handelt. Angezeigt wird das Kennzeichen aus dem Artikelstamm.
+
+- **Distance:** 0.14955651760101318
+
+---
+
+## Chunk 41
+
+- **Document Name:** auf_pos_vor103
+- **Pages:** [18]
+- **Chunk Type:** text
+- **Heading Path:** ['4 Bearbeitungsmaske Auftragspositionen', '4.2 Spalten/Felder', 'Kz Artikelposition', 'Kz Positionsart', 'KZ ArtPos (KZ Druck)', 'Menge bestellt', 'Funktion Erfassen Preisliste aktualisieren']
+
+### Text
+- Bis Menge: Menge der Artikelposition - Preis: Preis der Artikelposition - Rabatt Rabatt der Artikelposition Rabatt Eingabefeld des Rabatt-Prozentsatzes. Siehe Beschreibung unter E-Preis .
+
+- **Distance:** 0.14961445331573486
+
+---
+
+## Chunk 42
+
+- **Document Name:** auf_poskalk_vor103
+- **Pages:** [20]
+- **Chunk Type:** text
+- **Heading Path:** ['4 Angebot mit Positionskalkulation', '4.4 Kopieren von Positionen']
+
+### Text
+Nach Eingabe der neuen Positionsnummer (hier 2) kann der Anwender mit Funktionstaste Alt+F8 eine vorhanden Artikelposition aus dem aktuellen Angebot auf die neue Artikelposition kopieren.
+
+- **Distance:** 0.14978933334350586
+
+---
+
+## Chunk 43
+
+- **Document Name:** auf_kpa
+- **Pages:** [40]
+- **Chunk Type:** text
+- **Heading Path:** ['6 Abrufauftrag', '6.1 Anlegen von Abrufaufträgen', '6.1.1 Generieren von Abrufaufträgen mit dem Programm „Generieren Abrufe“', '6.1.1.5 Vorschlag von Artikeln']
+
+### Text
+Alternativ zum manuellen Eintrag von Artikeln, können alle „offenen“ Kontraktpositionen eines Kunden eingelesen werden. Es werden alle Kontraktpositionen einglesen, die folgende Bedingungen erfüllen. • Artikel "nicht gesperrt" • Artikel-Kundennummer=0 oder =Kunde aus Programmkopf (*) • Auftrag-Kundennummer=Kunde aus Programmkopf (*) • Kontrakt-FM-Datum=<BLANK> • Menge in Abrufaufträgen < Menge Kontrakt (offen Abruf >0) (*) Damit nicht nur die Daten des Kunden gelistet werden bzw. für die manuelle Erfassung zulässig sind, kann die Suche über Parametereinträge erweitert werden. (siehe Kapitel „Eintragen eines Artikels“ oben) Die nicht gewünschten Positionen können gelöscht werden. In den übriggebliebenen Positionen können dann die Daten nach Bedarf ergänzt werden (Menge, Datum, Textfeld).
+
+- **Distance:** 0.14999538660049438
 
 ---

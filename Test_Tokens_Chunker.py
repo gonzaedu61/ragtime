@@ -17,7 +17,6 @@ tokens_chunker = Tokens_Chunker(
     min_tokens=80,
     max_tokens=384,
     overlap=64,
-    use_block_proximity=False,   # set True if you want bbox-based matching
     verbose=True
 )
 

@@ -93,7 +93,7 @@ MIN_REPEAT_COUNT = 3                # must appear on ≥ 3 pages
 
 # TOC detection settings
 INCLUDE_TOC = False
-MAX_TOC_PAGES = 5
+MAX_TOC_PAGES = 6
 MIN_TOC_RIGHT_NUMBERS = 4
 MIN_TOC_HEADING_ENTRIES = 4
 MAX_TOC_LONG_LINE_RATIO = 0.3
@@ -277,21 +277,15 @@ class PDF_Chunker:
 
     def detect_toc_pages(self, spans: List[TextSpan]):
         """
-        Detects TOC pages using two complementary patterns:
-
-        Pattern A (single-span TOC entries):
-        - contains dotted/underscore leader
-        - ends with a page number
-        - contains real text before the leader
-
-        Pattern B (classic two-span TOC):
-        - right-aligned numeric span
-        - paired with a left-aligned title span on same line
-
-        A page is considered TOC if >= 20% of its spans match either pattern.
-        Only first MAX_TOC_PAGES pages are considered.
+        Robust TOC page detector with:
+        - line merging
+        - indentation tolerance
+        - multi-level numbering support
+        - improved leader detection
+        - improved right-number detection
         """
 
+        # --- Group spans by page ---
         pages: Dict[int, List[TextSpan]] = {}
         for s in spans:
             pages.setdefault(s.page_num, []).append(s)
@@ -306,53 +300,88 @@ class PDF_Chunker:
             page_width = page.rect.width
             page_height = page.rect.height
 
-            toc_like = 0
-            total = 0
-
+            # --- 1. Merge spans into lines ---
+            lines = {}
             for s in page_spans:
-                txt = s.text.strip()
+                # cluster by y-position (tolerance 3 px)
+                key = round(s.bbox[1] / 3)
+                lines.setdefault(key, []).append(s)
+
+            merged_lines = []
+            for spans_on_line in lines.values():
+                spans_on_line.sort(key=lambda s: s.bbox[0])
+                merged_text = " ".join(s.text.strip() for s in spans_on_line if s.text.strip())
+                if not merged_text:
+                    continue
+
+                merged_bbox = (
+                    spans_on_line[0].bbox[0],
+                    spans_on_line[0].bbox[1],
+                    spans_on_line[-1].bbox[2],
+                    spans_on_line[-1].bbox[3],
+                )
+
+                merged_lines.append((merged_text, merged_bbox))
+
+            toc_like = 0
+            total = len(merged_lines)
+
+            # --- 2. Evaluate each merged line ---
+            for txt, bbox in merged_lines:
+                txt = txt.strip()
                 if not txt:
                     continue
 
-                total += 1
-
-                # --- Pattern A: single-span TOC entries ---
+                # --- Pattern A: Single-line TOC entry ---
+                # Detect leaders
                 has_leader = (
-                    "___" in txt or
                     "..." in txt or
+                    "___" in txt or
                     "···" in txt or
                     "—" in txt or
-                    "–" in txt
+                    "–" in txt or
+                    re.search(r"\.{5,}", txt) is not None  # long dot sequences
                 )
 
+                # Detect page number at end
                 ends_with_number = bool(re.search(r"\d+$", txt))
+
+                # Detect title text
                 has_title_text = bool(re.search(r"[A-Za-zÄÖÜäöüß]", txt))
 
-                pattern_A = has_leader and ends_with_number and has_title_text
+                # Detect multi-level numbering prefix
+                multi_level_prefix = bool(re.match(r"^\d+(?:\.\d+){1,6}\b", txt))
 
-                # --- Pattern B: classic two-span TOC entries ---
-                is_right_number = (
-                    txt.isdigit() and
-                    s.bbox[2] > page_width * 0.70 and
-                    (page_height * 0.1) < s.bbox[1] < (page_height * 0.9)
+                # Allow indentation (TOC entries often indent deeply)
+                pattern_A = (
+                    has_leader
+                    and ends_with_number
+                    and (has_title_text or multi_level_prefix)
                 )
 
-                # Look for a left span on the same line
+                # --- Pattern B: Right-aligned page number ---
+                is_right_number = (
+                    ends_with_number
+                    and txt.isdigit()
+                    and bbox[2] > page_width * 0.65
+                    and page_height * 0.05 < bbox[1] < page_height * 0.95
+                )
+
                 pattern_B = False
                 if is_right_number:
-                    for other in page_spans:
-                        if other is s:
+                    # Look for a left-side title on same line
+                    for other_txt, other_bbox in merged_lines:
+                        if other_txt == txt:
                             continue
-                        if abs(other.bbox[1] - s.bbox[1]) < 3:  # same line
-                            if len(other.text.strip()) > 3:
+                        if abs(other_bbox[1] - bbox[1]) < 3:
+                            if len(other_txt.strip()) > 3:
                                 pattern_B = True
                                 break
 
-                # Count TOC-like entries
                 if pattern_A or pattern_B:
                     toc_like += 1
 
-            # Decide if this page is TOC
+            # --- Decide if page is TOC ---
             if total > 0 and toc_like / total >= 0.20:
                 toc_pages.add(page_num)
 

@@ -359,6 +359,110 @@ class PDF_Chunker:
         return toc_pages
 
 
+    def merge_cross_page_paragraphs(self, blocks):
+        """
+        Merge paragraph blocks that continue across page boundaries.
+        A block at the top of a page is merged with the last block of the
+        previous page if both are paragraphs and the second one does not
+        start with a structural marker (heading, list, caption, etc.).
+        """
+
+        merged = []
+        prev = None
+
+        for b in blocks:
+            if prev is None:
+                prev = b
+                continue
+
+            # Conditions for merging
+            continuation = (
+                prev.kind == "paragraph"
+                and b.kind == "paragraph"
+                and b.page_num == prev.page_num + 1
+                and b.spans[0].bbox[1] < 100  # near top of page
+                and not HEADING_REGEX.match(b.text)
+                and not LIST_BULLET_REGEX.match(b.text)
+                and not CAPTION_REGEX.match(b.text)
+            )
+
+            if continuation:
+                prev.text = prev.text.rstrip() + " " + b.text.lstrip()
+                prev.spans.extend(b.spans)
+                prev.image_paths.extend(b.image_paths)
+            else:
+                merged.append(prev)
+                prev = b
+
+        if prev:
+            merged.append(prev)
+
+        return merged
+    
+
+    def merge_images_into_previous_blocks(self, blocks):
+        """
+        Attach each image block to the nearest previous non-image block
+        using vertical proximity, including images at the top of the next page.
+        If the nearest previous block is a heading, attach to the next paragraph instead.
+        """
+
+        merged = []
+        text_blocks = [b for b in blocks if b.kind != "image"]
+
+        for block in blocks:
+            if block.kind != "image":
+                merged.append(block)
+                continue
+
+            img_span = block.spans[0]
+            img_y = img_span.bbox[1]
+            page_num = block.page_num
+
+            page = self.doc[page_num - 1]
+            page_height = page.rect.height
+
+            SAME_PAGE_MAX_DIST = page_height * 0.20
+            NEXT_PAGE_MAX_DIST = page_height * 0.10
+
+            best_block = None
+            best_distance = float("inf")
+
+            # --- PASS 1: Try to attach to previous non-heading block ---
+            for tb in text_blocks:
+                if tb.page_num == page_num:
+                    tb_y = tb.spans[-1].bbox[3]
+                    distance = img_y - tb_y
+
+                    if 0 <= distance < best_distance and distance <= SAME_PAGE_MAX_DIST:
+                        if tb.kind != "heading":  # skip headings
+                            best_distance = distance
+                            best_block = tb
+
+                elif tb.page_num == page_num - 1:
+                    if img_y <= NEXT_PAGE_MAX_DIST:
+                        if tb.kind != "heading":
+                            best_distance = 0
+                            best_block = tb
+
+            # --- PASS 2: If previous block was a heading, attach to next paragraph ---
+            if best_block is None:
+                for tb in text_blocks:
+                    if tb.page_num == page_num and tb.spans[0].bbox[1] > img_y:
+                        if tb.kind == "paragraph":
+                            best_block = tb
+                            break
+
+            # Attach image if a suitable block was found
+            if best_block:
+                best_block.image_paths.extend(
+                    [s.image_path for s in block.spans if s.is_image and s.image_path]
+                )
+
+        return merged
+    
+
+
     # -----------------------------------------------------
     # Step 1: Extract spans
     # -----------------------------------------------------
@@ -718,6 +822,7 @@ class PDF_Chunker:
                             spans=current.copy(),
                             page_num=first.page_num,
                             is_process_step=False,
+                            image_paths=getattr(first, "image_paths", [])
                         )
                     )
                     current = []
@@ -752,6 +857,7 @@ class PDF_Chunker:
                     spans=current.copy(),
                     page_num=first.page_num,
                     is_process_step=is_step,
+                    image_paths=getattr(first, "image_paths", [])
                 )
             )
             current = []
@@ -760,7 +866,6 @@ class PDF_Chunker:
 
             # Image block
             if getattr(s, "is_image", False):
-                flush()
                 blocks.append(
                     LogicalBlock(
                         kind="image",
@@ -768,6 +873,7 @@ class PDF_Chunker:
                         spans=[s],
                         page_num=s.page_num,
                         is_process_step=False,
+                        image_paths=[s.image_path] if s.image_path else []
                     )
                 )
                 continue
@@ -907,20 +1013,14 @@ class PDF_Chunker:
             text = self.normalize(" ".join(b.text for b in current_blocks))
             tokens = self.count_tokens(text)
 
-            # Collect image paths from image blocks
+            # Collect image paths from ALL blocks (images were merged into text blocks)
             image_paths = []
+
             for b in current_blocks:
-                if b.kind == "image":
-                    for s in b.spans:
-                        if getattr(s, "is_image", False) and getattr(s, "image_path", None):
-
-                            # Convert absolute path → relative path
-                            rel_path = os.path.relpath(
-                                s.image_path,
-                                start=self.output_dir
-                            )
-
-                            image_paths.append(rel_path)
+                # b.image_paths is already a list of absolute paths
+                for p in b.image_paths:
+                    rel_path = os.path.relpath(p, start=self.output_dir)
+                    image_paths.append(rel_path)
 
             # Determine chunk type
             block_kinds = {b.kind for b in current_blocks}
@@ -1098,6 +1198,8 @@ class PDF_Chunker:
         self.detect_tables(blocks)
         self.detect_captions(blocks, avg_font)
         self.detect_sidebars(blocks, page_width)
+        blocks = self.merge_images_into_previous_blocks(blocks)
+        blocks = self.merge_cross_page_paragraphs(blocks)
         self.assign_heading_levels(blocks)
         self.assign_numeric_heading_levels(blocks)
 

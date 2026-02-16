@@ -23,6 +23,8 @@ class LogicalBlock:
     page_num: int
     heading_level: Optional[int] = None
     is_process_step: bool = False
+    image_paths: List[str] = field(default_factory=list)
+
 
 @dataclass
 class StructuralChunk:

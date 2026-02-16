@@ -220,7 +220,7 @@ def main():
     parser.add_argument("query", type=str, help="The text query to search for.")
     parser.add_argument("--top", type=int, default=None,
                         help="Number of top results to retrieve.")
-    parser.add_argument("--persist", type=str, default="./DATA/KBs/Test_KB/4_Vector_DB")
+    parser.add_argument("--persist", type=str, default="./DATA/KBs/Test_KB/5_Vector_DB")
     parser.add_argument("--collection", type=str, default="Structural_Chunks")
 
     parser.add_argument("--md", action="store_true",

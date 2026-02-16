@@ -7,7 +7,7 @@ import os
 KB_NAME = "Test_KB"
 VECTOR_DB_NAME = "chroma"
 COLLECTION_NAME="Structural_Chunks"
-VDB_PATH = f"./DATA/KBs/{KB_NAME}/4_Vector_DB"
+VDB_PATH = f"./DATA/KBs/{KB_NAME}/5_Vector_DB"
 CHUNKS_PATH = f"./DATA/KBs/{KB_NAME}/2_Structural_Chunks"
 CHUNK_FILES_PATTERN = "*_chunks.json"
 

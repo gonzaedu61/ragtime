@@ -1,0 +1,290 @@
+[
+    {
+        "text": "wird ein Kennzeichen angezeigt (Z-Kosten), das anzeigt, dass Zusatzkosten erfasst sind.  ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            494.5762023925781,
+            484.42889404296875,
+            505.6816101074219
+        ],
+        "block_no": 14,
+        "line_no": 2,
+        "page_num": 32
+    },
+    {
+        "text": "In der Summenzeile der Artikelpositionen wird die Gesamtsumme ohne und mit ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            512.09619140625,
+            438.22637939453125,
+            523.2015991210938
+        ],
+        "block_no": 15,
+        "line_no": 0,
+        "page_num": 32
+    },
+    {
+        "text": "Zusatzkosten in separaten Feldern ausgewiesen. ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            523.6162109375,
+            305.9588928222656,
+            534.7216186523438
+        ],
+        "block_no": 15,
+        "line_no": 1,
+        "page_num": 32
+    },
+    {
+        "text": "Druckausgabe Zusatzkosten ",
+        "font_size": 9.960000038146973,
+        "bold": true,
+        "bbox": [
+            85.2239990234375,
+            688.7662353515625,
+            223.61888122558594,
+            699.8716430664062
+        ],
+        "block_no": 17,
+        "line_no": 0,
+        "page_num": 32
+    },
+    {
+        "text": "Bei der Druckausgabe können die Zusatzkosten bei Bedarf mit Mengen, Bezeichnung und Preis ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            700.3062133789062,
+            512.1793212890625,
+            711.41162109375
+        ],
+        "block_no": 17,
+        "line_no": 1,
+        "page_num": 32
+    },
+    {
+        "text": "einzeln aufgelistet und die Artikelposition ergänzen. ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            711.826171875,
+            316.03887939453125,
+            722.9315795898438
+        ],
+        "block_no": 17,
+        "line_no": 2,
+        "page_num": 32
+    },
+    {
+        "text": "Übernahme in Rechnung der Zusatzkosten ",
+        "font_size": 9.960000038146973,
+        "bold": true,
+        "bbox": [
+            85.2239990234375,
+            729.34619140625,
+            291.3188781738281,
+            740.4515991210938
+        ],
+        "block_no": 18,
+        "line_no": 0,
+        "page_num": 32
+    },
+    {
+        "text": "Zusatzkosten werden bei der Übernahme der Artikelpositionen im Programm ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            740.8662109375,
+            427.2205505371094,
+            751.9716186523438
+        ],
+        "block_no": 18,
+        "line_no": 1,
+        "page_num": 32
+    },
+    {
+        "text": "Rechnung",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            427.5400085449219,
+            740.8662109375,
+            473.116943359375,
+            751.95166015625
+        ],
+        "block_no": 18,
+        "line_no": 1,
+        "page_num": 32
+    },
+    {
+        "text": " als ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            473.260009765625,
+            740.8662109375,
+            491.4978332519531,
+            751.9716186523438
+        ],
+        "block_no": 18,
+        "line_no": 1,
+        "page_num": 32
+    },
+    {
+        "text": "",
+        "font_size": 0.0,
+        "bold": false,
+        "bbox": [
+            85.0999984741211,
+            98.13999938964844,
+            145.64999389648438,
+            114.69000244140625
+        ],
+        "block_no": 19,
+        "line_no": 0,
+        "page_num": 32,
+        "is_image": true,
+        "image_path": "C:\\Users\\gonza\\OneDrive\\Desktop\\Python\\ragtime\\DATA\\KBs\\Test_KB\\3_Extracted_Images\\auf_pos_vor103\\page_32_block_19.jpg"
+    },
+    {
+        "text": "",
+        "font_size": 0.0,
+        "bold": false,
+        "bbox": [
+            85.0999984741211,
+            178.6800079345703,
+            351.3999938964844,
+            282.1300048828125
+        ],
+        "block_no": 20,
+        "line_no": 0,
+        "page_num": 32,
+        "is_image": true,
+        "image_path": "C:\\Users\\gonza\\OneDrive\\Desktop\\Python\\ragtime\\DATA\\KBs\\Test_KB\\3_Extracted_Images\\auf_pos_vor103\\page_32_block_20.jpg"
+    },
+    {
+        "text": "",
+        "font_size": 0.0,
+        "bold": false,
+        "bbox": [
+            85.0999984741211,
+            367.0299987792969,
+            139.9499969482422,
+            384.17999267578125
+        ],
+        "block_no": 21,
+        "line_no": 0,
+        "page_num": 32,
+        "is_image": true,
+        "image_path": "C:\\Users\\gonza\\OneDrive\\Desktop\\Python\\ragtime\\DATA\\KBs\\Test_KB\\3_Extracted_Images\\auf_pos_vor103\\page_32_block_21.jpg"
+    },
+    {
+        "text": "",
+        "font_size": 0.0,
+        "bold": false,
+        "bbox": [
+            85.0999984741211,
+            540.6699829101562,
+            455.95001220703125,
+            682.3699951171875
+        ],
+        "block_no": 22,
+        "line_no": 0,
+        "page_num": 32,
+        "is_image": true,
+        "image_path": "C:\\Users\\gonza\\OneDrive\\Desktop\\Python\\ragtime\\DATA\\KBs\\Test_KB\\3_Extracted_Images\\auf_pos_vor103\\page_32_block_22.jpg"
+    },
+    {
+        "text": "separate Rechnungspositionen übernommen. Bei der Druckausgabe der Rechnung können ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            74.04619598388672,
+            492.7673645019531,
+            85.15159606933594
+        ],
+        "block_no": 2,
+        "line_no": 0,
+        "page_num": 33
+    },
+    {
+        "text": "Zuatzkostenpositionen bei Bedarf speziell formatiert werden. ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            85.56621551513672,
+            355.8788757324219,
+            96.67161560058594
+        ],
+        "block_no": 2,
+        "line_no": 1,
+        "page_num": 33
+    },
+    {
+        "text": "4.4.9.1 ",
+        "font_size": 11.039999961853027,
+        "bold": true,
+        "bbox": [
+            85.2239990234375,
+            80.02882385253906,
+            121.88912200927734,
+            92.33841705322266
+        ],
+        "block_no": 2,
+        "line_no": 0,
+        "page_num": 34
+    },
+    {
+        "text": "Generieren Anfrage ",
+        "font_size": 9.960000038146973,
+        "bold": true,
+        "bbox": [
+            127.69999694824219,
+            81.00621795654297,
+            223.85887145996094,
+            92.11161804199219
+        ],
+        "block_no": 2,
+        "line_no": 0,
+        "page_num": 34
+    },
+    {
+        "text": "Generieren einer Anfrage aus den Daten der aktuellen Artikelposition. ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            121.68621063232422,
+            396.5888977050781,
+            132.79161071777344
+        ],
+        "block_no": 4,
+        "line_no": 0,
+        "page_num": 34
+    },
+    {
+        "text": "Durch die Funktion wird die Anfrage generiert und das Programm ",
+        "font_size": 9.960000038146973,
+        "bold": false,
+        "bbox": [
+            85.2239990234375,
+            139.086181640625,
+            376.6934814453125,
+            150.1915740966797
+        ],
+        "block_no": 5,
+        "line_no": 0,
+        "page_num": 34
+    }
+]

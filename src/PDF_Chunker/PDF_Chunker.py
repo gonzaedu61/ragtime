@@ -1032,33 +1032,34 @@ class PDF_Chunker:
 
             # Collect image paths from ALL blocks (images were merged into text blocks)
             image_paths = []
-
             for b in current_blocks:
-                # b.image_paths is already a list of absolute paths
                 for p in b.image_paths:
                     rel_path = os.path.relpath(p, start=self.output_dir)
                     image_paths.append(rel_path)
 
-
-
-
-
-            # Determine chunk type
+            # --------------------------------------------
+            # OPTION B: New chunk-type logic
+            # --------------------------------------------
             block_kinds = {b.kind for b in current_blocks}
+
+            # Always record the combination of block kinds
             mixed_combo = " + ".join(sorted(block_kinds))
+
+            # Chunk type rules:
+            # - If only one block kind → use that kind
+            # - If multiple block kinds → "mixed"
+            # - Special case: pure image chunks (rare now)
             if block_kinds == {"image"}:
                 chunk_type = "image"
-            elif block_kinds.issubset({"paragraph", "list_item", "heading", "caption", "sidebar", "table"}):
-                chunk_type = "text"
+            elif len(block_kinds) == 1:
+                # Single-type chunk → use the type name directly
+                chunk_type = next(iter(block_kinds))
             else:
+                # Multiple block types → mixed
                 chunk_type = "mixed"
 
+            # --------------------------------------------
 
-
-
-
-
-            # Append image paths to metadata, but do not let them affect token count
             chunks.append(
                 StructuralChunk(
                     document_name=self.document_base_name,

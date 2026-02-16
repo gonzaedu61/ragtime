@@ -57,6 +57,7 @@ def chunk_to_json(c: StructuralChunk) -> Dict[str, Any]:
         "chunk_type": c.chunk_type,
         "image_paths": c.image_paths,
         "blocks": [block_to_json(b) for b in c.blocks],
+        "mixed_combo": c.mixed_combo
     }
 
 

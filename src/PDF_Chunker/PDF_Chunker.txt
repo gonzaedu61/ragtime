@@ -834,31 +834,19 @@ class PDF_Chunker:
 
             kind = ""
 
-            # Numbered heading detection
             if m:
-                if (
-                    is_heading_candidate
-                    and is_short_numbered
-                    and few_lines
-                    and valid_heading_ending
-                    and same_block
-                ):
+                # Numbered heading → use numbered threshold
+                if is_heading_candidate and is_short_numbered and few_lines and valid_heading_ending and same_block:
                     kind = "heading"
-
-            # Fallback classification ALWAYS runs if kind is still empty
-            if kind == "":
-                if (
-                    is_heading_candidate
-                    and is_short_non_numbered
-                    and few_lines
-                    and valid_heading_ending
-                    and same_block
-                ):
+            else:
+                # Non-numbered heading → use non-numbered threshold
+                if is_heading_candidate and is_short_non_numbered and few_lines and valid_heading_ending and same_block:
                     kind = "heading"
                 elif LIST_BULLET_REGEX.match(text):
                     kind = "list_item"
                 else:
                     kind = "paragraph"
+
 
             is_step = bool(PROCESS_STEP_REGEX.match(text))
 

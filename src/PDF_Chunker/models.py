@@ -37,3 +37,4 @@ class StructuralChunk:
     token_count: int
     chunk_type: str
     image_paths: List[str] = field(default_factory=list)
+    mixed_combo: str = ""

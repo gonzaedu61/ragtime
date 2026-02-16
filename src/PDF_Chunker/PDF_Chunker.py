@@ -71,7 +71,7 @@ MIN_TOKENS = 800
 MAX_TOKENS = 1500
 
 # Headings of level <= this threshold trigger a chunk break
-MIN_HEADING_LEVEL_FOR_CHUNK_BREAK = 3
+MIN_HEADING_LEVEL_FOR_CHUNK_BREAK = 4
 
 # Heuristics for heading detection
 MAX_WORDS_NUMBERED_HEADING = 50
@@ -964,13 +964,18 @@ class PDF_Chunker:
                 continue
 
             m = NUMBERED_HEADING_PREFIX.match(b.text)
-            if not m:
-                continue
+            if m:
+                # Count dots to determine level
+                prefix = m.group(1)
+                level = prefix.count(".") + 1
+                b.heading_level = level
 
-            prefix = m.group(1)
-            # Count the number of segments
-            level = len(prefix.split("."))
-            b.heading_level = level
+        for b in blocks:
+            if b.kind == "heading" and b.heading_level is None:
+                b.heading_level = 1
+
+
+
 
     # -----------------------------------------------------
     # Step 6: Chunking

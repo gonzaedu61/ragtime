@@ -1,7 +1,7 @@
 # Summary
 
-- **Total chunks:** 33
-- **ang_basis_v92**: 2 chunks
+- **Total chunks:** 32
+- **ang_basis_v92**: 1 chunks
 - **auf_poskalk_vor103**: 6 chunks
 - **auf_kpa**: 8 chunks
 - **auf_pos_vor103**: 14 chunks
@@ -15,13 +15,13 @@
 
 - **Document Name:** ang_basis_v92
 - **Pages:** [109]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['10 Positionen (P-Maske)']
 
 ### Text
 Bei Verwendung von Artikeln, werden diese hier eingetragen. Ausführliche Informationen können Sie eine speziellen Workshop „Auftragspositionen“ entnehmen.
 
-- **Distance:** 0.10175365209579468
+- **Distance:** 0.1017535924911499
 
 ---
 
@@ -29,7 +29,7 @@ Bei Verwendung von Artikeln, werden diese hier eingetragen. Ausführliche Inform
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [35]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['6 Auftrag', '6.3 Generieren Produktionsauftrag']
 
 ### Text
@@ -43,7 +43,7 @@ Nach Bestätigen der Angaben wird der neue Produktionsauftrag angelegt und die A
 
 - **Document Name:** auf_kpa
 - **Pages:** [6]
-- **Chunk Type:** text
+- **Chunk Type:** mixed
 - **Heading Path:** ['2 Allgemeines', '2.2 Warum KPA', 'Kontrakt']
 
 ### Text
@@ -57,7 +57,7 @@ Kundenauftrag für einen oder mehrere Artikel. In einer Position eines Kontrakte
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [12]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['3 Übersicht Auftragspositionen', '3.7 Info Z-Files und Positionstexte']
 
 ### Text
@@ -71,7 +71,7 @@ Hängen an einer Auftragsposition Artikelpositionstexte oder Z-Files, können Si
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [5]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['2 Allgemeines']
 
 ### Text
@@ -85,7 +85,7 @@ Für die Abwicklung eines Auftrages über Artikel werden in der Maske Artikelpos
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [26]
-- **Chunk Type:** text
+- **Chunk Type:** mixed
 - **Heading Path:** ['5 Artikelanlage', '5.2 Anlage einer Stammkalkulation durch Neuanlage', '5.2.2 Einfügen der Artikelpositionen']
 
 ### Text
@@ -99,13 +99,13 @@ Nach Aufruf der Maske „Artikelpositionen“ werden die benötigten Artikel in 
 
 - **Document Name:** auf_kpa
 - **Pages:** [35]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['6 Abrufauftrag', '6.1 Anlegen von Abrufaufträgen', '6.1.1 Generieren von Abrufaufträgen mit dem Programm „Generieren Abrufe“', '6.1.1.1 Eintragen eines Artikels', 'Bestand F8', 'Detail F9']
 
 ### Text
 Es erscheint eine Übersicht über bereits vorhandene Aufträge (Kontrakt oder Abrufaufträge), in denen bereits Positionen des Artikels bestehen.
 
-- **Distance:** 0.12876015901565552
+- **Distance:** 0.12876039743423462
 
 ---
 
@@ -113,7 +113,7 @@ Es erscheint eine Übersicht über bereits vorhandene Aufträge (Kontrakt oder A
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [13]
-- **Chunk Type:** text
+- **Chunk Type:** list_item
 - **Heading Path:** ['4 Bearbeitungsmaske Auftragspositionen', '4.1 Neuanlage, Ändern und Löschen Artikelposition', 'Neuanlage Artikelposition', 'Ändern und Löschen']
 
 ### Text
@@ -127,7 +127,7 @@ Es erscheint eine Übersicht über bereits vorhandene Aufträge (Kontrakt oder A
 
 - **Document Name:** auf_kpa
 - **Pages:** [28]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['5 Produktionsauftrag', '5.3 Positionskalkulation', '5.3.4 Manuelles Eintragen von Positionen in einem Produktionsauftrag']
 
 ### Text
@@ -141,7 +141,7 @@ In der Auftragsposition unter „Ändern“ wird die Positionsmaske des Produkti
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [10]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['3 Übersicht Auftragspositionen', '3.4 Funktionen Info', '3.4.4 Info Bestellung']
 
 ### Text
@@ -155,7 +155,7 @@ In der Auftragsposition unter „Ändern“ wird die Positionsmaske des Produkti
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [16]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['4 Bearbeitungsmaske Auftragspositionen', '4.2 Spalten/Felder', 'Kz Artikelposition', 'Kz Positionsart', 'KZ ArtPos (KZ Druck)', 'Menge bestellt']
 
 ### Text
@@ -169,7 +169,7 @@ Eingabefeld der Menge für die Auftragsposition. Die Menge wird beim Eintrag der
 
 - **Document Name:** auf_kpa
 - **Pages:** [19]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['5 Produktionsauftrag', '5.2 Variantenkalkulation', '5.2.4 Manuelles Eintragen von Positionen in einem Produktionsauftrag']
 
 ### Text
@@ -181,23 +181,9 @@ In der Auftragsposition unter „Ändern“ wird die Positionsmaske des Produkti
 
 ## Chunk 13
 
-- **Document Name:** ang_basis_v92
-- **Pages:** [78]
-- **Chunk Type:** mixed
-- **Heading Path:** ['7 Beschreibende Texte (B-Maske)', '7.1 Kopfdaten']
-
-### Text
-49 Anlagen Auftrag Wird in AB ganz am Ende nach Textbaustein-3 angedruckt.
-
-- **Distance:** 0.13665729761123657
-
----
-
-## Chunk 14
-
 - **Document Name:** auf_pos_vor103
 - **Pages:** [6]
-- **Chunk Type:** text
+- **Chunk Type:** list_item
 - **Heading Path:** ['3 Übersicht Auftragspositionen', '3.1 Übersichtsmaske', 'Inhalt und Funktionen in der Übersichtsmaske:']
 
 ### Text
@@ -207,11 +193,11 @@ In der Auftragsposition unter „Ändern“ wird die Positionsmaske des Produkti
 
 ---
 
-## Chunk 15
+## Chunk 14
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [16]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['4 Angebot mit Positionskalkulation', '4.1 Neuanlage einer Artikelposition', '4.1.4 Beschreibender Text für Artikelposition']
 
 ### Text
@@ -221,11 +207,11 @@ Für die Beschreibung des Artikels im Angebot können das Feld „Text“ der Ar
 
 ---
 
-## Chunk 16
+## Chunk 15
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [19]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['4 Bearbeitungsmaske Auftragspositionen', '4.2 Spalten/Felder', 'Kz Artikelposition', 'Kz Positionsart', 'KZ ArtPos (KZ Druck)', 'Menge bestellt', 'Format-A / Format-B / Format-C / Gewicht']
 
 ### Text
@@ -235,11 +221,11 @@ Anzeigefelder der Daten aus dem Artikelstamm.
 
 ---
 
-## Chunk 17
+## Chunk 16
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [19]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['4 Bearbeitungsmaske Auftragspositionen', '4.2 Spalten/Felder', 'Kz Artikelposition', 'Kz Positionsart', 'KZ ArtPos (KZ Druck)', 'Menge bestellt', 'Kz Text']
 
 ### Text
@@ -249,11 +235,11 @@ Anzeigefeld, ob bereits Auftragspositionstexte über die Funktion „Text“ fü
 
 ---
 
-## Chunk 18
+## Chunk 17
 
 - **Document Name:** auf_kpa
 - **Pages:** [9]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['4 Kontrakt', '4.1 Anlegen von Kontrakt', '4.1.1 Kontrakt an einem Beispiel']
 
 ### Text
@@ -263,11 +249,11 @@ In einem Kontrakt können mehrere Positionen eingetragen werden. Das folgende Be
 
 ---
 
-## Chunk 19
+## Chunk 18
 
 - **Document Name:** auf_kpa
 - **Pages:** [24]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['5 Produktionsauftrag', '5.3 Positionskalkulation', '5.3.1 Neuer Produktionsauftrag']
 
 ### Text
@@ -277,11 +263,11 @@ Die kompletten Daten werden aus der Auftragsposition des Kontraktes übernommen.
 
 ---
 
-## Chunk 20
+## Chunk 19
 
 - **Document Name:** auf_kpa
 - **Pages:** [14]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['5 Produktionsauftrag', '5.2 Variantenkalkulation', '5.2.1 Neuer Produktionsauftrag']
 
 ### Text
@@ -291,11 +277,11 @@ Die kompletten Daten werden aus der Auftragsposition des Kontraktes übernommen.
 
 ---
 
-## Chunk 21
+## Chunk 20
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [9]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['3 Stammdaten', '3.1 Kalkulationsartikel', '3.1.5 PosKalk']
 
 ### Text
@@ -305,11 +291,11 @@ Angaben zu Optionen der Positionskalkulation.
 
 ---
 
-## Chunk 22
+## Chunk 21
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [37]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['4 Bearbeitungsmaske Auftragspositionen', '4.4 Funktionen Bearbeitungsmaske Artikelstamm', '4.4.10 Anzeige Auftragswert Gesamt Auftragspositionen']
 
 ### Text
@@ -319,11 +305,11 @@ Die Summe der Gesamtwerte aus den einzelnen Auftragspositionen wird als Anzeigef
 
 ---
 
-## Chunk 23
+## Chunk 22
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [9]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['3 Übersicht Auftragspositionen', '3.4 Funktionen Info', '3.4.1 Info Fertigung']
 
 ### Text
@@ -333,11 +319,11 @@ Die Summe der Gesamtwerte aus den einzelnen Auftragspositionen wird als Anzeigef
 
 ---
 
-## Chunk 24
+## Chunk 23
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [19]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['4 Bearbeitungsmaske Auftragspositionen', '4.2 Spalten/Felder', 'Kz Artikelposition', 'Kz Positionsart', 'KZ ArtPos (KZ Druck)', 'Menge bestellt', 'Kz Z-Files']
 
 ### Text
@@ -347,11 +333,11 @@ Anzeigefeld, ob bereits Z-Files über die Funktion „Z-Files“ an die Auftrags
 
 ---
 
-## Chunk 25
+## Chunk 24
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [30]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['6 Auftrag']
 
 ### Text
@@ -361,11 +347,11 @@ Die Auftragsverwaltung wird ausschließlich über die Masken „Auftragsstamm“
 
 ---
 
-## Chunk 26
+## Chunk 25
 
 - **Document Name:** auf_rech
 - **Pages:** [15]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['3 Rechnung', '3.2 Positionen', '3.2.6 Rechnungsartikel: Zu- / Abschlag, Zwischensummen']
 
 ### Text
@@ -375,11 +361,11 @@ Zur automatischen Bildung von Zu- und Abschlägen bzw. von Zwischensumme können
 
 ---
 
-## Chunk 27
+## Chunk 26
 
 - **Document Name:** auf_lade
 - **Pages:** [36]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['7 Generieren Ladeliste', '7.3 Generieren aus Auftragspositionen (Fertigware)', 'Prüfung Beschreibung']
 
 ### Text
@@ -389,11 +375,11 @@ Auftrag Nicht fertiggemeldet Artikel Kz „Ohne Bestand“ = nein (0) Auftragspo
 
 ---
 
-## Chunk 28
+## Chunk 27
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [9]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['3 Übersicht Auftragspositionen', '3.4 Funktionen Info', '3.4.2 Info Lieferung']
 
 ### Text
@@ -403,11 +389,11 @@ Auftrag Nicht fertiggemeldet Artikel Kz „Ohne Bestand“ = nein (0) Auftragspo
 
 ---
 
-## Chunk 29
+## Chunk 28
 
 - **Document Name:** auf_lief
 - **Pages:** [11]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['3 Lieferschein', '3.2 Positionen', '3.2.2 Sonderfunktionen', '3.2.2.7 AufPos']
 
 ### Text
@@ -417,11 +403,11 @@ Wird mit Auftragspositionen (Fertigwaren) gearbeitet, können die Daten aus dies
 
 ---
 
-## Chunk 30
+## Chunk 29
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [19]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['4 Bearbeitungsmaske Auftragspositionen', '4.2 Spalten/Felder', 'Kz Artikelposition', 'Kz Positionsart', 'KZ ArtPos (KZ Druck)', 'Menge bestellt', 'Kz PosKalk']
 
 ### Text
@@ -431,11 +417,11 @@ Anzeigefeld ob es sich um einen Artikel mit Positionskalkulation handelt. Angeze
 
 ---
 
-## Chunk 31
+## Chunk 30
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [18]
-- **Chunk Type:** text
+- **Chunk Type:** mixed
 - **Heading Path:** ['4 Bearbeitungsmaske Auftragspositionen', '4.2 Spalten/Felder', 'Kz Artikelposition', 'Kz Positionsart', 'KZ ArtPos (KZ Druck)', 'Menge bestellt', 'Funktion Erfassen Preisliste aktualisieren']
 
 ### Text
@@ -445,11 +431,11 @@ Anzeigefeld ob es sich um einen Artikel mit Positionskalkulation handelt. Angeze
 
 ---
 
-## Chunk 32
+## Chunk 31
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [20]
-- **Chunk Type:** text
+- **Chunk Type:** paragraph
 - **Heading Path:** ['4 Angebot mit Positionskalkulation', '4.4 Kopieren von Positionen']
 
 ### Text
@@ -459,11 +445,11 @@ Nach Eingabe der neuen Positionsnummer (hier 2) kann der Anwender mit Funktionst
 
 ---
 
-## Chunk 33
+## Chunk 32
 
 - **Document Name:** auf_kpa
 - **Pages:** [40]
-- **Chunk Type:** text
+- **Chunk Type:** mixed
 - **Heading Path:** ['6 Abrufauftrag', '6.1 Anlegen von Abrufaufträgen', '6.1.1 Generieren von Abrufaufträgen mit dem Programm „Generieren Abrufe“', '6.1.1.5 Vorschlag von Artikeln']
 
 ### Text

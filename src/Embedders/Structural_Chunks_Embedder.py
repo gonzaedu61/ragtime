@@ -81,27 +81,10 @@ class Structural_Chunks_Embedder:
             if "image_paths" in m and not m["image_paths"]:
                 del m["image_paths"]
 
-        # Process Metadata blocks
+        # Remove metadata blocks
         for m in metadata:
             if "blocks" in m:
                 del m["blocks"]  # Remove original blocks to avoid storing complex nested structures in vector DB
-
-                '''
-                # Adjust Metadata blocks: Remove spans and convert to JSON string to avoid storing complex nested structures in vector DB
-                cleaned_blocks = []
-                for block in m["blocks"]:
-                    cleaned_block = {
-                        "kind": block.get("kind"),
-                        "text": block.get("text"),
-                        "page_num": block.get("page_num"),
-                        "heading_level": block.get("heading_level"),
-                        "is_process_step": block.get("is_process_step"),
-                    }
-                    cleaned_blocks.append(cleaned_block)
-
-                # Convert list of dicts → JSON string
-                m["blocks"] = json.dumps(cleaned_blocks)
-                '''                
 
         return texts, ids, metadata
 

@@ -20,7 +20,7 @@ import hashlib
 def deterministic_id(text: str) -> str:
     return hashlib.md5(text.encode("utf-8")).hexdigest()
 #=================================================================================================================================
-class Embedder:
+class Structural_Chunks_Embedder:
     def __init__(self,
                  chunks_path: str, 
                  chunk_files_pattern: str,
@@ -117,20 +117,39 @@ class Embedder:
         embeddings = self.embedding_backend.embed(texts)
         embeddings = [e.detach().cpu().numpy() for e in embeddings]
 
-        # 3. Remove duplicates by TEXT while keeping alignment
-        seen_texts = set()
-        unique_ids = []
-        unique_texts = []
-        unique_embeddings = []
-        unique_metadata = []
+        # 3. Merge duplicates by TEXT while combining image_paths
+        merged = {}  # key = text, value = merged record
 
         for i, text in enumerate(texts):
-            if text not in seen_texts:
-                seen_texts.add(text)
-                unique_ids.append(ids[i])
-                unique_texts.append(text)
-                unique_embeddings.append(embeddings[i])
-                unique_metadata.append(metadata[i])
+            img_paths = metadata[i].get("image_paths", [])
+
+            if text not in merged:
+                # First occurrence → initialize merged entry
+                merged[text] = {
+                    "id": ids[i],
+                    "text": text,
+                    "embedding": embeddings[i],
+                    "metadata": metadata[i].copy()
+                }
+
+                # Ensure image_paths exists in metadata
+                if img_paths:
+                    merged[text]["metadata"]["image_paths"] = list(img_paths)
+
+            else:
+                # Duplicate text → merge image paths
+                existing_paths = merged[text]["metadata"].get("image_paths", [])
+                combined = set(existing_paths) | set(img_paths)
+
+                if combined:
+                    merged[text]["metadata"]["image_paths"] = list(combined)
+
+        # Unpack merged results into final lists
+        unique_ids = [v["id"] for v in merged.values()]
+        unique_texts = [v["text"] for v in merged.values()]
+        unique_embeddings = [v["embedding"] for v in merged.values()]
+        unique_metadata = [v["metadata"] for v in merged.values()]
+
 
         # 4. Store in vector DB
         self.vectordb.upsert(

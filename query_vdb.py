@@ -4,7 +4,7 @@ import json
 import numpy as np
 from pathlib import Path
 from VectorDB_Factory import create_vectordb
-from Embedder import HFEmbeddingBackend
+from Embedders import HFEmbeddingBackend
 
 
 # -----------------------------

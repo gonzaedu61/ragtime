@@ -1,13 +1,13 @@
 # Summary
 
-- **Total chunks:** 43
-- **ang_basis_v92**: 3 chunks
-- **auf_pos_vor103**: 16 chunks
-- **auf_kpa**: 14 chunks
+- **Total chunks:** 33
+- **ang_basis_v92**: 2 chunks
 - **auf_poskalk_vor103**: 6 chunks
-- **auf_rech**: 2 chunks
-- **auf_lief**: 1 chunks
+- **auf_kpa**: 8 chunks
+- **auf_pos_vor103**: 14 chunks
+- **auf_rech**: 1 chunks
 - **auf_lade**: 1 chunks
+- **auf_lief**: 1 chunks
 
 # Query Results
 
@@ -27,15 +27,15 @@ Bei Verwendung von Artikeln, werden diese hier eingetragen. Ausführliche Inform
 
 ## Chunk 2
 
-- **Document Name:** auf_pos_vor103
-- **Pages:** [7]
+- **Document Name:** auf_poskalk_vor103
+- **Pages:** [35]
 - **Chunk Type:** text
-- **Heading Path:** ['3 Übersicht Auftragspositionen', '3.2 Spalten Übersicht']
+- **Heading Path:** ['6 Auftrag', '6.3 Generieren Produktionsauftrag']
 
 ### Text
-Positionstext vorhanden
+Nach Bestätigen der Angaben wird der neue Produktionsauftrag angelegt und die Artikelpositionen übernommen.
 
-- **Distance:** 0.11172592639923096
+- **Distance:** 0.11955714225769043
 
 ---
 
@@ -126,34 +126,6 @@ Es erscheint eine Übersicht über bereits vorhandene Aufträge (Kontrakt oder A
 ## Chunk 9
 
 - **Document Name:** auf_kpa
-- **Pages:** [32, 33]
-- **Chunk Type:** mixed
-- **Heading Path:** ['6 Abrufauftrag', '6.1 Anlegen von Abrufaufträgen', '6.1.1 Generieren von Abrufaufträgen mit dem Programm „Generieren Abrufe“', '6.1.1.1 Eintragen eines Artikels']
-
-### Text
-6.1.1.1 Eintragen eines Artikels
-
-- **Distance:** 0.13015270233154297
-
----
-
-## Chunk 10
-
-- **Document Name:** auf_kpa
-- **Pages:** [45]
-- **Chunk Type:** text
-- **Heading Path:** ['6 Abrufauftrag', '6.1 Anlegen von Abrufaufträgen', '6.1.4 Manuelles Eintragen von Abrufpositionen', '6.1.4.1 Eintragen eines Artikels']
-
-### Text
-Befindet sich der Anwender in den Positionen der Abrufaufträge, kann er unter „Ändern“ die Positionsmaske öffnen. In dieser Positionsmaske können Abrufpositionen manuell eingetragen werden. Somit gibt es auch die Möglichkeit, einen Abrufauftrag mit dem Status „Abruf“ manuell anzulegen und die Abrufaufträge einzutragen. 6.1.4.1 Eintragen eines Artikels
-
-- **Distance:** 0.13244706392288208
-
----
-
-## Chunk 11
-
-- **Document Name:** auf_kpa
 - **Pages:** [28]
 - **Chunk Type:** text
 - **Heading Path:** ['5 Produktionsauftrag', '5.3 Positionskalkulation', '5.3.4 Manuelles Eintragen von Positionen in einem Produktionsauftrag']
@@ -165,7 +137,7 @@ In der Auftragsposition unter „Ändern“ wird die Positionsmaske des Produkti
 
 ---
 
-## Chunk 12
+## Chunk 10
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [10]
@@ -179,7 +151,7 @@ In der Auftragsposition unter „Ändern“ wird die Positionsmaske des Produkti
 
 ---
 
-## Chunk 13
+## Chunk 11
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [16]
@@ -193,7 +165,7 @@ Eingabefeld der Menge für die Auftragsposition. Die Menge wird beim Eintrag der
 
 ---
 
-## Chunk 14
+## Chunk 12
 
 - **Document Name:** auf_kpa
 - **Pages:** [19]
@@ -207,7 +179,7 @@ In der Auftragsposition unter „Ändern“ wird die Positionsmaske des Produkti
 
 ---
 
-## Chunk 15
+## Chunk 13
 
 - **Document Name:** ang_basis_v92
 - **Pages:** [78]
@@ -221,35 +193,7 @@ In der Auftragsposition unter „Ändern“ wird die Positionsmaske des Produkti
 
 ---
 
-## Chunk 16
-
-- **Document Name:** auf_kpa
-- **Pages:** [9]
-- **Chunk Type:** text
-- **Heading Path:** ['4 Kontrakt', '4.1 Anlegen von Kontrakt', '4.1.1 Kontrakt an einem Beispiel']
-
-### Text
-In einem Kontrakt können mehrere Positionen eingetragen werden. Das folgende Beispiel in diesem Workshop wird mit nur einer Artikelposition durchgeführt: Artikelposition: 1 Artikelname: a001-06 Kontraktmenge Artikel: 250.000 Foldertab der Positionen nach dem Anlegen des Artikels, mit dem Status Kontrakt: In den Positionszeilen können folgende Informationen über die Artikelposition des Kontraktes angezeigt werden. Somit kann sich der Anwender hier ein Überblick über Daten der Artikelposition wie zum Beispiel Menge, Preis oder Liefertermin und über die Artikelpositionen was gefertigte, gelieferte oder berechnete Mengen betrifft, verschaffen. Das gilt auch für die Positionen, die aus den Produktionsaufträgen (gefertigt) und Abrufaufträgen (geliefert, berechnet) stammen.
-
-- **Distance:** 0.1372380256652832
-
----
-
-## Chunk 17
-
-- **Document Name:** auf_kpa
-- **Pages:** [39, 40]
-- **Chunk Type:** mixed
-- **Heading Path:** ['6 Abrufauftrag', '6.1 Anlegen von Abrufaufträgen', '6.1.1 Generieren von Abrufaufträgen mit dem Programm „Generieren Abrufe“', '6.1.1.4 Eintragen von Artikeln ohne offenen Kontrakt']
-
-### Text
-6.1.1.4 Eintragen von Artikeln ohne offenen Kontrakt
-
-- **Distance:** 0.1373978853225708
-
----
-
-## Chunk 18
+## Chunk 14
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [6]
@@ -263,7 +207,7 @@ In einem Kontrakt können mehrere Positionen eingetragen werden. Das folgende Be
 
 ---
 
-## Chunk 19
+## Chunk 15
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [16]
@@ -277,35 +221,7 @@ Für die Beschreibung des Artikels im Angebot können das Feld „Text“ der Ar
 
 ---
 
-## Chunk 20
-
-- **Document Name:** auf_kpa
-- **Pages:** [41]
-- **Chunk Type:** text
-- **Heading Path:** ['6 Abrufauftrag', '6.1 Anlegen von Abrufaufträgen', '6.1.2 Generieren von Abrufaufträgen mit der Funktion „Abruf“', '6.1.2.1 Generieren von Abrufaufträgen eines Artikels']
-
-### Text
-Abrufe können auch auf einer anderen Art generiert werden. Ähnlich wie bei Produktionsaufträgen gibt es in den Positionen im Kontrakt eine Funktion „Abruf“. 6.1.2.1 Generieren von Abrufaufträgen eines Artikels
-
-- **Distance:** 0.13883835077285767
-
----
-
-## Chunk 21
-
-- **Document Name:** auf_pos_vor103
-- **Pages:** [33, 34]
-- **Chunk Type:** text
-- **Heading Path:** ['4 Bearbeitungsmaske Auftragspositionen', '4.4 Funktionen Bearbeitungsmaske Artikelstamm', '4.4.9 Zusatzkosten', '4.4.9.1 Generieren Anfrage']
-
-### Text
-separate Rechnungspositionen übernommen. Bei der Druckausgabe der Rechnung können Zuatzkostenpositionen bei Bedarf speziell formatiert werden. 4.4.9.1 Generieren Anfrage
-
-- **Distance:** 0.13940221071243286
-
----
-
-## Chunk 22
+## Chunk 16
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [19]
@@ -315,11 +231,11 @@ separate Rechnungspositionen übernommen. Bei der Druckausgabe der Rechnung kön
 ### Text
 Anzeigefelder der Daten aus dem Artikelstamm.
 
-- **Distance:** 0.1394808292388916
+- **Distance:** 0.1394805908203125
 
 ---
 
-## Chunk 23
+## Chunk 17
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [19]
@@ -333,35 +249,49 @@ Anzeigefeld, ob bereits Auftragspositionstexte über die Funktion „Text“ fü
 
 ---
 
-## Chunk 24
-
-- **Document Name:** auf_rech
-- **Pages:** [12]
-- **Chunk Type:** text
-- **Heading Path:** ['3 Rechnung', '3.2 Positionen', '3.2.2 Sonderfunktionen', '3.2.2.5 Beleg übernehmen']
-
-### Text
-Zu jeder Rechnungsposition können Texte hinterlegt werden. Hierbei steht die Möglichkeit zur Verfügung Beschreibungen aus dem aktuellen Auftrag zu übernehmen, oder auch Textbausteine mit Standardtexten einzuspielen. 3.2.2.5 Beleg übernehmen
-
-- **Distance:** 0.14146357774734497
-
----
-
-## Chunk 25
+## Chunk 18
 
 - **Document Name:** auf_kpa
-- **Pages:** [38]
+- **Pages:** [9]
 - **Chunk Type:** text
-- **Heading Path:** ['6 Abrufauftrag', '6.1 Anlegen von Abrufaufträgen', '6.1.1 Generieren von Abrufaufträgen mit dem Programm „Generieren Abrufe“', '6.1.1.2 Ablesen des Abrufes aus dem Kontrakt']
+- **Heading Path:** ['4 Kontrakt', '4.1 Anlegen von Kontrakt', '4.1.1 Kontrakt an einem Beispiel']
 
 ### Text
-Mit „Ändern“ können die Positionen des Abrufauftrages geöffnet werden. Diese können noch manuell verändert werden. Die Positionen haben automatisch das Kennzeichen „Verkauf“. Diese Menge wird dem Kunden zu dem im Kontrakt festgelegten Preis ausgeliefert und berechnet (siehe Kapitel 7 und 8 in diesem Workshop). 6.1.1.2 Ablesen des Abrufes aus dem Kontrakt
+In einem Kontrakt können mehrere Positionen eingetragen werden. Das folgende Beispiel in diesem Workshop wird mit nur einer Artikelposition durchgeführt: Artikelposition: 1 Artikelname: a001-06 Kontraktmenge Artikel: 250.000 Foldertab der Positionen nach dem Anlegen des Artikels, mit dem Status Kontrakt: In den Positionszeilen können folgende Informationen über die Artikelposition des Kontraktes angezeigt werden. Somit kann sich der Anwender hier ein Überblick über Daten der Artikelposition wie zum Beispiel Menge, Preis oder Liefertermin und über die Artikelpositionen was gefertigte, gelieferte oder berechnete Mengen betrifft, verschaffen. Das gilt auch für die Positionen, die aus den Produktionsaufträgen (gefertigt) und Abrufaufträgen (geliefert, berechnet) stammen. Durch das Aufrufen mit „Ändern“ wird die Positionsmaske mit dem Artikel angezeigt.
 
-- **Distance:** 0.1429494023323059
+- **Distance:** 0.1395663619041443
 
 ---
 
-## Chunk 26
+## Chunk 19
+
+- **Document Name:** auf_kpa
+- **Pages:** [24]
+- **Chunk Type:** text
+- **Heading Path:** ['5 Produktionsauftrag', '5.3 Positionskalkulation', '5.3.1 Neuer Produktionsauftrag']
+
+### Text
+Die kompletten Daten werden aus der Auftragsposition des Kontraktes übernommen. Die Daten der Kalkulation (Positionskalkulation) werden ebenfalls übernommen und werden je Artikel auf die Produktionsmenge angepasst. Eine Bearbeitung der Kalkulation ist nicht erforderlich.
+
+- **Distance:** 0.14209043979644775
+
+---
+
+## Chunk 20
+
+- **Document Name:** auf_kpa
+- **Pages:** [14]
+- **Chunk Type:** text
+- **Heading Path:** ['5 Produktionsauftrag', '5.2 Variantenkalkulation', '5.2.1 Neuer Produktionsauftrag']
+
+### Text
+Die kompletten Daten werden aus der Auftragsposition des Kontraktes übernommen. Je nach Parametereinstellung wird die komplette Menge der Artikelposition aus dem Kontrakt übernommen oder auf der Basis der beim Kopiervorgang angegeben Menge umgerechnet. Im obigen Beispiel wurde die Gesamtmenge des Kontraktes (60.000 = 40.000 Artikel-1, 20.000 Artikel-2) auf 30.000 geändert.
+
+- **Distance:** 0.1432729959487915
+
+---
+
+## Chunk 21
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [9]
@@ -375,21 +305,7 @@ Angaben zu Optionen der Positionskalkulation.
 
 ---
 
-## Chunk 27
-
-- **Document Name:** auf_kpa
-- **Pages:** [24]
-- **Chunk Type:** text
-- **Heading Path:** ['5 Produktionsauftrag', '5.3 Positionskalkulation', '5.3.1 Neuer Produktionsauftrag']
-
-### Text
-Mit „Ändern“ kann die Positionsmaske des Auftrages geöffnet werden. Die kompletten Daten werden aus der Auftragsposition des Kontraktes übernommen. Die Daten der Kalkulation (Positionskalkulation) werden ebenfalls übernommen und werden je Artikel auf die Produktionsmenge angepasst. Eine Bearbeitung der Kalkulation ist nicht erforderlich.
-
-- **Distance:** 0.1441587209701538
-
----
-
-## Chunk 28
+## Chunk 22
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [37]
@@ -403,21 +319,7 @@ Die Summe der Gesamtwerte aus den einzelnen Auftragspositionen wird als Anzeigef
 
 ---
 
-## Chunk 29
-
-- **Document Name:** auf_poskalk_vor103
-- **Pages:** [35]
-- **Chunk Type:** text
-- **Heading Path:** ['6 Auftrag', '6.3 Generieren Produktionsauftrag']
-
-### Text
-Die tatsächlich gewünschte Menge wird vom Anwender eingetragen. (hier 50.000 für Pos-1, 75.000 für Pos-2, 0 für Pos-3) Nach Bestätigen der Angaben wird der neue Produktionsauftrag angelegt und die Artikelpositionen übernommen.
-
-- **Distance:** 0.14597493410110474
-
----
-
-## Chunk 30
+## Chunk 23
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [9]
@@ -431,7 +333,7 @@ Die tatsächlich gewünschte Menge wird vom Anwender eingetragen. (hier 50.000 f
 
 ---
 
-## Chunk 31
+## Chunk 24
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [19]
@@ -445,21 +347,7 @@ Anzeigefeld, ob bereits Z-Files über die Funktion „Z-Files“ an die Auftrags
 
 ---
 
-## Chunk 32
-
-- **Document Name:** ang_basis_v92
-- **Pages:** [65, 66]
-- **Chunk Type:** mixed
-- **Heading Path:** ['6 Spezifikation', '6.4 Material und Fremdleistung (M-Maske)', '6.4.6 Einzelpreis', '6.4.6.4 Preisliste Angebot/Auftrag']
-
-### Text
-6.4.6.4 Preisliste Angebot/Auftrag
-
-- **Distance:** 0.14670872688293457
-
----
-
-## Chunk 33
+## Chunk 25
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [30]
@@ -473,21 +361,7 @@ Die Auftragsverwaltung wird ausschließlich über die Masken „Auftragsstamm“
 
 ---
 
-## Chunk 34
-
-- **Document Name:** auf_lief
-- **Pages:** [10]
-- **Chunk Type:** text
-- **Heading Path:** ['3 Lieferschein', '3.2 Positionen', '3.2.2 Sonderfunktionen', '3.2.2.5 Beleg übernehmen']
-
-### Text
-Zu jeder Lieferscheinposition können Texte hinterlegt werden. Hierbei steht die Möglichkeit zur Verfügung Beschreibungen aus dem aktuellen Auftrag zu übernehmen, oder auch Textbausteine mit Standardtexten einzuspielen. 3.2.2.5 Beleg übernehmen
-
-- **Distance:** 0.14708101749420166
-
----
-
-## Chunk 35
+## Chunk 26
 
 - **Document Name:** auf_rech
 - **Pages:** [15]
@@ -501,21 +375,7 @@ Zur automatischen Bildung von Zu- und Abschlägen bzw. von Zwischensumme können
 
 ---
 
-## Chunk 36
-
-- **Document Name:** auf_kpa
-- **Pages:** [39]
-- **Chunk Type:** text
-- **Heading Path:** ['6 Abrufauftrag', '6.1 Anlegen von Abrufaufträgen', '6.1.1 Generieren von Abrufaufträgen mit dem Programm „Generieren Abrufe“', '6.1.1.3 Eintragen eines Artikels, der bereits in mehreren Kontrakten angelegt ist']
-
-### Text
-Aufgrund der Verknüpfung des Abrufauftrages zum Kontrakt wird die abgerufene Menge in der Positionszeile des Kontraktes unter „Abruf“ und „offen Abruf“ vermerkt. Der Vorteil des Programms „Generieren Abruf“ ist, dass auch mehrere Artikelpositionen unabhängig vom Kontrakt eingetragen und in einem Abrufauftrag generiert werden können. 6.1.1.3 Eintragen eines Artikels, der bereits in mehreren Kontrakten angelegt ist
-
-- **Distance:** 0.14756131172180176
-
----
-
-## Chunk 37
+## Chunk 27
 
 - **Document Name:** auf_lade
 - **Pages:** [36]
@@ -529,7 +389,7 @@ Auftrag Nicht fertiggemeldet Artikel Kz „Ohne Bestand“ = nein (0) Auftragspo
 
 ---
 
-## Chunk 38
+## Chunk 28
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [9]
@@ -543,21 +403,21 @@ Auftrag Nicht fertiggemeldet Artikel Kz „Ohne Bestand“ = nein (0) Auftragspo
 
 ---
 
-## Chunk 39
+## Chunk 29
 
-- **Document Name:** auf_kpa
-- **Pages:** [46, 47]
-- **Chunk Type:** mixed
-- **Heading Path:** ['6 Abrufauftrag', '6.1 Anlegen von Abrufaufträgen', '6.1.4 Manuelles Eintragen von Abrufpositionen', '6.1.4.2 Eintragen eines Artikels ohne offene Artikelposition']
+- **Document Name:** auf_lief
+- **Pages:** [11]
+- **Chunk Type:** text
+- **Heading Path:** ['3 Lieferschein', '3.2 Positionen', '3.2.2 Sonderfunktionen', '3.2.2.7 AufPos']
 
 ### Text
-6.1.4.2 Eintragen eines Artikels ohne offene Artikelposition
+Wird mit Auftragspositionen (Fertigwaren) gearbeitet, können die Daten aus diesem Bereich in den Lieferschein übernommen werden.
 
-- **Distance:** 0.1485961675643921
+- **Distance:** 0.14881914854049683
 
 ---
 
-## Chunk 40
+## Chunk 30
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [19]
@@ -567,11 +427,11 @@ Auftrag Nicht fertiggemeldet Artikel Kz „Ohne Bestand“ = nein (0) Auftragspo
 ### Text
 Anzeigefeld ob es sich um einen Artikel mit Positionskalkulation handelt. Angezeigt wird das Kennzeichen aus dem Artikelstamm.
 
-- **Distance:** 0.14955651760101318
+- **Distance:** 0.1495564579963684
 
 ---
 
-## Chunk 41
+## Chunk 31
 
 - **Document Name:** auf_pos_vor103
 - **Pages:** [18]
@@ -585,7 +445,7 @@ Anzeigefeld ob es sich um einen Artikel mit Positionskalkulation handelt. Angeze
 
 ---
 
-## Chunk 42
+## Chunk 32
 
 - **Document Name:** auf_poskalk_vor103
 - **Pages:** [20]
@@ -599,7 +459,7 @@ Nach Eingabe der neuen Positionsnummer (hier 2) kann der Anwender mit Funktionst
 
 ---
 
-## Chunk 43
+## Chunk 33
 
 - **Document Name:** auf_kpa
 - **Pages:** [40]

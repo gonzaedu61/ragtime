@@ -1,5 +1,5 @@
 import sys
-from Embedder import Embedder, HFEmbeddingBackend
+from Embedders import Structural_Chunks_Embedder, HFEmbeddingBackend
 from VectorDB_Factory import create_vectordb
 import os
 
@@ -33,7 +33,7 @@ print('Vector DB Object created ...')
 
 # Initialize Embedder
 print('Creating Embedder ...')
-embedder = Embedder(CHUNKS_PATH, CHUNK_FILES_PATTERN,embedding_backend, vectordb, COLLECTION_NAME, verbose=True)
+embedder = Structural_Chunks_Embedder(CHUNKS_PATH, CHUNK_FILES_PATTERN,embedding_backend, vectordb, COLLECTION_NAME, verbose=True)
 print('Embedder created ...')
 
 

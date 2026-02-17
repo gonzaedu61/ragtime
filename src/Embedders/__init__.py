@@ -1,3 +1,4 @@
 from .Structural_Chunks_Embedder import Structural_Chunks_Embedder
 from .embedding_backends import HFEmbeddingBackend
+from .Tokenized_Chunks_Embedder import Tokenized_Chunks_Embedder
 

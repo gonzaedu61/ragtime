@@ -119,15 +119,3 @@ class ChromaBackend:
             include=["documents", "metadatas", "distances"]
         )
 
-
-    def get_all(self):
-        data = self.collection.get(
-            include=["documents", "embeddings", "metadatas"]
-        )
-        return (
-            data["embeddings"],
-            data["ids"],
-            data["documents"],
-            data["metadatas"]
-        )
-

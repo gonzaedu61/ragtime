@@ -326,6 +326,9 @@ class Topic_Hierarchy_Builder:
             json.dump(hierarchy, f, indent=2, ensure_ascii=False)
 
 
+    # ---------------------------------------------------------
+    # Public API: Pretty Print Tree
+    # ---------------------------------------------------------
     def print_tree(self, node, indent=0):
         """
         Pretty-print the hierarchy tree using metadata fields instead of text snippets.
@@ -349,7 +352,7 @@ class Topic_Hierarchy_Builder:
                 pages = meta.get("pages", [])
                 chunk = meta.get("chunk_id", "n/a")
 
-                print(" " * (indent + 2) + f"• {doc} | pages={pages} | chunk={chunk}")
+                print(" " * (indent + 2) + f"- {doc} | pages={pages} | chunk={chunk}")
 
             # Recurse into children
             if cluster["children"] is not None:

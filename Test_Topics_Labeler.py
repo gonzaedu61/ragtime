@@ -49,7 +49,8 @@ print('Vector DB Object created ...')
 
 
 
-labeler = Topic_Hierarchy_Labeler(llm, vectordb, store_summaries=True, verbose=True, cache_path=TOPICS_CACHE)
+labeler = Topic_Hierarchy_Labeler(llm, vectordb, store_summaries=True, verbose=True, show_progress_bar=True, cache_path=TOPICS_CACHE,
+                                  languages=['DE'])
 
 labeler.label_hierarchy_file( input_json_path=TOPICS_PATH + '/' + TOPICS_FILE,
                               output_json_path=TOPICS_PATH + '/' + LABELED_TOPICS_FILE )

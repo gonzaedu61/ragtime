@@ -29,6 +29,14 @@ def main():
     parser.add_argument("-cid", "--cluster-id", action="store_true",
                         help="Print full hierarchical cluster ID")
 
+    # NEW SORT OPTION
+    parser.add_argument(
+        "-sort", "--sort-order",
+        choices=["cid", "size"],
+        default="cid",
+        help="Sort clusters by cluster ID (cid) or by cluster size (size)"
+    )
+
     args = parser.parse_args()
 
     # Determine mode
@@ -55,7 +63,8 @@ def main():
             color=use_color,
             show_label=args.cluster_label,
             hide_documents=args.documents_no,
-            show_full_cid=args.cluster_id
+            show_full_cid=args.cluster_id,
+            sort_order=args.sort_order
         )
         printer.print_tree(tree)
     finally:

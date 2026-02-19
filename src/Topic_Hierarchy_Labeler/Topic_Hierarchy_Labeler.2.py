@@ -9,20 +9,28 @@ from typing import Any, Dict, Optional, List
 class Topic_Hierarchy_Labeler:
     """
     Bottom-up LLM-based labeling and summarization for a topic hierarchy.
-    Now includes:
-    - Guaranteed labels (prompt + fallback)
-    - Missing-label detection
-    - Repair mode regenerates labels only for missing-label clusters
+
+    Features:
+    - One LLM call per cluster.
+    - Multilingual output for a configurable list of languages.
+    - Robust JSON extraction from LLM responses (brace-balanced).
+    - Retry logic with exponential backoff.
+    - Incomplete cluster detection and placeholder summaries.
+    - Internal nodes NEVER fall back to raw chunks.
+    - Each cluster has a `source_language`.
+    - Writes one hierarchy JSON per language.
+    - Removes `multilang` and `source_language` from per-language output files.
+    - Optional progress bar with time estimate.
+    - Repair mode: only process incomplete clusters + ancestors.
+    - Final summary of successful vs incomplete clusters.
     """
 
     DEFAULT_COMBINED_PROMPT = (
         "You are analyzing a set of text chunks that belong to the same topic.\n"
         "For EACH of the following languages: {languages}, produce:\n"
         "- A concise summary (4–6 sentences)\n"
-        "- A short label (max 6 words). YOU MUST ALWAYS PROVIDE A LABEL.\n"
+        "- A short label (max 6 words)\n"
         "- 5–10 high-value keywords\n\n"
-        "If the topic is unclear, too small, or ambiguous, you MUST STILL provide the best possible descriptive label.\n"
-        "Never return an empty label, 'None', 'N/A', or similar placeholders.\n\n"
         "TEXTS:\n{text}\n\n"
         "CRITICAL FORMAT RULES:\n"
         "- Respond ONLY with valid JSON.\n"
@@ -57,13 +65,18 @@ class Topic_Hierarchy_Labeler:
         self.cache_path = cache_path
         self.combined_prompt = combined_prompt or self.DEFAULT_COMBINED_PROMPT
 
+        # Retry configuration
         self.retry_attempts = retry_attempts
+
+        # Repair mode
         self.repair_mode = repair_mode
 
+        # Progress bar logic
         self.show_progress_bar = show_progress_bar
         self.verbose = False if show_progress_bar else verbose
         self._start_time = None
 
+        # Counters
         self._total_clusters = 0
         self._processed_clusters = 0
         self._successful_clusters = 0
@@ -75,6 +88,7 @@ class Topic_Hierarchy_Labeler:
         self._semaphore = asyncio.Semaphore(max_concurrent_llm_calls)
         self._flush_lock = asyncio.Lock()
 
+        # Load cache
         if os.path.exists(cache_path):
             with open(cache_path, "r", encoding="utf-8") as f:
                 self.cache = json.load(f)
@@ -89,7 +103,7 @@ class Topic_Hierarchy_Labeler:
             print(msg)
 
     # -------------------------------------------------------------------------
-    # Time formatting
+    # Time formatting helper
     # -------------------------------------------------------------------------
     def _fmt_time(self, seconds: float) -> str:
         seconds = int(seconds)
@@ -99,7 +113,7 @@ class Topic_Hierarchy_Labeler:
         return f"{h:02d}:{m:02d}:{s:02d}"
 
     # -------------------------------------------------------------------------
-    # Progress bar
+    # Progress bar with time estimate
     # -------------------------------------------------------------------------
     def _update_progress_bar(self):
         if not self.show_progress_bar:
@@ -111,8 +125,8 @@ class Topic_Hierarchy_Labeler:
         bar = "█" * filled + "░" * (bar_len - filled)
 
         elapsed = time.time() - self._start_time
-        avg = elapsed / max(1, self._processed_clusters)
-        est_total = avg * self._total_clusters
+        avg_per_cluster = elapsed / max(1, self._processed_clusters)
+        est_total = avg_per_cluster * self._total_clusters
         remaining = est_total - elapsed
 
         sys.stdout.write(
@@ -137,25 +151,10 @@ class Topic_Hierarchy_Labeler:
                 count += self._count_clusters(c["children"])
         return count
 
-    # -------------------------------------------------------------------------
-    # Missing-label detection
-    # -------------------------------------------------------------------------
-    def _cluster_missing_label(self, cluster):
-        if "multilang" not in cluster:
-            return True
-        for lang in self.languages:
-            label = cluster["multilang"].get(lang, {}).get("label", "")
-            if not label or not label.strip():
-                return True
-        return False
-
-    # -------------------------------------------------------------------------
-    # Count incomplete clusters (including missing labels)
-    # -------------------------------------------------------------------------
     def _count_incomplete(self, node: Dict[str, Any]) -> int:
         count = 0
         for c in node["clusters"]:
-            if c.get("incomplete") or self._cluster_missing_label(c):
+            if c.get("incomplete"):
                 count += 1
             if c["children"] is not None:
                 count += self._count_incomplete(c["children"])
@@ -173,7 +172,7 @@ class Topic_Hierarchy_Labeler:
         return text
 
     # -------------------------------------------------------------------------
-    # Extract first JSON object
+    # Extract first JSON object (brace-balanced)
     # -------------------------------------------------------------------------
     def _extract_first_json_object(self, text: str) -> Optional[str]:
         start = text.find("{")
@@ -220,7 +219,7 @@ class Topic_Hierarchy_Labeler:
         return "{\n" + ",\n".join(parts) + "\n}"
 
     # -------------------------------------------------------------------------
-    # Safe flush
+    # Flush progress
     # -------------------------------------------------------------------------
     async def _aflush_progress(self):
         if not self._current_hierarchy or not self._current_output_path:
@@ -252,6 +251,7 @@ class Topic_Hierarchy_Labeler:
         self._current_hierarchy = hierarchy
         self._current_output_path = output_json_path
 
+        # Count clusters depending on mode
         if self.repair_mode:
             self._total_clusters = self._count_incomplete(hierarchy)
         else:
@@ -271,6 +271,7 @@ class Topic_Hierarchy_Labeler:
 
         await self._aflush_progress()
 
+        # Write per-language files
         for lang in self.languages:
             lang_hierarchy = self._extract_language_view(hierarchy, lang)
             out_path = self._append_lang_suffix(output_json_path, lang)
@@ -278,7 +279,12 @@ class Topic_Hierarchy_Labeler:
             with open(out_path, "w", encoding="utf-8") as f:
                 json.dump(lang_hierarchy, f, indent=2, ensure_ascii=False)
 
-        print("\nSummary:")
+        # Final summary
+        if self.repair_mode:
+            print("\nRepair mode summary:")
+        else:
+            print("\nSummary:")
+
         print(f"  Successful clusters: {self._successful_clusters}")
         print(f"  Incomplete clusters: {self._incomplete_clusters}")
 
@@ -321,42 +327,38 @@ class Topic_Hierarchy_Labeler:
 
         cid = cluster["cluster_id"]
 
-        # NEW: treat missing labels as incomplete
-        if not cluster.get("incomplete") and self._cluster_missing_label(cluster):
-            cluster["incomplete"] = True
-
         # Skip healthy clusters in repair mode
         if self.repair_mode and not cluster.get("incomplete"):
             self._successful_clusters += 1
-            await self._aflush_progress()
             return
 
-        # Cache check
+        # Cache check (only successful clusters are cached)
         if not self.repair_mode and cid in self.cache:
             cached = self.cache[cid]
             cluster["multilang"] = cached["multilang"]
             cluster["source_language"] = cached["source_language"]
             self._successful_clusters += 1
-            await self._aflush_progress()
             return
 
         # Build input text
         if cluster["children"] is None:
+            # Leaf → raw chunks
             texts = []
             for chunk_id in cluster["ids"]:
                 rec = self._get_record_by_id(chunk_id)
                 texts.append(rec["document"] if rec else "")
             combined_text = "\n\n".join(texts)
         else:
+            # Internal → child summaries ONLY
             child_summaries = []
             for child in cluster["children"]["clusters"]:
                 if child.get("incomplete"):
                     child_summaries.append("[INCOMPLETE]")
                     continue
 
-                lang = child.get("source_language")
-                if "multilang" in child and lang in child["multilang"]:
-                    child_summaries.append(child["multilang"][lang]["summary"])
+                child_lang = child.get("source_language")
+                if "multilang" in child and child_lang in child["multilang"]:
+                    child_summaries.append(child["multilang"][child_lang]["summary"])
                 else:
                     child_summaries.append("[INCOMPLETE]")
 
@@ -370,7 +372,7 @@ class Topic_Hierarchy_Labeler:
             json_schema=json_schema,
         )
 
-        # Retry logic
+        # Retry logic with exponential backoff
         data = None
         for attempt in range(self.retry_attempts):
             try:
@@ -384,53 +386,32 @@ class Topic_Hierarchy_Labeler:
 
                 data = json.loads(json_candidate)
 
+                # Validate schema
                 for lang in self.languages:
                     if lang not in data or not isinstance(data[lang], dict):
                         raise ValueError(f"Missing or invalid language '{lang}'")
 
-                break
+                break  # success
 
             except Exception:
                 if attempt == self.retry_attempts - 1:
+                    # All retries failed → mark incomplete
                     cluster["incomplete"] = True
                     self._incomplete_clusters += 1
                     self._mark_ancestors_incomplete(cluster)
-                    await self._aflush_progress()
                     return
                 else:
                     await asyncio.sleep(2 ** attempt)
 
-        # Store multilingual data with HARD fallback
-        cluster["multilang"] = {}
-
-        for lang in self.languages:
-            summary = data[lang].get("summary", "").strip()
-            label = data[lang].get("label", "").strip()
-            keywords = data[lang].get("keywords", [])
-
-            # HARD GUARANTEE: enforce non-empty label
-            if not label:
-                # Leaf fallback
-                if cluster["children"] is None and cluster.get("metadatas"):
-                    label = cluster["metadatas"][0].get("document_name", "Unnamed Cluster")
-
-                # Internal fallback
-                elif cluster["children"] is not None:
-                    for child in cluster["children"]["clusters"]:
-                        child_label = child.get("multilang", {}).get(lang, {}).get("label")
-                        if child_label:
-                            label = child_label
-                            break
-
-                # Final fallback
-                if not label:
-                    label = f"Cluster {cluster['cluster_id']}"
-
-            cluster["multilang"][lang] = {
-                "summary": summary,
-                "label": label,
-                "keywords": keywords,
+        # Store multilingual data
+        cluster["multilang"] = {
+            lang: {
+                "summary": data[lang].get("summary", "").strip(),
+                "label": data[lang].get("label", "").strip(),
+                "keywords": data[lang].get("keywords", []),
             }
+            for lang in self.languages
+        }
 
         # Determine source_language
         if cluster["children"] is None:
@@ -446,17 +427,17 @@ class Topic_Hierarchy_Labeler:
                     scores[lang] = scores.get(lang, 0) + len(child["multilang"][lang]["summary"])
             cluster["source_language"] = max(scores, key=scores.get) if scores else self.languages[0]
 
+        # Remove incomplete flag if repaired
         if "incomplete" in cluster:
             del cluster["incomplete"]
 
-        # Cache successful clusters
+        # Cache only successful clusters
         self.cache[cid] = {
             "multilang": cluster["multilang"],
             "source_language": cluster["source_language"],
         }
 
         self._successful_clusters += 1
-        await self._aflush_progress()
 
     # -------------------------------------------------------------------------
     # Vector DB
@@ -465,7 +446,7 @@ class Topic_Hierarchy_Labeler:
         return self.vectordb.get_by_id(chunk_id)
 
     # -------------------------------------------------------------------------
-    # Per-language view
+    # Per-language hierarchy view (removes multilang and source_language)
     # -------------------------------------------------------------------------
     def _extract_language_view(self, root: Dict[str, Any], lang: str) -> Dict[str, Any]:
         hierarchy = json.loads(json.dumps(root))

@@ -2,13 +2,15 @@ from collections import Counter
 
 class Topics_Tree_Printer:
     def __init__(self, mode="details", color=True,
-                 show_label=False, hide_documents=False, show_full_cid=False):
+                 show_label=False, hide_documents=False,
+                 show_full_cid=False, sort_order="cid"):
 
         self.mode = mode
         self.color = color
         self.show_label = show_label
         self.hide_documents = hide_documents
         self.show_full_cid = show_full_cid
+        self.sort_order = sort_order
 
         if color:
             from colorama import Fore, Style, init
@@ -30,37 +32,47 @@ class Topics_Tree_Printer:
             return
 
         clusters = node["clusters"]
+
+        # Sorting logic
+        if self.sort_order == "cid":
+            clusters = sorted(clusters, key=lambda c: c["cluster_id"])
+        elif self.sort_order == "size":
+            clusters = sorted(clusters, key=lambda c: c["size"], reverse=True)
+
         last_index = len(clusters) - 1
 
         for i, cluster in enumerate(clusters):
             is_last = i == last_index
 
-            # Compute full hierarchical cluster ID
             cid = cluster["cluster_id"]
             full_cid = f"{cid_path}.{cid}" if cid_path else str(cid)
             cid_to_show = full_cid if self.show_full_cid else cid
 
             branch = "└── " if is_last else "├── "
-            size = cluster["size"]
 
-            # Build main line
-            line = f"{self.cyan}[{cid_to_show}]{self.reset} size={size}"
+            # NEW: chunks + child cluster count
+            chunks = cluster["size"]
+            child_count = (
+                len(cluster["children"]["clusters"])
+                if cluster["children"] else 0
+            )
 
-            # Append label inline if requested
+            line = (
+                f"{self.cyan}[{cid_to_show}]{self.reset} "
+                f"chunks={chunks} | childs={child_count}"
+            )
+
             label = cluster.get("label")
             if self.show_label and label:
                 line += f": {self.green}{label}{self.reset}"
 
-            # Print the cluster header line
             print(prefix + branch + line)
 
-            # Print document details unless suppressed
             if self.mode == "details":
                 self._print_details(cluster, prefix, is_last)
             else:
                 self._print_summary(cluster, prefix, is_last)
 
-            # Recurse into children
             if cluster["children"] is not None:
                 new_prefix = prefix + ("    " if is_last else "│   ")
                 new_cid_path = full_cid
@@ -81,8 +93,10 @@ class Topics_Tree_Printer:
             branch = "└── " if i == last_index else "├── "
             sub_prefix = prefix + ("    " if is_last else "│   ")
 
-            print(sub_prefix + branch +
-                  f"{self.yellow}{doc}{self.reset} | pages={pages} | chunk={chunk}")
+            print(
+                sub_prefix + branch +
+                f"{self.yellow}{doc}{self.reset} | pages={pages} | chunk={chunk}"
+            )
 
     def _print_summary(self, cluster, prefix, is_last):
         metadatas = cluster["metadatas"]
@@ -98,5 +112,7 @@ class Topics_Tree_Printer:
             branch = "└── " if i == last_index else "├── "
             sub_prefix = prefix + ("    " if is_last else "│   ")
 
-            print(sub_prefix + branch +
-                  f"{self.green}{doc}{self.reset} | chunks={count} | {pct:.1f}%")
+            print(
+                sub_prefix + branch +
+                f"{self.green}{doc}{self.reset} | chunks={count} | {pct:.1f}%"
+            )

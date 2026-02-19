@@ -21,6 +21,14 @@ def main():
     parser.add_argument("--no-color", action="store_true",
                         help="Disable ANSI colors in output")
 
+    # NEW OPTIONS
+    parser.add_argument("-cl", "--cluster-label", action="store_true",
+                        help="Show cluster label")
+    parser.add_argument("-dn", "--documents-no", action="store_true",
+                        help="Do not print document info lines")
+    parser.add_argument("-cid", "--cluster-id", action="store_true",
+                        help="Print full hierarchical cluster ID")
+
     args = parser.parse_args()
 
     # Determine mode
@@ -30,9 +38,7 @@ def main():
     with open(args.input_file, "r") as f:
         tree = json.load(f)
 
-    # Determine color usage:
-    # - If writing to a file → disable color unless user forces it
-    # - If printing to console → enable color unless user disables it
+    # Determine color usage
     if args.output:
         use_color = not args.no_color
     else:
@@ -44,7 +50,13 @@ def main():
     sys.stdout = buffer
 
     try:
-        printer = Topics_Tree_Printer(mode=mode, color=use_color)
+        printer = Topics_Tree_Printer(
+            mode=mode,
+            color=use_color,
+            show_label=args.cluster_label,
+            hide_documents=args.documents_no,
+            show_full_cid=args.cluster_id
+        )
         printer.print_tree(tree)
     finally:
         sys.stdout = original_stdout

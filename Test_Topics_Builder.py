@@ -8,6 +8,8 @@ VECTOR_DB_NAME = "chroma"
 COLLECTION_NAME="Structural_Chunks"
 VDB_PATH = f"./DATA/KBs/{KB_NAME}/5_Vector_DB"
 
+TOPICS_PATH = f"./DATA/KBs/{KB_NAME}/6_Topics_Hierarchy"
+TOPICS_FILE = "Topics_Hierarchy.json" 
 
 
 vector_db = create_vectordb(
@@ -19,14 +21,17 @@ vector_db = create_vectordb(
 
 topics_builder = Topic_Hierarchy_Builder(
     vector_db=vector_db,
-    metadata_keys=["heading_path"],
-    metadata_weight=0.3,
+    metadata_keys=["heading_path","document_name"],
+    metadata_weight=0.2,
     postprocess_rules=None,
     verbose=False
 )
 
 hierarchy = topics_builder.build()
 
-topics_builder.save(hierarchy)
 
-topics_builder.print_tree(hierarchy)
+
+os.makedirs(TOPICS_PATH, exist_ok=True)
+topics_builder.save(hierarchy, filename=TOPICS_PATH + '/' + TOPICS_FILE)
+
+#topics_builder.print_tree(hierarchy)

@@ -1,13 +1,16 @@
-# Topics_Tree_Printer.py
 from collections import Counter
 
 class Topics_Tree_Printer:
-    def __init__(self, mode="details", color=True):
+    def __init__(self, mode="details", color=True,
+                 show_label=False, hide_documents=False, show_full_cid=False):
+
         self.mode = mode
         self.color = color
+        self.show_label = show_label
+        self.hide_documents = hide_documents
+        self.show_full_cid = show_full_cid
 
         if color:
-            # Import colorama ONLY when needed
             from colorama import Fore, Style, init
             init(autoreset=True)
 
@@ -16,13 +19,12 @@ class Topics_Tree_Printer:
             self.green = Fore.GREEN
             self.reset = Style.RESET_ALL
         else:
-            # No ANSI codes at all
             self.cyan = ""
             self.yellow = ""
             self.green = ""
             self.reset = ""
 
-    def print_tree(self, node, prefix=""):
+    def print_tree(self, node, prefix="", cid_path=""):
         if node is None:
             print(prefix + "(empty)")
             return
@@ -33,24 +35,41 @@ class Topics_Tree_Printer:
         for i, cluster in enumerate(clusters):
             is_last = i == last_index
 
+            # Compute full hierarchical cluster ID
+            cid = cluster["cluster_id"]
+            full_cid = f"{cid_path}.{cid}" if cid_path else str(cid)
+            cid_to_show = full_cid if self.show_full_cid else cid
+
+            branch = "└── " if is_last else "├── "
+            size = cluster["size"]
+
+            # Build main line
+            line = f"{self.cyan}[{cid_to_show}]{self.reset} size={size}"
+
+            # Append label inline if requested
+            label = cluster.get("label")
+            if self.show_label and label:
+                line += f": {self.green}{label}{self.reset}"
+
+            # Print the cluster header line
+            print(prefix + branch + line)
+
+            # Print document details unless suppressed
             if self.mode == "details":
-                branch = "└── " if is_last else "├── "
-                cid = cluster["cluster_id"]
-                size = cluster["size"]
-
-                print(prefix + branch +
-                      f"{self.cyan}[{cid}]{self.reset} size={size}")
-
                 self._print_details(cluster, prefix, is_last)
-
             else:
                 self._print_summary(cluster, prefix, is_last)
 
+            # Recurse into children
             if cluster["children"] is not None:
                 new_prefix = prefix + ("    " if is_last else "│   ")
-                self.print_tree(cluster["children"], new_prefix)
+                new_cid_path = full_cid
+                self.print_tree(cluster["children"], new_prefix, new_cid_path)
 
     def _print_details(self, cluster, prefix, is_last):
+        if self.hide_documents:
+            return
+
         metadatas = cluster["metadatas"]
         last_index = len(metadatas) - 1
 

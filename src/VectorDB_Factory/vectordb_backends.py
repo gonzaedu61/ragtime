@@ -130,4 +130,18 @@ class ChromaBackend:
             data["documents"],
             data["metadatas"]
         )
+    
+    def get_by_id(self, chunk_id: str):
+        result = self.collection.get(
+            ids=[chunk_id],
+            include=["documents", "metadatas"]
+        )
+        if not result.get("documents"):
+            return None
+        return {
+            "id": chunk_id,
+            "document": result["documents"][0],
+            "metadata": result["metadatas"][0],
+        }
+
 

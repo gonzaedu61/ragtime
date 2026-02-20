@@ -5,7 +5,7 @@ import time
 class Simple_Progress_Bar:
     """
     Reusable progress bar with ETA and elapsed time.
-    Now supports optional step labels.
+    Matches the behavior of the Topic_Hierarchy_Labeler progress bar.
     """
 
     def __init__(self, total: int, enabled: bool = True, bar_length: int = 30):
@@ -16,14 +16,7 @@ class Simple_Progress_Bar:
         self.start_time = time.time()
         self.current = 0
 
-        # NEW: store last label printed
-        self.last_label = ""
-
-    def update(self, step: int = 1, label: str = None):
-        """
-        Update the progress bar.
-        Optional: label="Hybrid retrieval", etc.
-        """
+    def update(self, step: int = 1):
         if not self.enabled:
             return
 
@@ -38,20 +31,12 @@ class Simple_Progress_Bar:
         est_total = avg * self.total
         remaining = est_total - elapsed
 
-        # NEW: store label if provided
-        if label is not None:
-            self.last_label = label
-
-        # NEW: append label to the progress bar line
-        label_str = f" | {self.last_label}" if self.last_label else ""
-
         sys.stdout.write(
             f"\r[{bar}] {pct:5.1f}%  "
             f"({self.current}/{self.total})  "
             f"Elapsed: {self._fmt(elapsed)} | "
             f"ETA: {self._fmt(remaining)} | "
             f"Total est.: {self._fmt(est_total)}"
-            f"{label_str}"
         )
         sys.stdout.flush()
 

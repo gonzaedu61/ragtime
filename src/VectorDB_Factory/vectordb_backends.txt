@@ -156,24 +156,6 @@ class ChromaBackend:
             }
             for i in range(len(result["ids"][0]))
         ]
-    
-
-    def all_chunks(self):
-        """
-        Returns all chunks in a unified format expected by Ontology_Chunks_Retriever.
-        """
-        embeddings, ids, documents, metadatas = self.get_all()
-
-        chunks = []
-        for i in range(len(ids)):
-            chunks.append({
-                "chunk_id": ids[i],
-                "text": documents[i],
-                "metadata": metadatas[i],
-            })
-
-        return chunks
-
 
 
 

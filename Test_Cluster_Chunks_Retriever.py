@@ -1,7 +1,7 @@
 import sys
 from Embedders import HFEmbeddingBackend
 from VectorDB_Factory import create_vectordb
-from Ontology_Builder import Ontology_Chunks_Retriever
+from Ontology_Builder import Cluster_Chunks_Retriever
 import os
 
 # Config Constants
@@ -14,7 +14,7 @@ VDB_PATH = f"./DATA/KBs/{KB_NAME}/5_Vector_DB"
 ONTOLOGY_DIR = "7_Ontology_Files"
 ONTOLOGY_PATH = f"./DATA/KBs/{KB_NAME}/{ONTOLOGY_DIR}"
 INPUT_CLUSTERS_FILE = f"./DATA/KBs/{KB_NAME}/6_Topics_Hierarchy/Labeled_Topics_Hierarchy.json"
-RETRIEVED_CHUNKS_FILE = f"{ONTOLOGY_PATH}/Ontology_Retrieved_Chunks.json"
+RETRIEVED_CHUNKS_FILE = f"{ONTOLOGY_PATH}/Cluster_Retrieved_Chunks.json"
 FLATTENED_CLUSTERS_FILE = f"{ONTOLOGY_PATH}/Flattened_Clusters.json"
 
 
@@ -33,7 +33,7 @@ vectordb = create_vectordb(
 )
 
 
-retriever = Ontology_Chunks_Retriever(
+retriever = Cluster_Chunks_Retriever(
     vector_db=vectordb,
     embedder=embedding_backend,
     language="DE",

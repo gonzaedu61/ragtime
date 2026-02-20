@@ -6,7 +6,7 @@ import numpy as np
 import hashlib
 
 
-class Ontology_Chunks_Retriever:
+class Cluster_Chunks_Retriever:
     """
     Retrieves top-N relevant raw chunks for each cluster.
     Now includes:

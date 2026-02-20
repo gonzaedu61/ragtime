@@ -1,1 +1,1 @@
-from .Ontology_Chunks_Retriever import Ontology_Chunks_Retriever
+from .Cluster_Chunks_Retriever import Cluster_Chunks_Retriever

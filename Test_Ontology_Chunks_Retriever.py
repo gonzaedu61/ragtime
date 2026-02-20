@@ -37,7 +37,6 @@ retriever = Ontology_Chunks_Retriever(
     vector_db=vectordb,
     embedder=embedding_backend,
     language="DE",
-    top_n=40,
     verbose=True,          
     progress_bar=True    
 )

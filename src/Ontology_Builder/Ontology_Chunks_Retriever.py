@@ -1,37 +1,52 @@
 import json
 from typing import List, Dict, Any
 from Utilities import Simple_Progress_Bar
+from rank_bm25 import BM25Okapi
+import numpy as np
+import hashlib
 
 
 class Ontology_Chunks_Retriever:
     """
     Retrieves top-N relevant raw chunks for each cluster.
-    Includes:
-    - automatic hierarchy flattening
-    - automatic/configurable language selection
-    - saving flattened clusters for debugging
-    - shared progress bar
+    Now includes:
+    - efficient hybrid retrieval (dense + sparse)
+    - keyword re-ranking
+    - chunk deduplication
+    - minimal diagnostics
+    - configurable candidate_k and final_k
+    - deduped cluster keywords
+    - per-cluster progress visibility
     """
 
     def __init__(
         self,
         vector_db,
         embedder,
-        top_n=30,
+        candidate_k=40,     # NEW
+        final_k=10,         # NEW
         verbose=False,
         progress_bar=False,
-        language: str = None,   # NEW: optional language override
+        language: str = None,
+        hybrid_alpha=0.5,
+        keyword_weight=0.2,
     ):
         self.vector_db = vector_db
         self.embedder = embedder
-        self.top_n = top_n
 
-        self.progress_bar_enabled = progress_bar
+        self.candidate_k = candidate_k
+        self.final_k = final_k
+
         self.verbose = verbose and not progress_bar
+        self.progress_bar_enabled = progress_bar
 
-        self.language_override = language  # NEW
+        self.language_override = language
+        self.hybrid_alpha = hybrid_alpha
+        self.keyword_weight = keyword_weight
 
         self.progress = None
+
+        self._init_sparse_index()
 
     # ---------------------------------------------------------
     # Logging helper
@@ -39,6 +54,28 @@ class Ontology_Chunks_Retriever:
     def log(self, msg: str):
         if self.verbose:
             print(msg)
+
+    # ---------------------------------------------------------
+    # Build BM25 sparse index
+    # ---------------------------------------------------------
+    def _init_sparse_index(self):
+        try:
+            self.all_chunks = self.vector_db.all_chunks()
+        except Exception:
+            self.all_chunks = None
+
+        if not self.all_chunks:
+            self.log("WARNING: vector_db.all_chunks() returned no data. Using dense-only retrieval.")
+            self.bm25 = None
+            self.chunk_by_id = {}
+            return
+
+        tokenized = [c["text"].split() for c in self.all_chunks]
+        self.bm25 = BM25Okapi(tokenized)
+
+        self.chunk_by_id = {c["chunk_id"]: c for c in self.all_chunks}
+
+        self.log(f"Initialized BM25 index with {len(self.all_chunks)} chunks.")
 
     # ---------------------------------------------------------
     # Load input
@@ -64,18 +101,10 @@ class Ontology_Chunks_Retriever:
     # Determine which language to use
     # ---------------------------------------------------------
     def detect_language(self, hierarchy: Dict[str, Any]) -> str:
-        """
-        Rules:
-        1. If user passed a language → use it.
-        2. Else detect available languages from the first cluster.
-        3. If only one language → use it.
-        4. If multiple → use the first one.
-        """
         if self.language_override:
             self.log(f"Using user-specified language: {self.language_override}")
             return self.language_override
 
-        # Find first cluster with multilang
         def find_first_multilang(node):
             for c in node["clusters"]:
                 if "multilang" in c:
@@ -91,14 +120,8 @@ class Ontology_Chunks_Retriever:
             raise ValueError("No multilingual data found in hierarchy.")
 
         languages = list(multilang.keys())
-
-        if len(languages) == 1:
-            lang = languages[0]
-            self.log(f"Detected single language: {lang}")
-            return lang
-
         lang = languages[0]
-        self.log(f"Detected multiple languages {languages}. Using first: {lang}")
+        self.log(f"Detected languages {languages}. Using: {lang}")
         return lang
 
     # ---------------------------------------------------------
@@ -136,6 +159,118 @@ class Ontology_Chunks_Retriever:
         )
 
     # ---------------------------------------------------------
+    # Keyword score
+    # ---------------------------------------------------------
+    def keyword_score(self, query: str, text: str) -> int:
+        q_words = set(query.lower().split())
+        t_words = set(text.lower().split())
+        return len(q_words & t_words)
+
+    # ---------------------------------------------------------
+    # Deduplication helper
+    # ---------------------------------------------------------
+    def dedupe_chunks(self, results):
+        seen = set()
+        deduped = []
+        for r in results:
+            text = r["chunk"]["text"].strip()
+            h = hashlib.md5(text.encode("utf-8")).hexdigest()
+            if h not in seen:
+                seen.add(h)
+                deduped.append(r)
+        return deduped
+
+    # ---------------------------------------------------------
+    # Efficient hybrid retrieval
+    # ---------------------------------------------------------
+    def hybrid_retrieve(self, query_embedding, query_text):
+        k = self.candidate_k
+
+        # Dense top-k
+        dense_results = self.vector_db.search(query_embedding, top_n=k)
+        dense_map = {c["chunk_id"]: float(c.get("score", 0.0)) for c in dense_results}
+
+        # Dense-only fallback
+        if not getattr(self, "all_chunks", None) or not self.bm25:
+            return [
+                {
+                    "chunk": c,
+                    "dense_score": dense_map[c["chunk_id"]],
+                    "sparse_score": 0.0,
+                    "hybrid_score": dense_map[c["chunk_id"]],
+                }
+                for c in dense_results
+            ]
+
+        # Sparse top-k
+        sparse_scores = self.bm25.get_scores(query_text.split())
+        if len(sparse_scores) <= k:
+            top_sparse_idx = list(range(len(sparse_scores)))
+        else:
+            top_sparse_idx = np.argpartition(sparse_scores, -k)[-k:]
+
+        sparse_map = {
+            self.all_chunks[idx]["chunk_id"]: float(sparse_scores[idx])
+            for idx in top_sparse_idx
+        }
+
+        # Merge candidates
+        candidate_ids = set(dense_map.keys()) | set(sparse_map.keys())
+
+        # Normalize sparse
+        if sparse_map:
+            norm = np.linalg.norm(list(sparse_map.values())) + 1e-6
+        else:
+            norm = 1.0
+
+        hybrid = []
+        for cid in candidate_ids:
+            dense = dense_map.get(cid, 0.0)
+            sparse = sparse_map.get(cid, 0.0) / norm
+
+            chunk = next((c for c in dense_results if c["chunk_id"] == cid), None)
+            if chunk is None:
+                chunk = self.chunk_by_id[cid]
+
+            hybrid_score = self.hybrid_alpha * dense + (1 - self.hybrid_alpha) * sparse
+
+            hybrid.append({
+                "chunk": chunk,
+                "dense_score": dense,
+                "sparse_score": sparse,
+                "hybrid_score": hybrid_score,
+            })
+
+        hybrid_sorted = sorted(hybrid, key=lambda x: x["hybrid_score"], reverse=True)
+        return hybrid_sorted[:k]
+
+    # ---------------------------------------------------------
+    # Keyword re-ranking
+    # ---------------------------------------------------------
+    def rerank_keywords(self, results, query_text):
+        reranked = []
+        for r in results:
+            kw = self.keyword_score(query_text, r["chunk"]["text"])
+            final = r["hybrid_score"] + self.keyword_weight * kw
+            r["keyword_score"] = kw
+            r["final_score"] = float(final)
+            reranked.append(r)
+
+        return sorted(reranked, key=lambda x: x["final_score"], reverse=True)
+
+    # ---------------------------------------------------------
+    # Minimal diagnostics
+    # ---------------------------------------------------------
+    def format_diagnostics(self, results):
+        return [
+            {
+                "chunk_id": r["chunk"]["chunk_id"],
+                "final_score": r["final_score"],
+            }
+            for r in results
+        ]
+
+    # ---------------------------------------------------------
     # Main retrieval method
     # ---------------------------------------------------------
     def retrieve(
@@ -147,61 +282,70 @@ class Ontology_Chunks_Retriever:
         self.log(f"Loading input from {input_json_path}")
         data = self.load_input(input_json_path)
 
-        # -----------------------------------------------------
         # Step 1: Flatten if needed
-        # -----------------------------------------------------
         if self.is_hierarchy(data):
-            self.log("Detected hierarchy. Determining language...")
-
             lang = self.detect_language(data)
-
-            self.log(f"Flattening clusters using language: {lang}")
             clusters = self.flatten_clusters(data, lang=lang)
-
-            self.log(f"Flattened {len(clusters)} clusters. Saving to {flattened_debug_path}")
             self.save_json(clusters, flattened_debug_path)
         else:
-            self.log("Detected flat cluster list.")
             clusters = data
 
-        # -----------------------------------------------------
-        # Step 2: Progress bar
-        # -----------------------------------------------------
-        total = len(clusters)
-        self.progress = Simple_Progress_Bar(total, enabled=self.progress_bar_enabled)
+        # Progress bar
+        total_steps = len(clusters) * 4
+        self.progress = Simple_Progress_Bar(total_steps, enabled=self.progress_bar_enabled)
 
         results = []
 
-        # -----------------------------------------------------
         # Step 3: Retrieval
-        # -----------------------------------------------------
         for cluster in clusters:
             cid = cluster["cluster_id"]
-            self.log(f"Processing cluster {cid}")
 
-            query = self.build_query(
+            # Deduped cluster keywords
+            cluster_keywords = sorted(set(cluster.get("keywords", [])))
+
+            query_text = self.build_query(
                 cluster["label"],
                 cluster["summary"],
-                cluster.get("keywords", [])
+                cluster_keywords
             )
 
-            embedding = self.embedder.embed(query, progress_bar=False)
-            retrieved = self.vector_db.search(embedding, top_n=self.top_n)
+            query_embedding = self.embedder.embed(query_text, progress_bar=False)
+
+            # A — Hybrid retrieval
+            hybrid = self.hybrid_retrieve(query_embedding, query_text)
+            self.progress.update(label="Hybrid retrieval")
+
+            # B — Keyword re-ranking
+            reranked = self.rerank_keywords(hybrid, query_text)
+            self.progress.update(label="Keyword re-ranking")
+
+            # C — Deduplication
+            deduped = self.dedupe_chunks(reranked)
+            self.progress.update(label="Deduplication")
+
+            # D — Final selection + diagnostics
+            final = deduped[:self.final_k]
+
+            retrieved_chunks = []
+            for r in final:
+                retrieved_chunks.append({
+                    "chunk_id": r["chunk"]["chunk_id"],
+                    "text": r["chunk"]["text"],
+                    "metadata": r["chunk"].get("metadata", {}),
+                    "final_score": r["final_score"],
+                })
+
+            diagnostics = self.format_diagnostics(final)
+            self.progress.update(label="Diagnostics")
 
             results.append({
                 "cluster_id": cid,
                 "cluster_label": cluster["label"],
-                "retrieved_count": len(retrieved),
-                "retrieved_chunks": retrieved
+                "cluster_keywords": cluster_keywords,  # NEW
+                "retrieved_count": len(retrieved_chunks),
+                "retrieved_chunks": retrieved_chunks,
+                "diagnostics": diagnostics,
             })
 
-            self.progress.update()
-
-        # -----------------------------------------------------
-        # Step 4: Save output
-        # -----------------------------------------------------
-        self.log(f"Saving retrieved chunks to {output_json_path}")
         self.save_json(results, output_json_path)
-
-        self.log("Retrieval completed.")
         return results

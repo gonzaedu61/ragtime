@@ -259,18 +259,6 @@ class Cluster_Chunks_Retriever:
         return sorted(reranked, key=lambda x: x["final_score"], reverse=True)
 
     # ---------------------------------------------------------
-    # Minimal diagnostics
-    # ---------------------------------------------------------
-    def format_diagnostics(self, results):
-        return [
-            {
-                "chunk_id": r["chunk"]["chunk_id"],
-                "final_score": r["final_score"],
-            }
-            for r in results
-        ]
-
-    # ---------------------------------------------------------
     # Main retrieval method
     # ---------------------------------------------------------
     def retrieve(
@@ -291,7 +279,7 @@ class Cluster_Chunks_Retriever:
             clusters = data
 
         # Progress bar
-        total_steps = len(clusters) * 4
+        total_steps = len(clusters) * 3   # diagnostics removed → 3 steps
         self.progress = Simple_Progress_Bar(total_steps, enabled=self.progress_bar_enabled)
 
         results = []
@@ -319,13 +307,12 @@ class Cluster_Chunks_Retriever:
             reranked = self.rerank_keywords(hybrid, query_text)
             self.progress.update(label="Keyword re-ranking")
 
-            # C — Deduplication
+            # C — Deduplication + final selection
             deduped = self.dedupe_chunks(reranked)
-            self.progress.update(label="Deduplication")
-
-            # D — Final selection + diagnostics
             final = deduped[:self.final_k]
+            self.progress.update(label="Final selection")
 
+            # Build final chunk list
             retrieved_chunks = []
             for r in final:
                 retrieved_chunks.append({
@@ -335,16 +322,12 @@ class Cluster_Chunks_Retriever:
                     "final_score": r["final_score"],
                 })
 
-            diagnostics = self.format_diagnostics(final)
-            self.progress.update(label="Diagnostics")
-
             results.append({
                 "cluster_id": cid,
                 "cluster_label": cluster["label"],
-                "cluster_keywords": cluster_keywords,  # NEW
+                "cluster_keywords": cluster_keywords,
                 "retrieved_count": len(retrieved_chunks),
-                "retrieved_chunks": retrieved_chunks,
-                "diagnostics": diagnostics,
+                "retrieved_chunks": retrieved_chunks
             })
 
         self.save_json(results, output_json_path)

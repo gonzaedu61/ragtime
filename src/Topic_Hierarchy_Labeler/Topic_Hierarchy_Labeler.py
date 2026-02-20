@@ -52,7 +52,7 @@ class Topic_Hierarchy_Labeler:
     ):
         self.llm = llm
         self.vectordb = vectordb
-        self.languages = list(languages) if languages else ["EN"]
+        self.languages = list(languages) if languages else None
         self.store_summaries = store_summaries
         self.cache_path = cache_path
         self.combined_prompt = combined_prompt or self.DEFAULT_COMBINED_PROMPT
@@ -148,6 +148,33 @@ class Topic_Hierarchy_Labeler:
             if not label or not label.strip():
                 return True
         return False
+
+    # -------------------------------------------------------------------------
+    # Detect Language
+    # -------------------------------------------------------------------------
+    async def _detect_language(self, text: str) -> str:
+        """
+        Uses the LLM to detect the dominant language of the input text.
+        Returns a 2-letter ISO code (e.g., EN, ES, DE, FR).
+        Defaults to EN if detection fails.
+        """
+        prompt = (
+            "Detect the primary language of the following text. "
+            "Respond ONLY with a 2-letter ISO language code (e.g., EN, ES, DE, FR). "
+            "Text:\n\n"
+            f"{text}"
+        )
+
+        try:
+            response = await self.llm.acomplete(prompt)
+            code = response.strip().upper()
+            # Basic validation
+            if len(code) == 2 and code.isalpha():
+                return code
+        except Exception:
+            pass
+
+        return "EN"
 
     # -------------------------------------------------------------------------
     # Count incomplete clusters (including missing labels)
@@ -361,6 +388,12 @@ class Topic_Hierarchy_Labeler:
                     child_summaries.append("[INCOMPLETE]")
 
             combined_text = "\n\n".join(child_summaries)
+
+        # Auto-detect language if not provided
+        if self.languages is None:
+            detected = await self._detect_language(combined_text)
+            self.languages = [detected]
+            self._log(f"Auto-detected language: {detected}")
 
         # Build prompt
         json_schema = self._build_multilang_json_schema()

@@ -1,0 +1,14 @@
+I have created an initial labeled Topics Hierarchy. I would like now to extract based on this, the ontology “content”: entities, relationships, attributes, hierarchies.
+
+As I understand it, I should for each cluster:
+
+1 -  Pull the top-N relevant chunks: How? How can I combine the embeedings in the Vector DB with the additional information I do have about the cluster now like "Summary" and "Keywords" to get the right chunks per cluster?
+
+2 - Entity extraction: Prompt the LLM to extract key concepts/entities from the selected chunks, summary and keywords and to return a JSON with fields: name, type, definition, source_chunk_ids. Would you give me the input and output schema and right prompt for this?
+
+3 - Relationship extraction: Prompt the LLM to identify the relationships from the extracted entities and text using a schema like: subject, predicate, object, evidence_chunk_ids, confidence. Would you sketch the input and output schema and the prompt for this?
+
+4 - Attribute extraction: Prompt the LLM to extract attributes (properties) and their values from the identified entities. WOuld you give the input and output schema and the prompt to use for this? 
+
+5 - Hierarchy inference: Prompt the LLM to infer parent-child (is-a, part-of) relationships for the identified entities. Would you draft the needed input and output schema and the prompt for this?
+

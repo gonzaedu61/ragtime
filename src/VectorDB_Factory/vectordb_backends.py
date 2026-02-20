@@ -143,5 +143,19 @@ class ChromaBackend:
             "document": result["documents"][0],
             "metadata": result["metadatas"][0],
         }
+    
+    def search(self, embedding, top_n=30):
+        result = self.query(query_embeddings=[embedding], n_results=top_n)
+        # Chroma returns lists inside lists → unwrap
+        return [
+            {
+                "chunk_id": result["ids"][0][i],
+                "text": result["documents"][0][i],
+                "score": 1 - result["distances"][0][i],  # convert distance to similarity
+                "metadata": result["metadatas"][0][i],
+            }
+            for i in range(len(result["ids"][0]))
+        ]
+
 
 

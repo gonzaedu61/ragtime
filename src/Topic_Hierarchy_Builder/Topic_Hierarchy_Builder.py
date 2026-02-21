@@ -2,7 +2,6 @@ import numpy as np
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics.pairwise import cosine_similarity
 import json
-import sys
 
 
 class Topic_Hierarchy_Builder:
@@ -23,14 +22,6 @@ class Topic_Hierarchy_Builder:
         postprocess_rules=None,
         verbose=False
     ):
-        """
-        vector_db must implement:
-            get_all() -> embeddings, ids, documents, metadatas
-
-        metadata_keys: list of metadata fields to encode into vectors
-        metadata_weight: scaling factor for metadata vector
-        postprocess_rules: list of functions(cluster) -> modified cluster
-        """
         self.db = vector_db
 
         self.initial_cutoff = initial_cutoff
@@ -42,7 +33,6 @@ class Topic_Hierarchy_Builder:
         self.metadata_keys = metadata_keys or []
         self.metadata_weight = metadata_weight
 
-        # Post-processing rules (splitting, merging, constraints)
         self.postprocess_rules = postprocess_rules or []
         self.verbose = verbose
 
@@ -50,40 +40,24 @@ class Topic_Hierarchy_Builder:
     # Metadata → vector encoding
     # ---------------------------------------------------------
     def encode_metadata(self, metadatas):
-        """
-        Convert metadata dicts into numeric vectors.
-        Simple one-hot encoding for categorical fields.
-        """
         if not self.metadata_keys:
             return np.zeros((len(metadatas), 1))
 
-        # Build vocabulary for each metadata key
         vocab = {key: {} for key in self.metadata_keys}
 
-        # Assign integer IDs for each categorical value
+        # Build vocab
         for meta in metadatas:
             for key in self.metadata_keys:
                 val = meta.get(key, None)
+                if isinstance(val, list):
+                    for item in val:
+                        if item not in vocab[key]:
+                            vocab[key][item] = len(vocab[key])
+                else:
+                    if val not in vocab[key]:
+                        vocab[key][val] = len(vocab[key])
 
-                try:
-                    # Multi-label support: expand lists
-                    if isinstance(val, list):
-                        for item in val:
-                            if item not in vocab[key]:
-                                vocab[key][item] = len(vocab[key])
-                    else:
-                        if val not in vocab[key]:
-                            vocab[key][val] = len(vocab[key])
-
-                except TypeError:
-                    print("\n🔥 ERROR: Unhashable metadata value encountered during vocab build")
-                    print(f"   metadata key: {key}")
-                    print(f"   raw value: {val}")
-                    print(f"   type: {type(val)}")
-                    print("   full metadata object:", meta)
-                    raise
-
-        # Encode metadata
+        # Encode
         encoded = []
         for meta in metadatas:
             vec = []
@@ -92,24 +66,15 @@ class Topic_Hierarchy_Builder:
                 one_hot = np.zeros(size)
                 val = meta.get(key, None)
 
-                try:
-                    if isinstance(val, list):
-                        for item in val:
-                            idx = vocab[key].get(item, None)
-                            if idx is not None:
-                                one_hot[idx] = 1
-                    else:
-                        idx = vocab[key].get(val, None)
+                if isinstance(val, list):
+                    for item in val:
+                        idx = vocab[key].get(item)
                         if idx is not None:
                             one_hot[idx] = 1
-
-                except TypeError:
-                    print("\n🔥 ERROR: Unhashable metadata value encountered during encoding")
-                    print(f"   metadata key: {key}")
-                    print(f"   raw value: {val}")
-                    print(f"   type: {type(val)}")
-                    print("   full metadata object:", meta)
-                    raise
+                else:
+                    idx = vocab[key].get(val)
+                    if idx is not None:
+                        one_hot[idx] = 1
 
                 vec.extend(one_hot)
             encoded.append(vec)
@@ -120,71 +85,35 @@ class Topic_Hierarchy_Builder:
     # Combine embeddings + metadata vectors
     # ---------------------------------------------------------
     def combine_vectors(self, embeddings, metadata_vectors):
-        """
-        Concatenate embedding + scaled metadata vector.
-        """
         metadata_vectors = metadata_vectors * self.metadata_weight
         return np.concatenate([embeddings, metadata_vectors], axis=1)
 
     # ---------------------------------------------------------
-    # Utility: compute centroid
+    # Compute centroid
     # ---------------------------------------------------------
     def compute_centroid(self, embeddings):
         return np.mean(embeddings, axis=0)
 
     # ---------------------------------------------------------
-    # Utility: label cluster
-    # ---------------------------------------------------------
-    def label_cluster(self, centroid, embeddings, documents, top_k=3):
-        sims = cosine_similarity([centroid], embeddings)[0]
-        top_indices = sims.argsort()[-top_k:][::-1]
-        sample_texts = [documents[i][:120] for i in top_indices]
-        return " | ".join(sample_texts)
-
-    # ---------------------------------------------------------
-    # Apply metadata-based post-processing rules
-    # ---------------------------------------------------------
-    def apply_postprocess_rules(self, cluster):
-        """
-        Each rule receives the cluster dict and returns a modified cluster.
-        """
-        for rule in self.postprocess_rules:
-            cluster = rule(cluster)
-        return cluster
-
-    # ---------------------------------------------------------
-    # Recursive clustering
+    # Recursive clustering (single unified path)
     # ---------------------------------------------------------
     def recursive_cluster(
         self,
         embeddings,
         ids,
-        documents,
         metadatas,
         cutoff,
         depth=0,
         path=""
     ):
-        if self.verbose:
-            print(f"[Depth {depth}] Starting clustering with {len(embeddings)} items, cutoff={cutoff:.4f}")
-
-        # Stop conditions
         if len(embeddings) < self.min_cluster_size:
-            if self.verbose:
-                print(f"[Depth {depth}] Too few items ({len(embeddings)}). Stopping.")
             return None
-
         if cutoff < self.min_cutoff:
-            if self.verbose:
-                print(f"[Depth {depth}] Cutoff {cutoff:.4f} below min_cutoff. Stopping.")
             return None
-
         if depth > self.max_depth:
-            if self.verbose:
-                print(f"[Depth {depth}] Max depth reached. Stopping.")
             return None
 
-        # Metadata-aware vector augmentation
+        # Build augmented vectors
         metadata_vectors = self.encode_metadata(metadatas)
         combined_vectors = self.combine_vectors(embeddings, metadata_vectors)
 
@@ -195,25 +124,18 @@ class Topic_Hierarchy_Builder:
             metric="cosine",
             linkage="average"
         )
-
         labels = clustering.fit_predict(combined_vectors)
 
-        if self.verbose:
-            n_clusters = len(set(labels))
-            print(f"[Depth {depth}] Formed {n_clusters} clusters")
-
-        # Group items by cluster
+        # Group items
         clusters = {}
         for idx, label in enumerate(labels):
             clusters.setdefault(label, {
                 "embeddings": [],
                 "ids": [],
-                "documents": [],
                 "metadatas": []
             })
             clusters[label]["embeddings"].append(embeddings[idx])
             clusters[label]["ids"].append(ids[idx])
-            clusters[label]["documents"].append(documents[idx])
             clusters[label]["metadatas"].append(metadatas[idx])
 
         # Build node
@@ -223,49 +145,25 @@ class Topic_Hierarchy_Builder:
             "clusters": []
         }
 
-        # Process each cluster
+        # Process clusters
         for label, group in clusters.items():
-
-            if self.verbose:
-                print(f"[Depth {depth}] Processing cluster {label} (size={len(group['ids'])})")
-
-            # Apply post-processing rules
-            if self.postprocess_rules:
-                if self.verbose:
-                    print(f"[Depth {depth}] Applying {len(self.postprocess_rules)} postprocess rules")
-                group = self.apply_postprocess_rules(group)
-
             group_embeddings = np.array(group["embeddings"])
-            centroid = self.compute_centroid(group_embeddings)
-
-            # Label cluster
-            cluster_label = self.label_cluster(
-                centroid,
-                group_embeddings,
-                group["documents"]
-            )
-
-            # Build hierarchical path ID
-            child_path = f"{path}.{label}" if path != "" else str(label)
+            child_path = f"{path}.{label}" if path else str(label)
 
             child_node = {
                 "cluster_id": child_path,
-                "label": cluster_label,
-                "size": int(len(group["ids"])),
+                "size": len(group["ids"]),
                 "ids": list(group["ids"]),
                 "metadatas": group["metadatas"],
                 "children": None
             }
 
-            # Recurse if cluster is large enough
+            # Recurse
             if len(group["ids"]) >= self.min_cluster_size:
-                if self.verbose:
-                    print(f"[Depth {depth}] Recursing into cluster {label}")
                 child_node["children"] = self.recursive_cluster(
                     embeddings=group_embeddings,
-                    ids=group["ids"],
-                    documents=group["documents"],
-                    metadatas=group["metadatas"],
+                    ids=child_node["ids"],
+                    metadatas=child_node["metadatas"],
                     cutoff=cutoff * self.cutoff_decay,
                     depth=depth + 1,
                     path=child_path
@@ -273,88 +171,88 @@ class Topic_Hierarchy_Builder:
 
             node["clusters"].append(child_node)
 
-        # Add clusters_count field
         node["clusters_count"] = len(node["clusters"])
+        return node
 
-        if self.verbose:
-            print(f"[Depth {depth}] Completed depth {depth}")
-
-
-        # --- MERGE REDUNDANT LEVELS ---
-        merged_clusters = []
+    # ---------------------------------------------------------
+    # Redundant-level merging (full mode)
+    # ---------------------------------------------------------
+    def merge_redundant_levels(self, node):
+        merged = []
         for cluster in node["clusters"]:
             child = cluster["children"]
 
-            # Check if child exists and is redundant
             if (
                 child is not None
                 and child["clusters_count"] == 1
                 and set(cluster["ids"]) == set(child["clusters"][0]["ids"])
             ):
-                # Replace this cluster's children with the grandchild
                 cluster["children"] = child["clusters"][0]["children"]
-                # Optionally: update label to something more stable
-                cluster["label"] = child["clusters"][0]["label"]
 
-            merged_clusters.append(cluster)
+            if cluster["children"] is not None:
+                self.merge_redundant_levels(cluster["children"])
 
-        node["clusters"] = merged_clusters
-        node["clusters_count"] = len(merged_clusters)
+            merged.append(cluster)
 
-        return node
+        node["clusters"] = merged
+        node["clusters_count"] = len(merged)
+
+    # ---------------------------------------------------------
+    # Minimal tree transformation
+    # ---------------------------------------------------------
+    def to_minimal_tree(self, node):
+        """
+        Convert full tree → minimal tree:
+            - remove ids, metadatas
+            - keep cluster_id, size, children
+            - leaf nodes get chunk_ids
+        """
+        minimal = {"clusters": []}
+
+        for cluster in node["clusters"]:
+            new_c = {
+                "cluster_id": cluster["cluster_id"],
+                "size": cluster["size"],
+                "children": None
+            }
+
+            if cluster["children"] is None:
+                new_c["chunk_ids"] = cluster["ids"]
+            else:
+                new_c["children"] = self.to_minimal_tree(cluster["children"])
+
+            minimal["clusters"].append(new_c)
+
+        minimal["clusters_count"] = len(minimal["clusters"])
+        return minimal
 
     # ---------------------------------------------------------
     # Public API: Build ontology
     # ---------------------------------------------------------
-    def build(self):
-        embeddings, ids, documents, metadatas = self.db.get_all()
+    def build(self, minimal=False):
+        embeddings, ids, metadatas = self.db.get_for_clustering(self.metadata_keys)
         embeddings = np.array(embeddings)
 
-        return self.recursive_cluster(
+        # Build full tree
+        tree = self.recursive_cluster(
             embeddings=embeddings,
             ids=ids,
-            documents=documents,
             metadatas=metadatas,
             cutoff=self.initial_cutoff
         )
 
+        # Merge redundant levels
+        self.merge_redundant_levels(tree)
+
+        # Minimal mode: strip tree
+        if minimal:
+            return self.to_minimal_tree(tree)
+
+        return tree
+
     # ---------------------------------------------------------
-    # Public API: Save to JSON
+    # Save to JSON
     # ---------------------------------------------------------
     def save(self, hierarchy, filename="topic_hierarchy.json"):
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(hierarchy, f, indent=2, ensure_ascii=False)
-
-
-    # ---------------------------------------------------------
-    # Public API: Pretty Print Tree
-    # ---------------------------------------------------------
-    def print_tree(self, node, indent=0):
-        """
-        Pretty-print the hierarchy tree using metadata fields instead of text snippets.
-        Shows cluster_id, size, and for each item: document_name, pages, chunk_id.
-        """
-
-        if node is None:
-            print(" " * indent + "(empty)")
-            return
-
-        # Print each cluster
-        for cluster in node["clusters"]:
-            cid = cluster["cluster_id"]
-            size = cluster["size"]
-
-            print(" " * indent + f"- [{cid}] size={size}")
-
-            # Print metadata summary for each item in the cluster
-            for meta in cluster["metadatas"]:
-                doc = meta.get("document_name", "unknown")
-                pages = meta.get("pages", [])
-                chunk = meta.get("chunk_id", "n/a")
-
-                print(" " * (indent + 2) + f"- {doc} | pages={pages} | chunk={chunk}")
-
-            # Recurse into children
-            if cluster["children"] is not None:
-                self.print_tree(cluster["children"], indent + 4)
-

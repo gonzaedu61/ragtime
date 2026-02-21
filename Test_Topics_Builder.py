@@ -27,7 +27,7 @@ topics_builder = Topic_Hierarchy_Builder(
     verbose=False
 )
 
-hierarchy = topics_builder.build()
+hierarchy = topics_builder.build(minimal=True)
 
 
 

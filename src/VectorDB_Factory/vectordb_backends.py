@@ -175,5 +175,33 @@ class ChromaBackend:
         return chunks
 
 
+    def get_for_clustering(self, metadata_keys):
+        """
+        Returns only the data needed for clustering:
+            - embeddings
+            - ids
+            - filtered metadatas (only metadata_keys)
+        Documents are NOT returned.
+        """
+
+        # Fetch only embeddings + metadatas + ids
+        data = self.collection.get(
+            include=["embeddings", "metadatas"]
+        )
+
+        embeddings = data["embeddings"]
+        ids = data["ids"]
+        metadatas = data["metadatas"]
+
+        # Filter metadata to only the keys needed for clustering
+        filtered_metadatas = []
+        for meta in metadatas:
+            filtered = {k: meta.get(k) for k in metadata_keys}
+            filtered_metadatas.append(filtered)
+
+        return embeddings, ids, filtered_metadatas
+
+
+
 
 

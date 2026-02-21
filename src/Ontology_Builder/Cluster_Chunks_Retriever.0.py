@@ -17,15 +17,14 @@ class Cluster_Chunks_Retriever:
     - configurable candidate_k and final_k
     - deduped cluster keywords
     - per-cluster progress visibility
-    - minimal output mode (NEW)
     """
 
     def __init__(
         self,
         vector_db,
         embedder,
-        candidate_k=40,
-        final_k=10,
+        candidate_k=40,     # NEW
+        final_k=10,         # NEW
         verbose=False,
         progress_bar=False,
         language: str = None,
@@ -266,8 +265,7 @@ class Cluster_Chunks_Retriever:
         self,
         input_json_path: str,
         output_json_path: str,
-        flattened_debug_path: str = "flattened_clusters.json",
-        minimal: bool = False,   # NEW
+        flattened_debug_path: str = "flattened_clusters.json"
     ):
         self.log(f"Loading input from {input_json_path}")
         data = self.load_input(input_json_path)
@@ -281,7 +279,7 @@ class Cluster_Chunks_Retriever:
             clusters = data
 
         # Progress bar
-        total_steps = len(clusters) * 3
+        total_steps = len(clusters) * 3   # diagnostics removed → 3 steps
         self.progress = Simple_Progress_Bar(total_steps, enabled=self.progress_bar_enabled)
 
         results = []
@@ -317,18 +315,12 @@ class Cluster_Chunks_Retriever:
             # Build final chunk list
             retrieved_chunks = []
             for r in final:
-                if minimal:
-                    retrieved_chunks.append({
-                        "chunk_id": r["chunk"]["chunk_id"],
-                        "final_score": r["final_score"],
-                    })
-                else:
-                    retrieved_chunks.append({
-                        "chunk_id": r["chunk"]["chunk_id"],
-                        "text": r["chunk"]["text"],
-                        "metadata": r["chunk"].get("metadata", {}),
-                        "final_score": r["final_score"],
-                    })
+                retrieved_chunks.append({
+                    "chunk_id": r["chunk"]["chunk_id"],
+                    "text": r["chunk"]["text"],
+                    "metadata": r["chunk"].get("metadata", {}),
+                    "final_score": r["final_score"],
+                })
 
             results.append({
                 "cluster_id": cid,

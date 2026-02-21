@@ -47,6 +47,7 @@ os.makedirs(ONTOLOGY_PATH, exist_ok=True)
 retriever.retrieve(
     input_json_path=INPUT_CLUSTERS_FILE,
     output_json_path=RETRIEVED_CHUNKS_FILE,
-    flattened_debug_path=FLATTENED_CLUSTERS_FILE
+    flattened_debug_path=FLATTENED_CLUSTERS_FILE,
+    minimal=True
 )
 

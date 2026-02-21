@@ -95,6 +95,16 @@ class Topic_Hierarchy_Builder:
         return np.mean(embeddings, axis=0)
 
     # ---------------------------------------------------------
+    # Count clusters
+    # ---------------------------------------------------------
+    def _count_clusters(self, node):
+        count = len(node["clusters"])
+        for c in node["clusters"]:
+            if c["children"] is not None:
+                count += self._count_clusters(c["children"])
+        return count
+
+    # ---------------------------------------------------------
     # Recursive clustering (single unified path)
     # ---------------------------------------------------------
     def recursive_cluster(
@@ -171,31 +181,50 @@ class Topic_Hierarchy_Builder:
 
             node["clusters"].append(child_node)
 
-        node["clusters_count"] = len(node["clusters"])
+        node["children_count"] = len(node["clusters"])
         return node
 
     # ---------------------------------------------------------
     # Redundant-level merging (full mode)
     # ---------------------------------------------------------
     def merge_redundant_levels(self, node):
+        """
+        Recursively collapse chains of redundant clusters.
+
+        A cluster is redundant if:
+          - It has exactly one child cluster
+          - That child contains exactly the same set of chunk IDs
+        In that case, we "skip" the intermediate level and keep going
+        until the chain stops being redundant.
+        """
         merged = []
+
         for cluster in node["clusters"]:
-            child = cluster["children"]
-
-            if (
-                child is not None
-                and child["clusters_count"] == 1
-                and set(cluster["ids"]) == set(child["clusters"][0]["ids"])
+            # Collapse repeatedly while this cluster is redundant
+            while (
+                cluster["children"] is not None
+                and cluster["children"]["children_count"] == 1
             ):
-                cluster["children"] = child["clusters"][0]["children"]
+                only_child = cluster["children"]["clusters"][0]
 
+                # If IDs differ, it's not redundant → stop collapsing
+                if set(cluster["ids"]) != set(only_child["ids"]):
+                    break
+
+                # Collapse this level into its only child
+                cluster["children"] = only_child["children"]
+                cluster["ids"] = only_child["ids"]
+                cluster["size"] = only_child["size"]
+                cluster["metadatas"] = only_child["metadatas"]
+
+            # Recurse into (possibly collapsed) children
             if cluster["children"] is not None:
                 self.merge_redundant_levels(cluster["children"])
 
             merged.append(cluster)
 
         node["clusters"] = merged
-        node["clusters_count"] = len(merged)
+        node["children_count"] = len(merged)
 
     # ---------------------------------------------------------
     # Minimal tree transformation
@@ -223,7 +252,7 @@ class Topic_Hierarchy_Builder:
 
             minimal["clusters"].append(new_c)
 
-        minimal["clusters_count"] = len(minimal["clusters"])
+        minimal["children_count"] = len(minimal["clusters"])
         return minimal
 
     # ---------------------------------------------------------
@@ -244,9 +273,14 @@ class Topic_Hierarchy_Builder:
         # Merge redundant levels
         self.merge_redundant_levels(tree)
 
+        # Add total cluster count at top level
+        tree["total_clusters"] = self._count_clusters(tree)
+
         # Minimal mode: strip tree
         if minimal:
-            return self.to_minimal_tree(tree)
+            minimal_tree = self.to_minimal_tree(tree)
+            minimal_tree["total_clusters"] = tree["total_clusters"]
+            return minimal_tree
 
         return tree
 

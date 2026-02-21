@@ -39,13 +39,11 @@ llm = create_llm(
 
 
 # Initialize vector DB backend (Chroma or others)
-print('Initializing vector DB ...')
 vectordb = create_vectordb(
     backend=VECTOR_DB_NAME,
     collection_name=COLLECTION_NAME,
     persist_dir=VDB_PATH
 )
-print('Vector DB Object created ...')
 
 
 

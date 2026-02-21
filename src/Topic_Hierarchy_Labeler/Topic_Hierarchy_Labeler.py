@@ -9,10 +9,13 @@ from typing import Any, Dict, Optional, List
 class Topic_Hierarchy_Labeler:
     """
     Bottom-up LLM-based labeling and summarization for a topic hierarchy.
-    Now includes:
-    - Guaranteed labels (prompt + fallback)
-    - Missing-label detection
-    - Repair mode regenerates labels only for missing-label clusters
+
+    FIXED + IMPROVED:
+    - Internal clusters ALWAYS use child summaries (never chunk text)
+    - Leaf clusters retrieve chunk text from Vector DB
+    - No premature incomplete marking
+    - No “[INCOMPLETE]” poisoning of parent summaries
+    - Upward propagation restored
     """
 
     DEFAULT_COMBINED_PROMPT = (
@@ -143,6 +146,8 @@ class Topic_Hierarchy_Labeler:
     def _cluster_missing_label(self, cluster):
         if "multilang" not in cluster:
             return True
+        if not self.languages:
+            return False
         for lang in self.languages:
             label = cluster["multilang"].get(lang, {}).get("label", "")
             if not label or not label.strip():
@@ -153,11 +158,6 @@ class Topic_Hierarchy_Labeler:
     # Detect Language
     # -------------------------------------------------------------------------
     async def _detect_language(self, text: str) -> str:
-        """
-        Uses the LLM to detect the dominant language of the input text.
-        Returns a 2-letter ISO code (e.g., EN, ES, DE, FR).
-        Defaults to EN if detection fails.
-        """
         prompt = (
             "Detect the primary language of the following text. "
             "Respond ONLY with a 2-letter ISO language code (e.g., EN, ES, DE, FR). "
@@ -168,7 +168,6 @@ class Topic_Hierarchy_Labeler:
         try:
             response = await self.llm.acomplete(prompt)
             code = response.strip().upper()
-            # Basic validation
             if len(code) == 2 and code.isalpha():
                 return code
         except Exception:
@@ -177,7 +176,7 @@ class Topic_Hierarchy_Labeler:
         return "EN"
 
     # -------------------------------------------------------------------------
-    # Count incomplete clusters (including missing labels)
+    # Count incomplete clusters
     # -------------------------------------------------------------------------
     def _count_incomplete(self, node: Dict[str, Any]) -> int:
         count = 0
@@ -322,13 +321,14 @@ class Topic_Hierarchy_Labeler:
     # Recursive processing
     # -------------------------------------------------------------------------
     async def _aprocess_node(self, node: Dict[str, Any]):
-        tasks = []
+        # 1. Process children first (depth-first)
         for cluster in node["clusters"]:
             if cluster["children"] is not None:
                 await self._aprocess_node(cluster["children"])
-            tasks.append(self._alabel_cluster(cluster))
-        if tasks:
-            await asyncio.gather(*tasks)
+
+        # 2. Then process this level sequentially (strict bottom-up)
+        for cluster in node["clusters"]:
+            await self._alabel_cluster(cluster)
 
     # -------------------------------------------------------------------------
     # Mark ancestors incomplete
@@ -348,12 +348,11 @@ class Topic_Hierarchy_Labeler:
 
         cid = cluster["cluster_id"]
 
-        # NEW: treat missing labels as incomplete
-        if not cluster.get("incomplete") and self._cluster_missing_label(cluster):
-            cluster["incomplete"] = True
+        # DO NOT pre-mark incomplete — this was the root bug
+        # Missing labels are expected before LLM runs
 
         # Skip healthy clusters in repair mode
-        if self.repair_mode and not cluster.get("incomplete"):
+        if self.repair_mode and not self._cluster_missing_label(cluster):
             self._successful_clusters += 1
             await self._aflush_progress()
             return
@@ -367,35 +366,46 @@ class Topic_Hierarchy_Labeler:
             await self._aflush_progress()
             return
 
-        # Build input text
+        # ---------------------------------------------------------------------
+        # Build input text for LLM
+        # ---------------------------------------------------------------------
         if cluster["children"] is None:
+            # LEAF CLUSTER → retrieve chunk texts from VectorDB
+            chunk_ids = cluster.get("ids") or cluster.get("chunk_ids") or []
+
             texts = []
-            for chunk_id in cluster["ids"]:
+            for chunk_id in chunk_ids:
                 rec = self._get_record_by_id(chunk_id)
-                texts.append(rec["document"] if rec else "")
+                if rec and rec.get("document"):
+                    texts.append(rec["document"])
+                else:
+                    texts.append("")
             combined_text = "\n\n".join(texts)
+
         else:
+            # INTERNAL CLUSTER → use child summaries ONLY
             child_summaries = []
+
             for child in cluster["children"]["clusters"]:
-                if child.get("incomplete"):
-                    child_summaries.append("[INCOMPLETE]")
+                if "multilang" not in child:
+                    # Child not processed yet — skip
                     continue
 
-                lang = child.get("source_language")
-                if "multilang" in child and lang in child["multilang"]:
-                    child_summaries.append(child["multilang"][lang]["summary"])
-                else:
-                    child_summaries.append("[INCOMPLETE]")
+                lang = child.get("source_language", self.languages[0])
+                child_summaries.append(child["multilang"][lang]["summary"])
 
-            combined_text = "\n\n".join(child_summaries)
+            combined_text = "\n\n".join(child_summaries).strip()
 
-        # Auto-detect language if not provided
+            # If still empty (should not happen), fallback to empty string
+            if not combined_text:
+                combined_text = ""
+
+        # Auto-detect language if needed
         if self.languages is None:
             detected = await self._detect_language(combined_text)
             self.languages = [detected]
             self._log(f"Auto-detected language: {detected}")
 
-        # Build prompt
         json_schema = self._build_multilang_json_schema()
         prompt = self.combined_prompt.format(
             text=combined_text,
@@ -403,7 +413,9 @@ class Topic_Hierarchy_Labeler:
             json_schema=json_schema,
         )
 
-        # Retry logic
+        # ---------------------------------------------------------------------
+        # LLM CALL WITH RETRIES
+        # ---------------------------------------------------------------------
         data = None
         for attempt in range(self.retry_attempts):
             try:
@@ -433,7 +445,9 @@ class Topic_Hierarchy_Labeler:
                 else:
                     await asyncio.sleep(2 ** attempt)
 
-        # Store multilingual data with HARD fallback
+        # ---------------------------------------------------------------------
+        # Store multilingual data
+        # ---------------------------------------------------------------------
         cluster["multilang"] = {}
 
         for lang in self.languages:
@@ -443,19 +457,14 @@ class Topic_Hierarchy_Labeler:
 
             # HARD GUARANTEE: enforce non-empty label
             if not label:
-                # Leaf fallback
-                if cluster["children"] is None and cluster.get("metadatas"):
-                    label = cluster["metadatas"][0].get("document_name", "Unnamed Cluster")
-
-                # Internal fallback
-                elif cluster["children"] is not None:
+                if cluster["children"] is not None:
+                    # Try child labels
                     for child in cluster["children"]["clusters"]:
                         child_label = child.get("multilang", {}).get(lang, {}).get("label")
                         if child_label:
                             label = child_label
                             break
 
-                # Final fallback
                 if not label:
                     label = f"Cluster {cluster['cluster_id']}"
 
@@ -501,21 +510,30 @@ class Topic_Hierarchy_Labeler:
     # Per-language view
     # -------------------------------------------------------------------------
     def _extract_language_view(self, root: Dict[str, Any], lang: str) -> Dict[str, Any]:
+        """
+        Build a language-specific view of the hierarchy:
+        - For each cluster, keep only the summary/label/keywords for `lang`
+        - Remove multilang + source_language
+        """
+        # Deep copy to avoid mutating the original
         hierarchy = json.loads(json.dumps(root))
 
         def recurse(node: Dict[str, Any]):
             for c in node["clusters"]:
+                # If multilingual data exists for this cluster and language
                 if "multilang" in c and lang in c["multilang"]:
                     c["summary"] = c["multilang"][lang]["summary"]
                     c["label"] = c["multilang"][lang]["label"]
                     c["keywords"] = c["multilang"][lang]["keywords"]
 
+                # Drop multilingual + source_language fields
                 if "multilang" in c:
                     del c["multilang"]
 
                 if "source_language" in c:
                     del c["source_language"]
 
+                # Recurse into children
                 if c["children"] is not None:
                     recurse(c["children"])
 

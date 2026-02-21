@@ -203,5 +203,20 @@ class ChromaBackend:
 
 
 
+    def get_embedding(self, chunk_id: str):
+        """
+        Return the embedding vector for a given chunk_id.
+        """
+        result = self.collection.get(
+            ids=[chunk_id],
+            include=["embeddings"]
+        )
+
+        embs = result.get("embeddings")
+        if embs is None or len(embs) == 0:
+            return None
+
+        return embs[0]
+
 
 

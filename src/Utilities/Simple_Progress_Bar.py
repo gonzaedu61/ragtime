@@ -38,12 +38,14 @@ class Simple_Progress_Bar:
         est_total = avg * self.total
         remaining = est_total - elapsed
 
-        # NEW: store label if provided
+        # Store label if provided
         if label is not None:
             self.last_label = label
 
-        # NEW: append label to the progress bar line
         label_str = f" | {self.last_label}" if self.last_label else ""
+
+        # NEW: add trailing spaces to erase leftover characters
+        clear_tail = " " * 20
 
         sys.stdout.write(
             f"\r[{bar}] {pct:5.1f}%  "
@@ -51,7 +53,7 @@ class Simple_Progress_Bar:
             f"Elapsed: {self._fmt(elapsed)} | "
             f"ETA: {self._fmt(remaining)} | "
             f"Total est.: {self._fmt(est_total)}"
-            f"{label_str}"
+            f"{label_str}{clear_tail}"
         )
         sys.stdout.flush()
 

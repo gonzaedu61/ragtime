@@ -47,5 +47,5 @@ vectordb = create_vectordb(
 
 os.makedirs(CLUSTERS_BASELINE_PATH, exist_ok=True)
 
-baseline_maker = Clusters_Baseline_Maker(ENRICHED_CLUSTERS_FILE, CLUSTERS_BASELINE_PATH, llm, vectordb)
+baseline_maker = Clusters_Baseline_Maker(ENRICHED_CLUSTERS_FILE, CLUSTERS_BASELINE_PATH, llm, vectordb, num_threads=4)
 baseline_maker.run()

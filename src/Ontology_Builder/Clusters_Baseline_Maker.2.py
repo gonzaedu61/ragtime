@@ -144,7 +144,6 @@ class Clusters_Baseline_Maker:
     # ------------------------------------------------------------
     def run(self):
         all_nodes = list(self.traverse())
-        all_nodes.sort(key=lambda n: n.get("cluster_id", ""))
         total_clusters = len(all_nodes)
 
         # ------------------------------------------------------------
@@ -182,8 +181,6 @@ class Clusters_Baseline_Maker:
         # PROGRESS BAR
         # ------------------------------------------------------------
         progress = Simple_Progress_Bar(total=total_clusters, enabled=True)
-        progress.current = len(existing_ids)  # start at already processed count
-        progress.update(step=0, label="Resuming previous progress")  # optional initial render
 
         # ------------------------------------------------------------
         # SINGLE-THREAD MODE
@@ -194,7 +191,7 @@ class Clusters_Baseline_Maker:
 
                 # Skip existing
                 if cid in existing_ids:
-                    progress.update(step=0, label=f"{cid} (skipped)")
+                    progress.update(label=f"{cid} (skipped)")
                     continue
 
                 result = self.process_single_cluster(node)
@@ -217,7 +214,7 @@ class Clusters_Baseline_Maker:
 
                     # Skip existing
                     if cid in existing_ids:
-                        progress.update(step=0, label=f"{cid} (skipped)")
+                        progress.update(label=f"{cid} (skipped)")
                         continue
 
                     try:

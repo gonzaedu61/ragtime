@@ -144,120 +144,31 @@ class Clusters_Baseline_Maker:
     # ------------------------------------------------------------
     def run(self):
         all_nodes = list(self.traverse())
-        all_nodes.sort(key=lambda n: n.get("cluster_id", ""))
-        total_clusters = len(all_nodes)
+        progress = Simple_Progress_Bar(total=len(all_nodes), enabled=True)
 
-        # ------------------------------------------------------------
-        # PRE-RUN SCAN OF OUTPUT FOLDER
-        # ------------------------------------------------------------
-        existing_ids = []
-        missing_ids = []
-
-        for node in all_nodes:
-            cid = node.get("cluster_id", "unknown")
-            output_path = os.path.join(self.output_folder, f"base_{cid}_knowledge.json")
-            if os.path.exists(output_path):
-                existing_ids.append(cid)
-            else:
-                missing_ids.append(cid)
-
-        print("\n=== Baseline Maker Status Check ===")
-        print(f"Total clusters ..: {total_clusters}")
-        print(f"Existing clusters: {len(existing_ids)}")
-        print(f"Pending clusters.: {len(missing_ids)}")
-
-        if len(existing_ids) == total_clusters:
-            print("\nAll cluster baseline files already exist. Nothing to do.")
-            return
-
-        '''
-        if len(existing_ids) > 0:
-            print("\nSome clusters are already processed. Only missing ones will be computed.")
-            print(f"Missing cluster IDs: {missing_ids}")
-        '''
-
-        print("\nStarting LLM processing...\n")
-
-        # ------------------------------------------------------------
-        # PROGRESS BAR
-        # ------------------------------------------------------------
-        progress = Simple_Progress_Bar(total=total_clusters, enabled=True)
-        progress.current = len(existing_ids)  # start at already processed count
-        progress.update(step=0, label="Resuming previous progress")  # optional initial render
-
-        # ------------------------------------------------------------
-        # SINGLE-THREAD MODE
-        # ------------------------------------------------------------
+        # Single-thread mode
         if self.num_threads == 1:
             for node in all_nodes:
                 cid = node.get("cluster_id", "unknown")
-
-                # Skip existing
-                if cid in existing_ids:
-                    progress.update(step=0, label=f"{cid} (skipped)")
-                    continue
-
                 result = self.process_single_cluster(node)
                 progress.update(label=result)
-
             print("\nBaseline extraction completed.")
-        else:
-            # ------------------------------------------------------------
-            # MULTI-THREAD MODE
-            # ------------------------------------------------------------
-            with ThreadPoolExecutor(max_workers=self.num_threads) as executor:
-                futures = {
-                    executor.submit(self.process_single_cluster, node): node
-                    for node in all_nodes
-                }
+            return
 
-                for future in as_completed(futures):
-                    node = futures[future]
-                    cid = node.get("cluster_id", "unknown")
+        # Multi-thread mode
+        with ThreadPoolExecutor(max_workers=self.num_threads) as executor:
+            futures = {
+                executor.submit(self.process_single_cluster, node): node
+                for node in all_nodes
+            }
 
-                    # Skip existing
-                    if cid in existing_ids:
-                        progress.update(step=0, label=f"{cid} (skipped)")
-                        continue
+            for future in as_completed(futures):
+                node = futures[future]
+                cid = node.get("cluster_id", "unknown")
+                try:
+                    result = future.result()
+                except Exception:
+                    result = f"{cid} (error)"
+                progress.update(label=result)
 
-                    try:
-                        result = future.result()
-                    except Exception:
-                        result = f"{cid} (error)"
-
-                    progress.update(label=result)
-
-            print("\nParallel baseline extraction completed.")
-
-        # ------------------------------------------------------------
-        # POST-RUN SCAN
-        # ------------------------------------------------------------
-        final_existing = []
-        final_missing = []
-
-        for node in all_nodes:
-            cid = node.get("cluster_id", "unknown")
-            output_path = os.path.join(self.output_folder, f"base_{cid}_knowledge.json")
-            if os.path.exists(output_path):
-                final_existing.append(cid)
-            else:
-                final_missing.append(cid)
-
-        print("\n=== Final Output Folder Status ===")
-        print(f"Total clusters:          {total_clusters}")
-        print(f"Files generated:         {len(final_existing)}")
-        print(f"Files still missing:     {len(final_missing)}")
-
-        # Always generate missing_clusters.txt if anything is missing
-        if final_missing:
-            print("\nWARNING: Some clusters are still missing.")
-            print(f"Missing cluster IDs: {final_missing}")
-
-            missing_file = os.path.join(self.output_folder, "missing_clusters.txt")
-            with open(missing_file, "w", encoding="utf-8") as f:
-                for cid in final_missing:
-                    f.write(cid + "\n")
-
-            print(f"Missing cluster list written to: {missing_file}")
-        else:
-            print("\nAll cluster baseline files are present. Complete set generated.")
+        print("\nParallel baseline extraction completed.")

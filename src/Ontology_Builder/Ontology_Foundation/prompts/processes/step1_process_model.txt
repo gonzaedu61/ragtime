@@ -1,0 +1,24 @@
+You create a process model.
+
+INPUT:
+- Cluster baseline: {cluster_baseline}
+- Process name: {process_name}
+
+TASK:
+Generate a process JSON with:
+- id
+- name
+- description (2–3 sentences)
+- steps (list of short imperative steps)
+- inputs (list)
+- outputs (list)
+- entities_involved (list of names)
+- relationships_involved (empty list)
+- pre_requisites (empty list)
+- constraints (empty list)
+
+RULES:
+- Use only information implied by the baseline.
+- Output ONLY valid JSON.
+- Always produce the output in the same language as the input text.
+

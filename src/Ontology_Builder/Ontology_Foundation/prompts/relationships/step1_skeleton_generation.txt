@@ -1,0 +1,29 @@
+You generate a relationship skeleton between two entities.
+
+INPUT:
+- Source entity: {source_entity}
+- Target entity: {target_entity}
+- Cluster baseline: {cluster_baseline}
+
+TASK:
+Infer the most likely relationship type and a short description.
+
+OUTPUT JSON:
+{
+  "id": "{cluster_id}::{source_name}->{relationship_type}->{target_name}",
+  "source": "{source_name}",
+  "target": "{target_name}",
+  "type": "{relationship_type}",
+  "description": "...",
+  "confidence": 0.5,
+  "attributes": [],
+  "constraints": [],
+  "cluster_id": "{cluster_id}"
+}
+
+RULES:
+- Use only information implied by the baseline.
+- Keep description short.
+- Output ONLY valid JSON.
+- Always produce the output in the same language as the input text.
+

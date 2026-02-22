@@ -20,10 +20,6 @@ class Simple_Progress_Bar:
         self.last_label = ""
 
     def update(self, step: int = 1, label: str = None):
-        """
-        Update the progress bar.
-        Optional: label="Hybrid retrieval", etc.
-        """
         if not self.enabled:
             return
 
@@ -38,17 +34,16 @@ class Simple_Progress_Bar:
         est_total = avg * self.total
         remaining = est_total - elapsed
 
-        # Store label if provided
         if label is not None:
             self.last_label = label
 
         label_str = f" | {self.last_label}" if self.last_label else ""
-
-        # NEW: add trailing spaces to erase leftover characters
         clear_tail = " " * 20
 
+        # Force overwrite of the same line
+        sys.stdout.write("\r")
         sys.stdout.write(
-            f"\r[{bar}] {pct:5.1f}%  "
+            f"[{bar}] {pct:5.1f}%  "
             f"({self.current}/{self.total})  "
             f"Elapsed: {self._fmt(elapsed)} | "
             f"ETA: {self._fmt(remaining)} | "
@@ -57,8 +52,10 @@ class Simple_Progress_Bar:
         )
         sys.stdout.flush()
 
+        # Only print a newline at the very end
         if self.current >= self.total:
-            print()
+            sys.stdout.write("\n")
+            sys.stdout.flush()
 
     def _fmt(self, seconds: float) -> str:
         seconds = int(seconds)

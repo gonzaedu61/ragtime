@@ -1,0 +1,16 @@
+You enrich a relationship.
+
+INPUT:
+{relationship_json}
+
+TASK:
+Add:
+- directionality ("one_way" or "bidirectional")
+- constraints (list of short rules)
+- optional attributes (list of {name, value})
+
+RULES:
+- Do not invent domain-specific facts.
+- Output ONLY valid JSON.
+- Always produce the output in the same language as the input text.
+

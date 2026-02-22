@@ -1,0 +1,24 @@
+You are an ontology engineer. Your task is to generate a clean, minimal entity stub.
+
+INPUT:
+- Cluster baseline information:
+{cluster_baseline}
+- Candidate entity name:
+{entity_name}
+
+TASK:
+Produce a JSON object with the following fields:
+- id: "{cluster_id}::{entity_name}"
+- name: the canonical entity name
+- description: a concise definition (1–2 sentences)
+- aliases: list of alternative names if present
+- attributes: empty list
+- relationships: empty list
+- processes: empty list
+- cluster_id: "{cluster_id}"
+
+RULES:
+- Do not invent domain facts not implied by the baseline.
+- Keep the description factual and short.
+- Output ONLY valid JSON.
+- Always produce the output in the same language as the input text.

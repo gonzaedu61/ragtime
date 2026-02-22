@@ -1,0 +1,20 @@
+You finalize an ontology entity for storage in a vector database.
+
+INPUT:
+{entity_json}
+
+TASK:
+Normalize and finalize the entity:
+- ensure description is clean and self-contained
+- ensure aliases are unique and normalized
+- ensure attributes are consistent
+- ensure relationships reference canonical names
+
+OUTPUT:
+Return the final JSON object.
+
+RULES:
+- Do not add new domain facts.
+- Output ONLY valid JSON.
+- Always produce the output in the same language as the input text.
+

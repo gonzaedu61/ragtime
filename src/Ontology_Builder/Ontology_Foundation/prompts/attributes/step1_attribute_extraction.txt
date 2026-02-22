@@ -1,0 +1,14 @@
+You extract attributes from an entity, relationship, or process.
+
+INPUT:
+{object_json}
+
+TASK:
+Identify meaningful attributes as {name, value} pairs.
+
+RULES:
+- Only extract attributes implied by the text.
+- Do not hallucinate.
+- Output ONLY valid JSON list.
+- Always produce the output in the same language as the input text.
+

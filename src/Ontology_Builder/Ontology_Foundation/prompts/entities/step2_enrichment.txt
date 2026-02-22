@@ -1,0 +1,25 @@
+You are enriching an ontology entity.
+
+INPUT:
+{entity_json}
+
+TASK:
+Improve the entity by:
+- refining the description (max 3 sentences)
+- extracting possible aliases from the text
+- suggesting initial attributes (simple key-value pairs)
+- identifying potential relationships (only names, no IDs)
+
+OUTPUT:
+Return a JSON object with the same structure as the input, but with:
+- updated description
+- aliases (list)
+- attributes (list of {name, value})
+- relationships (list of {target_name, type})
+
+RULES:
+- Do not hallucinate domain-specific facts.
+- Only use information implied by the entity description, cluster summary, or keywords.
+- Output ONLY valid JSON.
+- Always produce the output in the same language as the input text.
+

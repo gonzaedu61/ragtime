@@ -1,0 +1,16 @@
+Processing: 0.0.0.1.2.0__9_step1.json
+Processing: 0.0.0.1.2.1__6_step1.json
+Processing: 0.0.0.3.0.0.1__3_step1.json
+Processing: 0.0.0.4.2.0__12_step1.json
+
+
+
+
+
+(ragtime) PS C:\Users\gonza\OneDrive\Desktop\Python\ragtime> python Test_Ontology_Foundation_Builder.py
+[██████████████████████████████] 100.0%  (4353/4353)  Elapsed: 00:00:00 | ETA: 00:00:00 | Total est.: 00:00:00 | Entities / Step_1 (stubs)
+[█████████████████████████████░] 100.0%  (4352/4353)  Elapsed: 00:00:00 | ETA: 00:00:00 | Total est.: 00:00:00 | Entities / Step_2 (enrich)                    Processing: 0.0.0.3.0.0.1__3_step1.json
+Prompt:
+-----------------------------------------------------
+[██████████████████████████████] 100.0%  (4353/4353)  Elapsed: 00:00:10 | ETA: 00:00:00 | Total est.: 00:00:10 | Entities / Step_2 (enrich)                    
+[█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   5.9%  (256/4353)  Elapsed: 00:00:59 | ETA: 00:15:54 | Total est.: 00:16:53 | Entities / Step_3 (final)

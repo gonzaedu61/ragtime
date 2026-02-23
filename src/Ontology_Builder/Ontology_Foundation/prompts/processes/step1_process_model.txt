@@ -10,12 +10,17 @@ Generate a process JSON with:
 - name
 - description (2–3 sentences)
 - steps (list of short imperative steps)
+- actors + roles (list)
 - inputs (list)
 - outputs (list)
 - entities_involved (list of names)
 - relationships_involved (empty list)
-- pre_requisites (empty list)
+- pre_conditions (empty list)
+- post_conditions (empty list)
 - constraints (empty list)
+- decision_points (empty list)
+- exceptions (empty list)
+
 
 RULES:
 - Use only information implied by the baseline.

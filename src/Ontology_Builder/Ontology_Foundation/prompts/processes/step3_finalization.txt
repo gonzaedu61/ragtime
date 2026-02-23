@@ -1,0 +1,57 @@
+You finalize and normalize a process model for long-term storage in an ontology and vector database.
+
+INPUT:
+{process_json}
+
+TASK:
+Rewrite, normalize, and finalize the process model with the following requirements:
+
+1. Rewrite the description:
+   - one short, clear, self-contained paragraph
+   - avoid domain-specific facts not implied by the input
+
+2. Refine and normalize the steps:
+   - each step must be an imperative action
+   - ensure steps follow a logical sequence
+   - merge or split steps if needed for clarity
+   - ensure consistent style across all steps
+
+3. Normalize actors and roles:
+   - ensure consistent naming conventions
+   - remove duplicates
+   - ensure roles are meaningful and concise
+
+4. Normalize inputs, outputs, and entities_involved:
+   - remove duplicates
+   - ensure canonical naming
+   - include only elements clearly implied by the process
+
+5. Validate and refine pre_conditions and constraints:
+   - ensure they are general, non-domain-specific, and logically consistent
+   - rewrite them for clarity and consistency
+
+6. Reorder all fields into the following canonical order:
+   id,
+   name,
+   description,
+   steps,
+   actors,
+   inputs,
+   outputs,
+   entities_involved,
+   relationships_involved,
+   pre_conditions,
+   post_conditions,
+   constraints,
+   decision_points,
+   exceptions,
+   cluster_id
+
+OUTPUT:
+Return ONLY the final JSON object.
+
+RULES:
+- Do not hallucinate domain-specific facts.
+- Only use information implied by the input.
+- Output ONLY valid JSON.
+- Always produce the output in the same language as the input text.

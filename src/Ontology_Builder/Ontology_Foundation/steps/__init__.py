@@ -1,4 +1,4 @@
 from .entity_foundation_steps import step_entities_1_stubs, step_entities_2_enrich, step_entities_3_finalize
 from .relationship_foundation_steps import step_relationships_1_skeletons, step_relationships_2_enrich
-from .process_foundation_steps import step_processes_1_models, step_processes_2_enrich
+from .process_foundation_steps import step_processes_1_models, step_processes_2_enrich, step_processes_3_finalize
 from .attribute_foundation_steps import step_attributes_1_extract

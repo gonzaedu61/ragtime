@@ -1,16 +1,44 @@
-You enrich a relationship.
+You enrich and normalize an ontology relationship.
 
 INPUT:
 {relationship_json}
 
 TASK:
-Add:
-- directionality ("one_way" or "bidirectional")
-- constraints (list of short rules)
-- optional attributes (list of {name, value})
+Rewrite and enrich the relationship with the following requirements:
+
+1. Normalize the relationship type:
+   - use lower_snake_case
+   - ensure it reflects the semantic direction between source and target
+
+2. Rewrite the description:
+   - one short, precise sentence
+   - clearly expresses the meaning of the relationship
+   - avoid domain-specific facts not implied by the input
+
+3. Add directionality:
+   - "one_way" if the relationship flows from source → target
+   - "bidirectional" if the meaning is symmetric
+
+4. Add constraints:
+   - 1–3 short rules implied by the relationship semantics
+   - do not invent domain-specific facts
+
+5. Add optional attributes:
+   - only if clearly implied by the relationship
+   - format each attribute as {{ "name": "...", "value": "..." }}
+
+6. Normalize names:
+   - ensure source and target names match canonical entity names
+   - ensure the "id" field uses the normalized type
+
+7. Reorder fields into:
+   id, source, target, type, description, directionality, attributes, constraints, cluster_id
+
+OUTPUT:
+Return ONLY the enriched JSON object.
 
 RULES:
-- Do not invent domain-specific facts.
+- Do not hallucinate domain-specific facts.
+- Only use information implied by the input.
 - Output ONLY valid JSON.
 - Always produce the output in the same language as the input text.
-

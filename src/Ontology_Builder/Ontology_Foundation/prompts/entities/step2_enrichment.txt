@@ -14,8 +14,8 @@ OUTPUT:
 Return a JSON object with the same structure as the input, but with:
 - updated description
 - aliases (list)
-- attributes (list of {name, value})
-- relationships (list of {target_name, type})
+- attributes (list of {{name, value}})
+- relationships (list of {{target_name, type}})
 
 RULES:
 - Do not hallucinate domain-specific facts.

@@ -50,7 +50,7 @@ vectordb = create_vectordb(
 foundation_builder = Ontology_Foundation_Builder(INPUT_CLUSTERS_FILE,
                                                  CLUSTERS_BASELINE_PATH,
                                                  FOUNDATION_FILES_PATH,
-                                                 llm, vectordb, max_workers=8,
+                                                 llm, vectordb, max_workers=1,
                                                  progress_enabled=True)
 
 foundation_builder.run()

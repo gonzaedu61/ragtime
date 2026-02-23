@@ -11,7 +11,7 @@ from .utils import LLM_Wrapper
 # --- Step modules ---
 from .steps import step_entities_1_stubs, step_entities_2_enrich, step_entities_3_finalize
 from .steps import step_relationships_1_skeletons, step_relationships_2_enrich
-from .steps import step_processes_1_models, step_processes_2_enrich
+from .steps import step_processes_1_models, step_processes_2_enrich, step_processes_3_finalize
 from .steps import step_attributes_1_extract
 
 class Ontology_Foundation_Builder:
@@ -100,6 +100,8 @@ class Ontology_Foundation_Builder:
         # --- PROCESSES ---
         self._run_step("Processes", 1, lambda: step_processes_1_models(self))
         self._run_step("Processes", 2, lambda: step_processes_2_enrich(self))
+        self._run_step("Processes", 3, lambda: step_processes_3_finalize(self))
+
 
         # --- ATTRIBUTES ---
         self._run_step("Attributes", 1, lambda: step_attributes_1_extract(self))
@@ -110,10 +112,14 @@ class Ontology_Foundation_Builder:
 
     def _run_step(self, element: str, step: int, fn):
         key = f"{element}_Step_{step}"
-        if self._is_step_completed(key):
-            return
+
+        # Always mark as running (informational only)
         self._mark_step_running(key)
+
+        # Always call the step function
         fn()
+
+        # Mark as completed after the function returns
         self._mark_step_completed(key)
 
     # -------------------------------------------------------------------------
@@ -122,19 +128,36 @@ class Ontology_Foundation_Builder:
 
     def _collect_cluster_ids(self):
         """
-        Traverse the hierarchy and collect all cluster_ids.
+        Collect ALL cluster_ids from the hierarchy, regardless of how the
+        'children' field is structured (null, {}, missing, or containing clusters).
         """
         ids = []
 
         def recurse(node):
+            # 1. Record this cluster_id
             cid = node.get("cluster_id")
             if cid:
                 ids.append(cid)
-            children = node.get("children", {})
-            if children and "clusters" in children:
-                for child in children["clusters"]:
-                    recurse(child)
 
+            # 2. Extract children safely
+            children = node.get("children")
+
+            # Case A: children is None → leaf node → stop
+            if children is None:
+                return
+
+            # Case B: children is a dict → may contain "clusters"
+            if isinstance(children, dict):
+                subclusters = children.get("clusters", [])
+                for child in subclusters:
+                    recurse(child)
+                return
+
+            # Case C: children exists but is not dict (rare malformed case)
+            # → ignore safely
+            return
+
+        # Start recursion from top-level clusters
         for root in self.hierarchy.get("clusters", []):
             recurse(root)
 

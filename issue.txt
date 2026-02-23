@@ -1,0 +1,18 @@
+The issue of skipping Entity steps 2 and 3 and Relationship steps 1 and 2 is still there. This is the context:
+1 - There are already 4349 Entity json files in the Step_1 folder, out of a total of 4353. There are therefore 4 left to complete the step 1
+2 - When I restart the pipeline to resume, the progress bar shows that the entity steps module is completing the pending 4 items. , but these 4 json files are never created even if the progress bar shows that the total has been reached !!!
+3 - Then when Entity Step 1 is shown as completed (even when those 4 files were not created) the progress bar for Entity Step 2 shows up, but it runs quickly till the total end (minus 4) without creating any file in the Entity Step 2 folder (the folder is created though)
+4 - Then no progress bar is shown at all for Relationships.
+5 - Then the processes Step 1 start apparently working fine.
+
+Let me know if you need any fresh script completed
+
+Here the console output:
+(ragtime) PS C:\Users\gonza\OneDrive\Desktop\Python\ragtime> python Test_Ontology_Foundation_Builder.py
+[██████████████████████████████] 100.0%  (4353/4353)  Elapsed: 00:00:09 | ETA: 00:00:00 | Total est.: 00:00:09 | Entities / Step_1 (stubs)
+[██████████████████████████████] 100.0%  (4349/4349)  Elapsed: 00:00:07 | ETA: 00:00:00 | Total est.: 00:00:07 | Entities / Step_2 (enrich)
+[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0.3%  (10/3651)  Elapsed: 00:00:17 | ETA: 01:45:18 | Total est.: 01:45:35 | Processes / Step_1 (models)
+
+
+
+

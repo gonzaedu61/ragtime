@@ -1,0 +1,46 @@
+You enrich and normalize a process model.
+
+INPUT:
+{process_json}
+
+TASK:
+Rewrite and enrich the process model with the following requirements:
+
+1. Rewrite the description:
+   - one short, clear, self-contained paragraph
+   - avoid domain-specific facts not implied by the input
+
+2. Refine the steps:
+   - ensure each step is an imperative action
+   - ensure steps are logically ordered
+   - merge or split steps if needed for clarity
+
+3. Add pre_conditions:
+   - 1–3 conditions that must be true before the process starts
+   - only if clearly implied by the description or baseline
+
+4. Add constraints:
+   - 1–3 rules that must hold during or after the process
+   - do not invent domain-specific facts
+
+5. Normalize actors and roles:
+   - ensure consistent naming
+   - remove duplicates
+
+6. Refine entities_involved:
+   - include only entities clearly implied by the process
+   - normalize names to canonical entity names
+
+7. Reorder fields into:
+   id, name, description, steps, actors, inputs, outputs,
+   entities_involved, relationships_involved, pre_conditions,
+   post_conditions, constraints, decision_points, exceptions, cluster_id
+
+OUTPUT:
+Return ONLY the enriched JSON object.
+
+RULES:
+- Do not hallucinate domain-specific facts.
+- Only use information implied by the input.
+- Output ONLY valid JSON.
+- Always produce the output in the same language as the input text.

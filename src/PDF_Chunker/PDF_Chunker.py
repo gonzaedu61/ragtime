@@ -11,6 +11,7 @@ from .models import TextSpan, LogicalBlock, StructuralChunk
 from .json_export import spans_to_json, blocks_to_json, chunks_to_json
 from collections import Counter
 import glob
+import sys
 
 
 KBs_DIR = "DATA/KBs"
@@ -93,7 +94,7 @@ MIN_REPEAT_COUNT = 3                # must appear on ≥ 3 pages
 
 # TOC detection settings
 INCLUDE_TOC = False
-MAX_TOC_PAGES = 6
+MAX_TOC_PAGES = 7
 MIN_TOC_RIGHT_NUMBERS = 4
 MIN_TOC_HEADING_ENTRIES = 4
 MAX_TOC_LONG_LINE_RATIO = 0.3
@@ -141,7 +142,7 @@ def _resolve_input_files(dir, pattern) -> List[str]:
     exact_path = os.path.join(dir, pattern)
     if os.path.exists(exact_path):
         return [exact_path]
-
+    
     raise FileNotFoundError(f"No PDF files match: {pattern}")
 
 # ---------------------------------------------------------
@@ -1279,7 +1280,7 @@ class PDF_Chunker:
 
     def parse(self):
         """ Main entry point. Processes one or multiple PDF files. """
-        
+
         pdf_files = _resolve_input_files(self.pdf_path, self.document_name)
 
         for pdf_pathName in pdf_files: 

@@ -5,6 +5,9 @@ from typing import List, Dict, Any
 from .embedding_backends import HFEmbeddingBackend
 from Utilities.File_Utilities import expand_files_pattern
 import os
+import numpy as np
+
+
 
 
 
@@ -75,11 +78,12 @@ class Structural_Chunks_Embedder:
         ids = [c.chunk_id for c in chunks]
         ids = [str(i) for i in ids]
 
-        # Adjust Metadata images: Remove empty image paths to avoid storing empty lists in vector DB
         metadata = [c.metadata for c in chunks]
+        # Remove ANY empty list metadata fields
         for m in metadata:
-            if "image_paths" in m and not m["image_paths"]:
-                del m["image_paths"]
+            keys_to_delete = [k for k, v in m.items() if isinstance(v, list) and len(v) == 0]
+            for k in keys_to_delete:
+                del m[k]
 
         # Remove metadata blocks
         for m in metadata:
@@ -98,7 +102,17 @@ class Structural_Chunks_Embedder:
 
         # 2. Create embeddings
         embeddings = self.embedding_backend.embed(texts)
-        embeddings = [e.detach().cpu().numpy() for e in embeddings]
+        processed = []
+        for e in embeddings:
+            if hasattr(e, "detach"):          # torch tensor
+                e = e.detach().cpu().numpy()
+            elif hasattr(e, "cpu"):           # numpy on device
+                e = e.cpu().numpy()
+            else:                             # already list or numpy
+                e = np.array(e)
+            processed.append(e)
+
+        embeddings = processed
 
         # 3. Merge duplicates by TEXT while combining image_paths
         merged = {}  # key = text, value = merged record

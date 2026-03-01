@@ -1,0 +1,29 @@
+Extract the following fields:
+
+1. Label (short, 1–4 words)
+
+2. High-level summary (3–6 sentences)
+
+3. Keywords (10–20)
+
+4. Candidate entities:
+   - List of domain-relevant nouns or noun phrases.
+   - Include only items clearly mentioned or strongly implied by the input chunks.
+   - Use short, canonical names.
+   - Avoid generic terms (e.g., "system", "process", "data") unless central to the text.
+
+5. Candidate processes:
+   - List of actions or workflows described or implied in the input chunks.
+   - Use short verb–noun phrases (e.g., "create order", "approve request").
+   - Include only processes clearly supported by the text.
+
+6. Candidate relationships:
+   - Identify relationships explicitly or implicitly suggested by the input chunks.
+   - Include only relationships that are clearly implied by the text.
+   - Represent each relationship as a JSON object of the form:
+     {{ "source": "...", "target": "...", "type": "..." }}
+   - If the type is unclear, use "related_to".
+   - Do not invent domain-specific facts or technical relationship types.
+
+Return ONLY valid JSON with these keys:
+label, summary, keywords, entities, processes, relationships.

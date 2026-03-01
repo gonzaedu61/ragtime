@@ -1,23 +1,55 @@
-You finalize an ontology entity for storage in a vector database.
+You finalize and normalize an ontology entity for long-term storage in a vector database.
 
 INPUT:
 {entity_json}
 
 TASK:
-Rewrite and normalize the entity:
-- rewrite the description into a single, clean, self-contained paragraph
-- normalize aliases (lowercase, unique)
-- normalize attribute names (Title Case)
-- normalize relationship types (lower_snake_case)
-- derive a list of processes implied by the entity description, cluster summary, or keywords
-- each process must include: {{ "name": "...", "description": "..." }}
-- reorder fields into: id, name, description, aliases, attributes, relationships, processes, cluster_id
+Rewrite, normalize, and finalize the entity with the following requirements:
+
+1. Description:
+   - Rewrite into one short, clear, self-contained paragraph.
+   - Avoid domain-specific facts not implied by the input.
+
+2. Name normalization:
+   - Ensure the entity name is concise, singular, and canonical.
+   - Remove determiners, unnecessary adjectives, and formatting artifacts.
+
+3. Alias normalization:
+   - Convert all aliases to lowercase.
+   - Remove duplicates and near-duplicates.
+   - Keep only aliases clearly implied by the input.
+
+4. Attribute normalization:
+   - Normalize attribute names to Title Case.
+   - Normalize attribute values to concise, canonical forms.
+   - Remove redundant or empty attributes.
+
+5. Relationship normalization:
+   - Normalize relationship types to lower_snake_case.
+   - Ensure each relationship has: {{ "source": "...", "type": "...", "target": "..." }}.
+   - Remove relationships that are unsupported by the input.
+
+6. Process inference:
+   - Derive a list of processes clearly implied by the entity description, cluster summary, or keywords.
+   - Each process must include: {{ "name": "...", "description": "..." }}.
+   - Do not invent domain-specific processes.
+
+7. Field ordering:
+   Reorder fields into the following canonical order:
+   id,
+   name,
+   description,
+   aliases,
+   attributes,
+   relationships,
+   processes,
+   cluster_id
 
 OUTPUT:
 Return ONLY the final JSON object.
 
 RULES:
 - Do not add new domain facts.
-- Only infer processes that are clearly implied by the text.
+- Only infer processes or relationships that are clearly implied by the text.
 - Output ONLY valid JSON.
 - Always produce the output in the same language as the input text.

@@ -61,3 +61,80 @@ class AzureOpenAIBackend:
             # fall back to creating a new task and waiting on it.
             loop = asyncio.get_event_loop()
             return loop.run_until_complete(self.acomplete(prompt))
+
+
+
+import aiohttp
+import asyncio
+from typing import Optional
+
+
+class GoogleColabAPIBackend:
+    """
+    Backend that calls a FastAPI LLM server running in Google Colab.
+    Matches the interface of AzureOpenAIBackend.
+    """
+
+    def __init__(self, base_url: str):
+        """
+        base_url: the public ngrok URL, e.g. "https://1234abcd.ngrok-free.app"
+        """
+        self.base_url = base_url.rstrip("/")
+
+    async def acomplete(self, prompt: str) -> str:
+        """
+        Asynchronous call to the remote FastAPI endpoint.
+        """
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    f"{self.base_url}/generate",
+                    json={"prompt": prompt},
+                    timeout=120
+                ) as resp:
+                    if resp.status != 200:
+                        return f"[ERROR {resp.status}: {await resp.text()}]"
+
+                    data = await resp.json()
+                    return data.get("response", "").strip()
+
+        except Exception as e:
+            return f"[ERROR calling Colab LLM API: {e}]"
+
+    def complete(self, prompt: str) -> str:
+        """
+        Synchronous wrapper around the async method.
+        """
+        try:
+            return asyncio.run(self.acomplete(prompt))
+        except RuntimeError:
+            loop = asyncio.get_event_loop()
+            return loop.run_until_complete(self.acomplete(prompt))
+
+    async def astatus(self) -> bool:
+        """
+        Asynchronous health check for the Colab FastAPI server.
+        Returns True if alive, False otherwise.
+        """
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(f"{self.base_url}/status", timeout=10) as resp:
+                    if resp.status != 200:
+                        return False
+                    data = await resp.json()
+                    return data.get("alive", False)
+        except Exception:
+            return False
+
+    def status(self) -> bool:
+        """
+        Synchronous wrapper for the health check.
+        """
+        import asyncio
+        try:
+            return asyncio.run(self.astatus())
+        except RuntimeError:
+            loop = asyncio.get_event_loop()
+            return loop.run_until_complete(self.astatus())
+
+

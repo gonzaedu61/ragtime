@@ -1,4 +1,4 @@
-You generate a relationship skeleton between two entities.
+You generate a normalized relationship skeleton between two ontology entities.
 
 INPUT:
 - Source entity: {source_entity}
@@ -6,24 +6,51 @@ INPUT:
 - Cluster baseline: {cluster_baseline}
 
 TASK:
-Infer the most likely relationship type and a short description.
+Infer the most likely relationship type and produce a clean, minimal relationship skeleton with the following requirements:
 
-OUTPUT JSON:
-{
-  "id": "{cluster_id}::{source_name}->{relationship_type}->{target_name}",
-  "source": "{source_name}",
-  "target": "{target_name}",
-  "type": "{relationship_type}",
-  "description": "...",
-  "confidence": 0.5,
-  "attributes": [],
-  "constraints": [],
-  "cluster_id": "{cluster_id}"
-}
+1. Relationship type:
+   - Choose the most appropriate type based on the baseline context.
+   - Use ONLY the following controlled vocabulary:
+       "related_to" (fallback),
+       "part_of",
+       "depends_on",
+       "uses",
+       "produces",
+       "belongs_to",
+       "associated_with"
+   - If no clear type is implied, use "related_to".
+   - Normalize the type to lower_snake_case.
+
+2. Description:
+   - One short, neutral sentence.
+   - Describe the relationship without adding domain-specific facts.
+   - Use only information implied by the baseline.
+
+3. Naming:
+   - Normalize source and target names to concise, canonical forms.
+   - Do not rewrite them semantically; only clean formatting if needed.
+
+4. Confidence:
+   - Use 0.7 if the baseline strongly implies the relationship.
+   - Otherwise use 0.5.
+
+5. Output structure:
+   Produce a JSON object with the following fields:
+   {{
+     "id": "{cluster_id}::{source_name}->{relationship_type}->{target_name}",
+     "source": "{source_name}",
+     "target": "{target_name}",
+     "type": "{relationship_type}",
+     "description": "...",
+     "confidence": <0.5 or 0.7>,
+     "attributes": [],
+     "constraints": [],
+     "cluster_id": "{cluster_id}"
+   }}
 
 RULES:
 - Use only information implied by the baseline.
-- Keep description short.
+- Do not invent domain-specific facts.
+- Keep the description short and neutral.
 - Output ONLY valid JSON.
 - Always produce the output in the same language as the input text.
-

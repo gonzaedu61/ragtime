@@ -94,17 +94,17 @@ class Ontology_Foundation_Builder:
         self._run_step("Entities", 3, lambda: step_entities_3_finalize(self))
 
         # --- RELATIONSHIPS ---
-        self._run_step("Relationships", 1, lambda: step_relationships_1_skeletons(self))
-        self._run_step("Relationships", 2, lambda: step_relationships_2_enrich(self))
+        #self._run_step("Relationships", 1, lambda: step_relationships_1_skeletons(self))
+        #self._run_step("Relationships", 2, lambda: step_relationships_2_enrich(self))
 
         # --- PROCESSES ---
-        self._run_step("Processes", 1, lambda: step_processes_1_models(self))
-        self._run_step("Processes", 2, lambda: step_processes_2_enrich(self))
-        self._run_step("Processes", 3, lambda: step_processes_3_finalize(self))
+        #self._run_step("Processes", 1, lambda: step_processes_1_models(self))
+        #self._run_step("Processes", 2, lambda: step_processes_2_enrich(self))
+        #self._run_step("Processes", 3, lambda: step_processes_3_finalize(self))
 
 
         # --- ATTRIBUTES ---
-        self._run_step("Attributes", 1, lambda: step_attributes_1_extract(self))
+        #self._run_step("Attributes", 1, lambda: step_attributes_1_extract(self))
 
     # -------------------------------------------------------------------------
     # STEP ORCHESTRATION

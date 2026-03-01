@@ -3,7 +3,8 @@ from collections import Counter
 class Topics_Tree_Printer:
     def __init__(self, mode="details", color=True,
                  show_label=False, hide_documents=False,
-                 show_full_cid=False, sort_order="cid"):
+                 show_full_cid=False, sort_order="cid",
+                 max_depth=None):
 
         self.mode = mode
         self.color = color
@@ -11,6 +12,7 @@ class Topics_Tree_Printer:
         self.hide_documents = hide_documents
         self.show_full_cid = show_full_cid
         self.sort_order = sort_order
+        self.max_depth = max_depth
 
         if color:
             from colorama import Fore, Style, init
@@ -26,16 +28,29 @@ class Topics_Tree_Printer:
             self.green = ""
             self.reset = ""
 
-    def print_tree(self, node, prefix="", cid_path=""):
+    def _cid_sort_key(self, cid):
+        # If it's already an int, just wrap it
+        if isinstance(cid, int):
+            return (cid,)
+
+        # Otherwise assume something like "0.0.0.10"
+        parts = str(cid).split(".")
+        return tuple(int(p) for p in parts if p != "")
+
+
+    def print_tree(self, node, prefix="", cid_path="", depth=0):
         if node is None:
             print(prefix + "(empty)")
             return
 
         clusters = node["clusters"]
 
-        # Sorting logic
+        # Always sort the clusters we are about to print
         if self.sort_order == "cid":
-            clusters = sorted(clusters, key=lambda c: c["cluster_id"])
+            clusters = sorted(
+                clusters,
+                key=lambda c: self._cid_sort_key(c["cluster_id"])
+            )
         elif self.sort_order == "size":
             clusters = sorted(clusters, key=lambda c: c["size"], reverse=True)
 
@@ -50,7 +65,6 @@ class Topics_Tree_Printer:
 
             branch = "└── " if is_last else "├── "
 
-            # NEW: chunks + child cluster count
             chunks = cluster["size"]
             child_count = (
                 len(cluster["children"]["clusters"])
@@ -68,15 +82,26 @@ class Topics_Tree_Printer:
 
             print(prefix + branch + line)
 
+            # Print details or summary for THIS cluster
             if self.mode == "details":
                 self._print_details(cluster, prefix, is_last)
             else:
                 self._print_summary(cluster, prefix, is_last)
 
+            # If we've reached max depth, do NOT recurse into children
+            if self.max_depth is not None and depth >= self.max_depth:
+                continue
+
+            # Recurse into children
             if cluster["children"] is not None:
                 new_prefix = prefix + ("    " if is_last else "│   ")
                 new_cid_path = full_cid
-                self.print_tree(cluster["children"], new_prefix, new_cid_path)
+                self.print_tree(
+                    cluster["children"],
+                    new_prefix,
+                    new_cid_path,
+                    depth + 1
+                )
 
     def _print_details(self, cluster, prefix, is_last):
         if self.hide_documents:

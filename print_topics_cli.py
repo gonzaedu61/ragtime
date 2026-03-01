@@ -1,3 +1,7 @@
+# USE:
+# python print_topics_cli.py -ds -cl  ./data/KBs/Almendro/6_Topics_Hierarchy/Topics_Hierarchy.json -o Tree.log
+
+
 #!/usr/bin/env python3
 import argparse
 import json
@@ -37,6 +41,14 @@ def main():
         help="Sort clusters by cluster ID (cid) or by cluster size (size)"
     )
 
+    parser.add_argument(
+        "-md", "--max-depth",
+        type=int,
+        default=None,
+        help="Maximum depth of hierarchy to print (root = depth 0)"
+    )
+
+
     args = parser.parse_args()
 
     # Determine mode
@@ -64,7 +76,8 @@ def main():
             show_label=args.cluster_label,
             hide_documents=args.documents_no,
             show_full_cid=args.cluster_id,
-            sort_order=args.sort_order
+            sort_order=args.sort_order,
+            max_depth=args.max_depth
         )
         printer.print_tree(tree)
     finally:

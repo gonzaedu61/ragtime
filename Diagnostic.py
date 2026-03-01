@@ -5,8 +5,8 @@ import re
 # ------------------------------------------------------------
 # CONFIG — adjust these paths if needed
 # ------------------------------------------------------------
-BASELINE_DIR = r"C:\Users\gonza\OneDrive\Desktop\Python\ragtime\DATA\KBs\Test_KB/7_Ontology_Files\Clusters_Baseline"
-ENTITIES_STEP1_DIR = r"C:\Users\gonza\OneDrive\Desktop\Python\ragtime\DATA\KBs\Test_KB/7_Ontology_Files\Foundation\Entities\Step_1"
+BASELINE_DIR = r"C:\Users\gonza\OneDrive\Desktop\Python\ragtime\DATA\KBs\Almendro/7_Ontology_Files\Clusters_Baseline"
+ENTITIES_STEP1_DIR = r"C:\Users\gonza\OneDrive\Desktop\Python\ragtime\DATA\KBs\Almendro/7_Ontology_Files\Foundation\Entities\Step_1"
 
 # Same sanitize logic as your builder
 def sanitize(s: str) -> str:

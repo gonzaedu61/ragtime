@@ -1,68 +1,67 @@
 import asyncio
 import json
 import os
-import sys
-import time
+import re
 from typing import Any, Dict, Optional, List
 from Utilities import Simple_Progress_Bar
 
 
-class Cluster_Info_Extractor:
+class Cluster_Info_Extender:
     """
-    Extracts information for each cluster using an LLM and Vector DB.
+    Extends cluster information using an LLM and Vector DB.
 
-    - Two prompt templates:
-        * leaf_prompt_template (must contain {text})
-        * internal_prompt_template (must contain {json_list}) or None
-    - If internal_prompt_template is None → only leaf clusters are processed.
-    - Only clusters under branch_id are processed (if provided).
-    - Each cluster output is written inside: output_folder / cluster_id / info_type.json
+    Differences from Cluster_Info_Extractor:
+    - Adds info_type_input: JSON file to read from each cluster folder.
+    - Leaf clusters: prompt includes original chunk text + info_type_input JSON.
+    - Internal clusters: prompt includes ONLY info_type_input JSON (no child JSON list).
+    - Optional semantic retrieval: retrieve chunks semantically close to the info_type_input JSON.
+      For leaf clusters: retrieve (top_number_of_chunks - original_chunk_count).
+      For internal clusters: retrieve top_number_of_chunks.
+    - NEW: Skip leaf clusters if leaf_prompt_template is None.
+    - NEW: Skip internal clusters if internal_prompt_template is None.
+    - NEW: JSON repair step before json.loads().
     """
 
     def __init__(
         self,
         llm: Any,
         vectordb: Any,
-        leaf_prompt_template: str,
+        leaf_prompt_template: Optional[str],
         internal_prompt_template: Optional[str],
         info_type: str,
+        info_type_input: str,
         output_folder: str,
-        store_cache: bool = True,
-        cache_path: str = "cluster_info_cache.json",
+        retrieve_semantic_chunks: bool = False,
+        top_number_of_chunks: int = 10,
         retry_attempts: int = 3,
         verbose: bool = False,
         show_progress_bar: bool = False,
         max_concurrent_llm_calls: int = 10,
         log_prompts: bool = False,
-        branch_id: Optional[str] = None,   # NEW
+        branch_id: Optional[str] = None,
     ):
         self.llm = llm
         self.vectordb = vectordb
         self.leaf_prompt_template = leaf_prompt_template
         self.internal_prompt_template = internal_prompt_template
         self.info_type = info_type
+        self.info_type_input = info_type_input
         self.output_folder = output_folder
 
-        self.store_cache = store_cache
-        self.cache_path = cache_path
+        self.retrieve_semantic_chunks = retrieve_semantic_chunks
+        self.top_number_of_chunks = top_number_of_chunks
+
         self.retry_attempts = retry_attempts
         self.verbose = verbose
         self.show_progress_bar = show_progress_bar
         self.log_prompts = log_prompts
-        self.branch_id = branch_id  # NEW
+        self.branch_id = branch_id
 
         self._semaphore = asyncio.Semaphore(max_concurrent_llm_calls)
-
-        if store_cache and os.path.exists(cache_path):
-            with open(cache_path, "r", encoding="utf-8") as f:
-                self.cache = json.load(f)
-        else:
-            self.cache = {}
-
         os.makedirs(output_folder, exist_ok=True)
 
         self.progress = None
-        self._branch_root = None  # NEW
+        self._branch_root = None
 
     # -------------------------------------------------------------------------
     # Logging
@@ -77,37 +76,7 @@ class Cluster_Info_Extractor:
             f.write(prompt)
 
     # -------------------------------------------------------------------------
-    # Count clusters (only those under branch_id if provided)
-    # -------------------------------------------------------------------------
-    def _count_clusters(self, node: Dict[str, Any]) -> int:
-        if self.branch_id and not self._branch_root:
-            # Find branch root first
-            self._branch_root = self._find_branch(node, self.branch_id)
-            if not self._branch_root:
-                raise ValueError(f"branch_id '{self.branch_id}' not found in hierarchy.")
-            return self._count_clusters(self._branch_root)
-
-        count = len(node["clusters"])
-        for c in node["clusters"]:
-            if c["children"] is not None:
-                count += self._count_clusters(c["children"])
-        return count
-
-    # -------------------------------------------------------------------------
-    # Find branch root
-    # -------------------------------------------------------------------------
-    def _find_branch(self, node: Dict[str, Any], target: str) -> Optional[Dict]:
-        for c in node["clusters"]:
-            if c["cluster_id"] == target:
-                return c  # return the REAL node, not a wrapper
-            if c["children"] is not None:
-                found = self._find_branch(c["children"], target)
-                if found:
-                    return found
-        return None
-
-    # -------------------------------------------------------------------------
-    # Clean JSON
+    # JSON cleaning helpers
     # -------------------------------------------------------------------------
     def _clean_json(self, text: str) -> str:
         text = text.strip()
@@ -117,9 +86,6 @@ class Cluster_Info_Extractor:
             text = text.rsplit("\n", 1)[0].strip()
         return text
 
-    # -------------------------------------------------------------------------
-    # Extract first JSON object
-    # -------------------------------------------------------------------------
     def _extract_first_json_object(self, text: str) -> Optional[str]:
         start = text.find("{")
         if start == -1:
@@ -155,10 +121,49 @@ class Cluster_Info_Extractor:
         return None
 
     # -------------------------------------------------------------------------
-    # Vector DB
+    # JSON repair
+    # -------------------------------------------------------------------------
+    def _repair_json(self, text: str) -> str:
+        """
+        Attempts to fix common JSON issues produced by LLMs.
+        Does NOT invent content; only structural fixes.
+        """
+
+        # Remove trailing commas before } or ]
+        text = re.sub(r",\s*([}\]])", r"\1", text)
+
+        # Replace Python booleans with JSON booleans
+        text = text.replace("None", "null")
+        text = text.replace("True", "true")
+        text = text.replace("False", "false")
+
+        # Replace single quotes with double quotes (safe heuristic)
+        if "'" in text and '"' not in text:
+            text = text.replace("'", '"')
+
+        # Remove comments
+        text = re.sub(r"//.*?\n", "", text)
+        text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
+
+        # Ensure it starts with { and ends with }
+        start = text.find("{")
+        end = text.rfind("}")
+        if start != -1 and end != -1:
+            text = text[start:end + 1]
+
+        return text
+
+    # -------------------------------------------------------------------------
+    # Vector DB helpers
     # -------------------------------------------------------------------------
     def _get_record_by_id(self, chunk_id: str):
         return self.vectordb.get_by_id(chunk_id)
+
+    def _semantic_search(self, text: str, k: int) -> List[str]:
+        if k <= 0:
+            return []
+        results = self.vectordb.search(text, k=k)
+        return [r["id"] for r in results]
 
     # -------------------------------------------------------------------------
     # Public entry point
@@ -177,27 +182,43 @@ class Cluster_Info_Extractor:
         with open(input_json_path, "r", encoding="utf-8") as f:
             hierarchy = json.load(f)
 
-        # If branch_id is set, restrict hierarchy BEFORE counting
         if self.branch_id:
             self._branch_root = self._find_branch(hierarchy, self.branch_id)
             if not self._branch_root:
                 raise ValueError(f"branch_id '{self.branch_id}' not found.")
             hierarchy = {"clusters": [self._branch_root]}
 
-        # Now count only the selected branch
         total = self._count_clusters(hierarchy)
         self.progress = Simple_Progress_Bar(total, enabled=self.show_progress_bar)
 
         await self._aprocess_node(hierarchy)
-
-        if self.store_cache:
-            with open(self.cache_path, "w", encoding="utf-8") as f:
-                json.dump(self.cache, f, indent=2, ensure_ascii=False)
-
         return hierarchy
 
     # -------------------------------------------------------------------------
-    # Sequential recursive traversal
+    # Count clusters
+    # -------------------------------------------------------------------------
+    def _count_clusters(self, node: Dict[str, Any]) -> int:
+        count = len(node["clusters"])
+        for c in node["clusters"]:
+            if c["children"] is not None:
+                count += self._count_clusters(c["children"])
+        return count
+
+    # -------------------------------------------------------------------------
+    # Find branch
+    # -------------------------------------------------------------------------
+    def _find_branch(self, node: Dict[str, Any], target: str) -> Optional[Dict]:
+        for c in node["clusters"]:
+            if c["cluster_id"] == target:
+                return c
+            if c["children"] is not None:
+                found = self._find_branch(c["children"], target)
+                if found:
+                    return found
+        return None
+
+    # -------------------------------------------------------------------------
+    # Recursive traversal
     # -------------------------------------------------------------------------
     async def _aprocess_node(self, node: Dict[str, Any]):
         for cluster in node["clusters"]:
@@ -213,52 +234,85 @@ class Cluster_Info_Extractor:
     async def _aprocess_cluster(self, cluster: Dict[str, Any]):
         cid = cluster["cluster_id"]
 
-        # Skip internal clusters if no internal prompt
+        cluster_folder = os.path.join(self.output_folder, cid)
+        out_path = os.path.join(cluster_folder, f"{cid}_{self.info_type}.json")
+
+        # Skip if output already exists
+        if os.path.exists(out_path):
+            self.progress.update(label=f"Skipping {cid} (exists)")
+            return
+
+        # Skip leaf clusters if no leaf prompt is provided
+        if cluster["children"] is None and self.leaf_prompt_template is None:
+            self.progress.update(label=f"Skipping leaf {cid} (no leaf prompt)")
+            return
+
+        # Skip internal clusters if no internal prompt is provided
         if cluster["children"] is not None and self.internal_prompt_template is None:
-            self.progress.update(label=f"Skipping internal {cid}")
+            #self.progress.update(label=f"Skipping internal {cid} (no internal prompt)")
             return
 
-        # Cache skip
-        if self.store_cache and cid in self.cache:
-            self.progress.update(label=f"Skipping {cid}")
+        # Load input JSON file
+        input_json_path = os.path.join(cluster_folder, f"{cid}_{self.info_type_input}.json")
+        if not os.path.exists(input_json_path):
+            self.progress.update(label=f"Missing input JSON for {cid}")
             return
 
-        # ---------------------------------------------------------------------
+        with open(input_json_path, "r", encoding="utf-8") as f:
+            input_json_data = json.load(f)
+
+        input_json_str = json.dumps(input_json_data, indent=2, ensure_ascii=False)
+
         # LEAF CLUSTER
-        # ---------------------------------------------------------------------
         if cluster["children"] is None:
             chunk_ids = cluster.get("ids") or cluster.get("chunk_ids") or []
             texts = []
+
             for chunk_id in chunk_ids:
                 rec = self._get_record_by_id(chunk_id)
                 texts.append(rec.get("document", "") if rec else "")
+
             combined_text = "\n\n".join(texts)
 
-            prompt = self.leaf_prompt_template.replace("{text}", combined_text)
+            # Semantic retrieval
+            extra_texts = []
+            if self.retrieve_semantic_chunks:
+                missing = max(0, self.top_number_of_chunks - len(chunk_ids))
+                if missing > 0:
+                    extra_ids = self._semantic_search(input_json_str, missing)
+                    for eid in extra_ids:
+                        rec = self._get_record_by_id(eid)
+                        extra_texts.append(rec.get("document", "") if rec else "")
 
-        # ---------------------------------------------------------------------
+            full_text = combined_text + "\n\n" + "\n\n".join(extra_texts)
+
+            prompt = (
+                self.leaf_prompt_template
+                .replace("{text}", full_text)
+                .replace("{input_json}", input_json_str)
+            )
+
         # INTERNAL CLUSTER
-        # ---------------------------------------------------------------------
         else:
-            child_jsons = []
-            for child in cluster["children"]["clusters"]:
-                child_id = child["cluster_id"]
-                path = os.path.join(self.output_folder, child_id, f"{self.info_type}.json")
-                if os.path.exists(path):
-                    with open(path, "r", encoding="utf-8") as f:
-                        child_jsons.append(json.load(f))
+            extra_texts = []
+            if self.retrieve_semantic_chunks:
+                extra_ids = self._semantic_search(input_json_str, self.top_number_of_chunks)
+                for eid in extra_ids:
+                    rec = self._get_record_by_id(eid)
+                    extra_texts.append(rec.get("document", "") if rec else "")
 
-            json_list_str = json.dumps(child_jsons, indent=2, ensure_ascii=False)
-            prompt = self.internal_prompt_template.replace("{json_list}", json_list_str)
+            extra_text_block = "\n\n".join(extra_texts)
 
-        # ---------------------------------------------------------------------
-        # LOG PROMPT IF ENABLED
-        # ---------------------------------------------------------------------
+            prompt = (
+                self.internal_prompt_template
+                .replace("{input_json}", input_json_str)
+                .replace("{extra_chunks}", extra_text_block)
+            )
+
+        # Log prompt
         self._log_prompt(cid, prompt)
 
-        # ---------------------------------------------------------------------
-        # LLM CALL WITH RETRIES
-        # ---------------------------------------------------------------------
+        # LLM CALL
         data = None
         for attempt in range(self.retry_attempts):
             try:
@@ -266,11 +320,14 @@ class Cluster_Info_Extractor:
                     response = await self.llm.acomplete(prompt)
 
                 clean = self._clean_json(response)
-                json_candidate = self._extract_first_json_object(clean)
-                if not json_candidate:
+                extracted = self._extract_first_json_object(clean)
+
+                if not extracted:
                     raise ValueError("No JSON object extracted")
 
-                data = json.loads(json_candidate)
+                repaired = self._repair_json(extracted)
+
+                data = json.loads(repaired)
                 break
 
             except Exception as e:
@@ -280,20 +337,9 @@ class Cluster_Info_Extractor:
                     return
                 await asyncio.sleep(2 ** attempt)
 
-        # ---------------------------------------------------------------------
-        # SAVE JSON FILE (inside cluster_id folder)
-        # ---------------------------------------------------------------------
-        cluster_folder = os.path.join(self.output_folder, cid)
+        # SAVE JSON
         os.makedirs(cluster_folder, exist_ok=True)
-
-        out_path = os.path.join(cluster_folder, f"{cid}_{self.info_type}.json")
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
-        if self.store_cache:
-            self.cache[cid] = True
-
-        # ---------------------------------------------------------------------
-        # UPDATE PROGRESS BAR AFTER SUCCESS
-        # ---------------------------------------------------------------------
         self.progress.update(label=f"Done {cid}")

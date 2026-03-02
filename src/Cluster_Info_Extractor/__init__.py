@@ -1,2 +1,3 @@
 from .Cluster_Info_Extractor import Cluster_Info_Extractor
+from .Cluster_Info_Extender import Cluster_Info_Extender
 

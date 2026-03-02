@@ -1,0 +1,44 @@
+LEAF_PROMPT = """
+You are analyzing a set of text chunks and an input json structure all belonging to the same topic. The json file contains a field named "process_steps" with a list of steps of the process described in the field "process_description".
+
+TASK:
+- For each step and based on the explanations in the given texts, generate a detailed explanation of the step writing what needs to be done by the process actors and any other details available.
+- The process actors are mainly the system user and the system itself. But include others actors if they exist and play a role in the process step.
+- Focus specially (when the information is available), on the detailed interaction between the user and the system (i.e. what system modeule to use, what menu items or buttons to select or click, how to provide input and how to see the results, ...)
+- Include a little narrative about the step context (the context in which this step is executed)
+- Optionally, indicate pre- and post- conditions of this process step when applicable and if the information is available. Do not create or infere facts.
+- Optionally, indicate exceptions and warnings when available in the input texts. Do not create or infere facts.
+
+Return a JSON object with the list of step details.   
+
+TEXTS:
+{text}
+
+INPUT JSON:
+{input_json}
+
+OUTPUT LANGUAGE: German
+
+FORMAT RULES:
+- Respond ONLY with valid JSON.
+- Do NOT output text before or after the JSON.
+- The FIRST character must be '{' and the LAST must be '}'.
+- Return a single JSON object with this structure:
+
+{
+  "process_steps": [
+    { "id": <original id>,
+      "name": <original name>,
+      "details": { 
+        "explanation": ...,
+        "context": ..., 
+        "pre-condition": ...,
+        "post-condition": ...,
+        "exceptions": ...,
+        "warnings": ...        
+      }      
+    }
+  ]
+}
+
+"""

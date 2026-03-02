@@ -1,0 +1,5 @@
+Using the uploaded Cluster_Info_Extractor class as a reference, create a new class named Cluster_Info_Extender with the following changes:
+1 - Receiva as parameter the target output info_type as now, but add another info_type_input indicating the file to pick as input from each cluster folder
+2 - For the leaf clusters insert as now into the given prompt template the related original chunks text retrieved from the vector DB, adding also now to the prompt the new info_type_input cluster json file
+3 - For the internal clusters do not insert any more the list of child jsons. Insert only the indicated info_type_input cluster json file.
+4 - For both leaf and internal clusters, if indicated with a flag passed to the class, extract from the vector db all chunks semantically close to the given info_type_input cluster json file content. The top_number_of_chunks to retrieve should be also indicated with a parameter to the class. In the case of a leaf cluster, the number of chunks to retrieve should be the top_number_of_chunks minus the actual number of original chunks associated to that leaf cluster. 

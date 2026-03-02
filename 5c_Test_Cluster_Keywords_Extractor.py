@@ -42,27 +42,13 @@ vectordb = create_vectordb(
 
 # Prompt template (must contain {text})
 BRANCH_ID = "0.0.0.6"
-INFO_TYPE = 'BO'
+INFO_TYPE = 'keywords'
 LEAF_PROMPT = """
 You are analyzing a set of text chunks that belong to the same topic.
 
 TASK:
-Identify and describe the Business Objects (BO) present in the input text.  
-Return a JSON object containing a list of BOs.  
-Each BO must include:
-- bo_name: A short label (max 6 words).
-- bo_description: A 4–8 sentence explanation of the BO.
-- bo_transitions: A list of status transitions.  
-  Each transition must be a JSON object with:
-    - state_1: previous state (string)
-    - event_label: short label (max 3 words)
-    - event_description: 1–2 line description
-    - state_2: resulting state (string)
-
-BUSINESS OBJECT RECOGNITION GUIDES:
-- A BO represents a coherent set of business data with a clear lifecycle.
-- A BO often corresponds to a business document passed through processes.
-- Business processes trigger events that change BO status.
+Identify and describe 5-15 high-value keywords present in the input text.  
+Return a JSON object containing a list of keywords with their name and description.  
 
 TEXTS:
 {text}
@@ -76,18 +62,10 @@ FORMAT RULES:
 - Return a single JSON object with this structure:
 
 {
-  "business_objects": [
+  "keywords": [
     {
-      "bo_name": "...",
-      "bo_description": "...",
-      "bo_transitions": [
-        {
-          "state_1": "...",
-          "event_label": "...",
-          "event_description": "...",
-          "state_2": "..."
-        }
-      ]
+      "name": "...",
+      "description": "...",
     }
   ]
 }
@@ -95,60 +73,7 @@ FORMAT RULES:
 """
 
 
-INTERNAL_PROMPT = """
-You are analyzing a list of Business Object (BO) JSON items.
-
-Each BO item has this structure:
-{
-  "bo_name": "...",
-  "bo_description": "...",
-  "bo_transitions": [
-    {
-      "state_1": "...",
-      "event_label": "...",
-      "event_description": "...",
-      "state_2": "..."
-    }
-  ]
-}
-
-AGGREGATION TASK:
-- Merge BOs that have the same name or represent the same conceptual BO.
-- When merging, combine all transitions from all matching BOs.
-- Keep only one BO entry per unique BO name.
-
-OUTPUT TASK:
-Return a single JSON object containing the aggregated list of BOs.
-
-INPUT:
-{json_list}
-
-OUTPUT LANGUAGE: German
-
-FORMAT RULES:
-- Respond ONLY with valid JSON.
-- Do NOT output text before or after the JSON.
-- The FIRST character must be '{' and the LAST must be '}'.
-- Return a single JSON object with this structure:
-
-{
-  "business_objects": [
-    {
-      "bo_name": "...",
-      "bo_description": "...",
-      "bo_transitions": [
-        {
-          "state_1": "...",
-          "event_label": "...",
-          "event_description": "...",
-          "state_2": "..."
-        }
-      ]
-    }
-  ]
-}
-
-"""
+INTERNAL_PROMPT = None
 
 
 extractor = Cluster_Info_Extractor( llm,

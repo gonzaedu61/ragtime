@@ -72,7 +72,7 @@ class Cluster_Info_Extractor:
             return
         folder = os.path.join(self.output_folder, cid)
         os.makedirs(folder, exist_ok=True)
-        log_path = os.path.join(folder, "PROMPT.txt")
+        log_path = os.path.join(folder, f"{cid}_{self.info_type}_PROMPT.txt")
         with open(log_path, "w", encoding="utf-8") as f:
             f.write(prompt)
 
@@ -286,7 +286,7 @@ class Cluster_Info_Extractor:
         cluster_folder = os.path.join(self.output_folder, cid)
         os.makedirs(cluster_folder, exist_ok=True)
 
-        out_path = os.path.join(cluster_folder, f"{self.info_type}.json")
+        out_path = os.path.join(cluster_folder, f"{cid}_{self.info_type}.json")
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 

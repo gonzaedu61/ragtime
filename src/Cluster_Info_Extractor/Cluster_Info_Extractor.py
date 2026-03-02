@@ -16,7 +16,7 @@ class Cluster_Info_Extractor:
         * internal_prompt_template (must contain {json_list}) or None
     - If internal_prompt_template is None → only leaf clusters are processed.
     - Only clusters under branch_id are processed (if provided).
-    - Each cluster output is written inside: output_folder / cluster_id / info_type.json
+    - Each cluster output is written inside: output_folder / cluster_id / <cluster_id>_<info_type>.json
     """
 
     def __init__(
@@ -27,14 +27,12 @@ class Cluster_Info_Extractor:
         internal_prompt_template: Optional[str],
         info_type: str,
         output_folder: str,
-        store_cache: bool = True,
-        cache_path: str = "cluster_info_cache.json",
         retry_attempts: int = 3,
         verbose: bool = False,
         show_progress_bar: bool = False,
         max_concurrent_llm_calls: int = 10,
         log_prompts: bool = False,
-        branch_id: Optional[str] = None,   # NEW
+        branch_id: Optional[str] = None,
     ):
         self.llm = llm
         self.vectordb = vectordb
@@ -43,26 +41,18 @@ class Cluster_Info_Extractor:
         self.info_type = info_type
         self.output_folder = output_folder
 
-        self.store_cache = store_cache
-        self.cache_path = cache_path
         self.retry_attempts = retry_attempts
         self.verbose = verbose
         self.show_progress_bar = show_progress_bar
         self.log_prompts = log_prompts
-        self.branch_id = branch_id  # NEW
+        self.branch_id = branch_id
 
         self._semaphore = asyncio.Semaphore(max_concurrent_llm_calls)
-
-        if store_cache and os.path.exists(cache_path):
-            with open(cache_path, "r", encoding="utf-8") as f:
-                self.cache = json.load(f)
-        else:
-            self.cache = {}
 
         os.makedirs(output_folder, exist_ok=True)
 
         self.progress = None
-        self._branch_root = None  # NEW
+        self._branch_root = None
 
     # -------------------------------------------------------------------------
     # Logging
@@ -81,7 +71,6 @@ class Cluster_Info_Extractor:
     # -------------------------------------------------------------------------
     def _count_clusters(self, node: Dict[str, Any]) -> int:
         if self.branch_id and not self._branch_root:
-            # Find branch root first
             self._branch_root = self._find_branch(node, self.branch_id)
             if not self._branch_root:
                 raise ValueError(f"branch_id '{self.branch_id}' not found in hierarchy.")
@@ -99,7 +88,7 @@ class Cluster_Info_Extractor:
     def _find_branch(self, node: Dict[str, Any], target: str) -> Optional[Dict]:
         for c in node["clusters"]:
             if c["cluster_id"] == target:
-                return c  # return the REAL node, not a wrapper
+                return c
             if c["children"] is not None:
                 found = self._find_branch(c["children"], target)
                 if found:
@@ -177,22 +166,16 @@ class Cluster_Info_Extractor:
         with open(input_json_path, "r", encoding="utf-8") as f:
             hierarchy = json.load(f)
 
-        # If branch_id is set, restrict hierarchy BEFORE counting
         if self.branch_id:
             self._branch_root = self._find_branch(hierarchy, self.branch_id)
             if not self._branch_root:
                 raise ValueError(f"branch_id '{self.branch_id}' not found.")
             hierarchy = {"clusters": [self._branch_root]}
 
-        # Now count only the selected branch
         total = self._count_clusters(hierarchy)
         self.progress = Simple_Progress_Bar(total, enabled=self.show_progress_bar)
 
         await self._aprocess_node(hierarchy)
-
-        if self.store_cache:
-            with open(self.cache_path, "w", encoding="utf-8") as f:
-                json.dump(self.cache, f, indent=2, ensure_ascii=False)
 
         return hierarchy
 
@@ -213,19 +196,19 @@ class Cluster_Info_Extractor:
     async def _aprocess_cluster(self, cluster: Dict[str, Any]):
         cid = cluster["cluster_id"]
 
+        # Skip if output already exists
+        cluster_folder = os.path.join(self.output_folder, cid)
+        out_path = os.path.join(cluster_folder, f"{cid}_{self.info_type}.json")
+        if os.path.exists(out_path):
+            self.progress.update(label=f"Skipping {cid} (exists)")
+            return
+
         # Skip internal clusters if no internal prompt
         if cluster["children"] is not None and self.internal_prompt_template is None:
             self.progress.update(label=f"Skipping internal {cid}")
             return
 
-        # Cache skip
-        if self.store_cache and cid in self.cache:
-            self.progress.update(label=f"Skipping {cid}")
-            return
-
-        # ---------------------------------------------------------------------
         # LEAF CLUSTER
-        # ---------------------------------------------------------------------
         if cluster["children"] is None:
             chunk_ids = cluster.get("ids") or cluster.get("chunk_ids") or []
             texts = []
@@ -233,32 +216,25 @@ class Cluster_Info_Extractor:
                 rec = self._get_record_by_id(chunk_id)
                 texts.append(rec.get("document", "") if rec else "")
             combined_text = "\n\n".join(texts)
-
             prompt = self.leaf_prompt_template.replace("{text}", combined_text)
 
-        # ---------------------------------------------------------------------
         # INTERNAL CLUSTER
-        # ---------------------------------------------------------------------
         else:
             child_jsons = []
             for child in cluster["children"]["clusters"]:
                 child_id = child["cluster_id"]
-                path = os.path.join(self.output_folder, child_id, f"{self.info_type}.json")
-                if os.path.exists(path):
-                    with open(path, "r", encoding="utf-8") as f:
+                child_path = os.path.join(self.output_folder, child_id, f"{child_id}_{self.info_type}.json")
+                if os.path.exists(child_path):
+                    with open(child_path, "r", encoding="utf-8") as f:
                         child_jsons.append(json.load(f))
 
             json_list_str = json.dumps(child_jsons, indent=2, ensure_ascii=False)
             prompt = self.internal_prompt_template.replace("{json_list}", json_list_str)
 
-        # ---------------------------------------------------------------------
-        # LOG PROMPT IF ENABLED
-        # ---------------------------------------------------------------------
+        # Log prompt
         self._log_prompt(cid, prompt)
 
-        # ---------------------------------------------------------------------
-        # LLM CALL WITH RETRIES
-        # ---------------------------------------------------------------------
+        # LLM CALL
         data = None
         for attempt in range(self.retry_attempts):
             try:
@@ -280,20 +256,10 @@ class Cluster_Info_Extractor:
                     return
                 await asyncio.sleep(2 ** attempt)
 
-        # ---------------------------------------------------------------------
-        # SAVE JSON FILE (inside cluster_id folder)
-        # ---------------------------------------------------------------------
-        cluster_folder = os.path.join(self.output_folder, cid)
+        # SAVE JSON
         os.makedirs(cluster_folder, exist_ok=True)
-
-        out_path = os.path.join(cluster_folder, f"{cid}_{self.info_type}.json")
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
-        if self.store_cache:
-            self.cache[cid] = True
-
-        # ---------------------------------------------------------------------
-        # UPDATE PROGRESS BAR AFTER SUCCESS
-        # ---------------------------------------------------------------------
+        # Progress update
         self.progress.update(label=f"Done {cid}")

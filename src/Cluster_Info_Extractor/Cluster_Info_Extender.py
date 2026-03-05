@@ -150,7 +150,7 @@ class Cluster_Info_Extender:
         if k <= 0:
             return []
 
-        embedding_list = self.embedder.embed([text])
+        embedding_list = self.embedder.embed([text], progress_bar=False)
         embedding = embedding_list[0]
 
         results = self.vectordb.search(embedding, top_n=k)

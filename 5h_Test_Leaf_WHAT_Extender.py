@@ -2,6 +2,7 @@ import os
 from VectorDB_Factory import create_vectordb
 from LLM_Factory import create_llm
 from Cluster_Info_Extractor import Cluster_Info_Extender
+from Embedders import HFEmbeddingBackend
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -33,6 +34,13 @@ llm = create_llm(
     api_version=LLM_API_VERSION
 )
 
+# Initialize embedding_backend
+os.environ["SENTENCE_TRANSFORMERS_HOME"] = "C:/Models"
+os.environ["TRANSFORMERS_NO_ADVISORY_WARNINGS"] = "1"
+os.environ["DISABLE_TRANSFORMERS_AVX_CHECK"] = "1"
+embedder = HFEmbeddingBackend("C:/Models/multilingual-e5-large/")
+
+
 # Initialize vector DB backend (Chroma or others)
 vectordb = create_vectordb(
     backend=VECTOR_DB_NAME,
@@ -42,29 +50,23 @@ vectordb = create_vectordb(
 
 # Prompt template (must contain {text})
 BRANCH_ID = "0.0.0.6"
-INFO_TYPE = 'steps'
-INFO_TYPE_INPUT = "process_b"
-LEAF_PROMPT = None
-INTERNAL_PROMPT = """
-You are analyzing a set of text chunks and an input json structure all belonging to the same topic. The json file contains a field named "process_steps" with a list of steps of the process described in the field "process_description".
+INFO_TYPE = 'WHAT'
+INFO_TYPE_INPUT = "questions"
+LEAF_PROMPT = """
+You are analyzing a set of text chunks and an input json structure all belonging to the same topic. The json file contains a field named "WHAT" with a list of questions related to the topic.
 
 TASK:
-- For each step and based on the explanations in the given texts, generate a detailed explanation of the step, writing what needs to be done by the process actors and any other details available.
-- Add also an explanation of what the objective of the process step is. What it exists and what the aim to achive is.
-- The process actors are mainly the system user and the system itself. But include others actors if they exist and play a role in the process step.
-- Focus specially (when the information is available), on the detailed interaction between the user and the system (i.e. what system modeule to use, what menu items or buttons to select or click, how to provide input and how to see the results, ...)
-- Include a little narrative about the step context (the context in which this step is executed)
-- Optionally, indicate pre- and post- conditions of this process step when applicable and if the information is available. Do not create or infere facts. If no conditions exist then leave them as ""
-- Optionally, indicate exceptions and warnings when available in the input texts. Do not create or infere facts. If no warning exist then leave it as "".
+- For each question in the "WHAT" field list generate a 4-8 statements answer using the provided texts as the knowledge source.
+- Add also a little business context introduction taking the knowledge from the same set of texts and from other internet sources related to the Industrial Printing Industry.
+- Do not create or infere facts. Use as knoeldge sources only the given texts and relevant and trustable internet sources.
 
 Return a JSON object with the list of step details.   
 
 TEXTS:
-{extra_chunks}
+{text}
 
 INPUT JSON:
 {input_json}
-
 
 OUTPUT LANGUAGE: German
 
@@ -74,27 +76,24 @@ FORMAT RULES:
 - The FIRST character must be '{' and the LAST must be '}'.
 - Return a single JSON object with this structure:
 
-{
-  "process_steps": [
-    { "id": <original id>,
-      "name": <original name>,
-      "details": { 
-        "objective": ...,
-        "explanation": ...,
-        "context": ..., 
-        "pre-condition": ...,
-        "post-condition": ...,
-        "exceptions": ...,
-        "warnings": ...        
-      }      
+{ "WHAT_Answers":
+  [
+    { 
+      "question": <original question>,
+      "answer": "..."
     }
   ]
 }
 
 """
 
+
+INTERNAL_PROMPT = None
+
+
 extractor = Cluster_Info_Extender( llm,
                                     vectordb, 
+                                    embedder,
                                     LEAF_PROMPT,
                                     INTERNAL_PROMPT,
                                     info_type = INFO_TYPE,

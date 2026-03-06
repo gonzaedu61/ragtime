@@ -106,6 +106,7 @@ class WordDocBuilder:
             "internal_process_name": b_context.get("process_name") if b_context else "",
             "internal_B_Context": b_context.get("business_context") if b_context else "",
             "data_elements": {
+                "BOs_title": "Data Elements",
                 "BOs": []
             },
             "leaf_processes": []
@@ -133,9 +134,11 @@ class WordDocBuilder:
                 "leaf_process_name": process_b.get("process_name") if process_b else "",
                 "leaf_process_description": process_b.get("process_description") if process_b else "",
                 "tasks": {
+                    "tasks_title": "Operational Tasks",
                     "task": []
                 },
                 "qa": {
+                    "title": "Questions / Answers",
                     "elements": []
                 }
             }

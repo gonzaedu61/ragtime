@@ -49,7 +49,7 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.0.6"
+BRANCH_ID = "0.0.0.4.1.2"
 INFO_TYPE = 'steps'
 INFO_TYPE_INPUT = "process_b"
 LEAF_PROMPT = None

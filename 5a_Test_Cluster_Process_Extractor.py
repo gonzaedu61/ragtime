@@ -41,7 +41,7 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.0.6"
+BRANCH_ID = "0.0.0.4.1.2"
 INFO_TYPE = 'process_b'
 LEAF_PROMPT = """
 You are analyzing a set of text chunks that belong to the same topic.
@@ -129,8 +129,6 @@ extractor = Cluster_Info_Extractor( llm,
                                     INTERNAL_PROMPT,
                                     info_type = INFO_TYPE,
                                     output_folder = TOPICS_PATH,
-                                    store_cache = False,
-                                    cache_path = TOPICS_CACHE,
                                     verbose=True,
                                     show_progress_bar=True,                                   
                                     max_concurrent_llm_calls = 1,

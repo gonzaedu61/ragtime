@@ -33,6 +33,8 @@ llm = create_llm(
     api_version=LLM_API_VERSION
 )
 
+embedder = None
+
 # Initialize vector DB backend (Chroma or others)
 vectordb = create_vectordb(
     backend=VECTOR_DB_NAME,
@@ -41,7 +43,7 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.0.6"
+BRANCH_ID = "0.0.0.4.1.2"
 INFO_TYPE = 'steps'
 INFO_TYPE_INPUT = "process_b"
 LEAF_PROMPT = """
@@ -97,6 +99,7 @@ INTERNAL_PROMPT = None
 
 extractor = Cluster_Info_Extender( llm,
                                     vectordb, 
+                                    embedder,
                                     LEAF_PROMPT,
                                     INTERNAL_PROMPT,
                                     info_type = INFO_TYPE,
@@ -109,6 +112,7 @@ extractor = Cluster_Info_Extender( llm,
                                     max_concurrent_llm_calls = 1,
                                     log_prompts = True,
                                     branch_id = BRANCH_ID )
+
 
 extractor.process_hierarchy_file(TOPICS_PATH + '/' + TOPICS_FILE)
 

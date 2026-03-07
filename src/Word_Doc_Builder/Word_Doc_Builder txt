@@ -38,10 +38,6 @@ def sanitize(text):
     for bad, good in replacements.items():
         text = text.replace(bad, good)
 
-    # Escape XML-breaking characters
-    text = text.replace("<", "&lt;")
-    text = text.replace(">", "&gt;")        
-
     return text
 
 
@@ -55,8 +51,7 @@ class WordDocBuilder:
         show_progress_bar: bool = False,
         log_json: bool = False,
         enable_word_generation: bool = False,
-        word_template_path: str = None,
-        use_existing_json: bool = False
+        word_template_path: str = None
     ):
         self.working_folder = Path(working_folder)
         self.tree_pathname = Path(tree_pathname)
@@ -69,7 +64,6 @@ class WordDocBuilder:
         self.log_json = log_json
         self.enable_word_generation = enable_word_generation
         self.word_template_path = Path(word_template_path) if word_template_path else None
-        self.use_existing_json = use_existing_json
 
         self.tree = self._load_json(self.tree_pathname)
 
@@ -90,11 +84,6 @@ class WordDocBuilder:
         if self.verbose:
             print(msg)
 
-    def _load_existing_json(self, cluster_id: str):
-        json_path = self.working_folder / cluster_id / f"{cluster_id}_word_doc.json"
-        if not json_path.exists():
-            raise FileNotFoundError(f"Existing JSON not found at {json_path}")
-        return self._load_json(json_path)
 
     # ---------------------------------------------------------
     # Tree traversal helpers
@@ -331,19 +320,15 @@ class WordDocBuilder:
             parent_id = parent["cluster_id"]
             self._log(f"Processing parent cluster {parent_id}")
 
-            if self.use_existing_json:
-                self._log(f"Loading existing JSON for cluster {parent_id}")
-                word_json = self._load_existing_json(parent_id)
-            else:
-                word_json = self._build_word_json(parent)
-                outputs[parent_id] = word_json
+            word_json = self._build_word_json(parent)
+            outputs[parent_id] = word_json
 
-                if self.log_json:
-                    parent_folder = self.working_folder / parent_id
-                    parent_folder.mkdir(parents=True, exist_ok=True)
-                    out_path = parent_folder / f"{parent_id}_word_doc.json"
-                    with open(out_path, "w", encoding="utf-8") as f:
-                        json.dump(word_json, f, indent=2, ensure_ascii=False)
+            if self.log_json:
+                parent_folder = self.working_folder / parent_id
+                parent_folder.mkdir(parents=True, exist_ok=True)
+                out_path = parent_folder / f"{parent_id}_word_doc.json"
+                with open(out_path, "w", encoding="utf-8") as f:
+                    json.dump(word_json, f, indent=2, ensure_ascii=False)
 
             self._render_word_document(parent_id, word_json)
 

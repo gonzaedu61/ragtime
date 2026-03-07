@@ -49,10 +49,9 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.0.4.1.2"
+BRANCH_ID = "0.0.0.3.0.1.0"
 INFO_TYPE = 'B_Context'
 INFO_TYPE_INPUT = "process_b"
-LEAF_PROMPT = None
 INTERNAL_PROMPT = """
 You are analyzing a set of text chunks and an input json structure all belonging to the same topic. The json file contains information about a business process named after the field "process_name" and another field named "process_description" summarizing in narrative form the scope of  related child subprocesses.
 
@@ -83,6 +82,8 @@ FORMAT RULES:
 }
 
 """
+LEAF_PROMPT = INTERNAL_PROMPT
+
 
 extractor = Cluster_Info_Extender( llm,
                                     vectordb, 

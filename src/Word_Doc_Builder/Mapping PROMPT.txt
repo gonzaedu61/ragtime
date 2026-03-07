@@ -1,0 +1,33 @@
+1- The uploaded JSON is the target structure we need to build in memory
+2- Generate a new class getting as input the following parameters:
+   - working_folder: The folder containing the cluster folders where the info_type json files to be used as data source are located
+   - tree_pathname: The file pathname of the json tree structure of clusters
+   - branch_id: The cluster_id from where to start traversing downwards the tree, looking for cluster nodes to process
+   - verbose: Enable/disable the verbose progress tracking
+   - show_progress_bar: Enable/disable the progress bar view. If enabled then verbose is set to False. The progress bar Class to use is uploaded
+   - log_json: Flag indicating to save the temporary "in-memory" generated json to be passed to the Word template (filename = <cluster_id>_word_doc.json)
+3- Implement a generate_word() method to:
+   - Start traversing downwards the tree starting from the given branch_id
+   - Look for the internal clusters one level above the leaf clusters. These low level "parent" clusters will be the ones to generate the word document for, using as source its own and their children leaf clusters info-type files
+4- The building of the Word_Doc.json file in memory will be done picking the texts from the info_type file fields indicated in the below mapping, with the following reference to the fields: <parent or leaf cluster_id> / <info_type json file> / <field_name>
+5- Mapping:
+  "internal_process_name": <parent / "B_Context" / "process_name">,
+  "internal_B_Context": <parent / "B_Context" / "business_context">,
+  "BOs_title": "Data Elements" (fix text value)
+  "bo_name": <leaf / "BO" / "bo_name">
+  "bo_description": <leaf / "BO" / "bo_description">
+  "leaf_process_name": <leaf / "process_b" / "process_name">
+  "leaf_process_description": <leaf / "process_b" / "process_description">
+  "tasks_title": "Process Steps" (fix text value)
+  "step_name": <leaf / "steps" / "process_steps.name" >
+  "step_context": <leaf / "steps" / "process_steps.details.context">
+  "step_objective": <leaf / "steps" / "process_steps.details.objective">
+  "step_explanation": <leaf / "steps" / "process_steps.details.explanation">
+  "step_precondition": <leaf / "steps" / "process_steps.details.pre-condition">
+  "step_postcondition": <leaf / "steps" / "process_steps.details.post-condition">
+  "step_exceptions": <leaf / "steps" / "process_steps.details.exceptions">
+  "step_warnings": <leaf / "steps" / "process_steps.details.warnings">
+  "Q&A_title": "Q&A" (fix text value)
+  "question": <leaf / "WHAT" | "WHY" / "question">
+  "answer": <leaf / "WHAT" | "WHY" / "answer">
+5- The info_type filename is composed as <cluster_id>_<info_type>.json and is located with the folder with the cluster_id name in the "working_folder"

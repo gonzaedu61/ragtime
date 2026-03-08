@@ -15,7 +15,6 @@ VDB_PATH = f"./DATA/KBs/{KB_NAME}/5_Vector_DB"
 TOPICS_PATH = f"./DATA/KBs/{KB_NAME}/6_Topics_Hierarchy"
 TOPICS_FILE = "Topics_Hierarchy.json" 
 LABELED_TOPICS_FILE = "Labeled_Topics_Hierarchy.json"
-TOPICS_CACHE=TOPICS_PATH + '/' + "hierarchy_label_cache.json"
 
 LLM_BACKEND = "azure"
 LLM_NAME = "o4-mini"
@@ -49,7 +48,7 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.0.3.0.1.0"
+BRANCH_ID = "0.0.0.4.1.0"
 INFO_TYPE = 'B_Context'
 INFO_TYPE_INPUT = "process_b"
 INTERNAL_PROMPT = """

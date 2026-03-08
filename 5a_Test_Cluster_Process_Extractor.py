@@ -41,7 +41,7 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.0.3.0.1.0"
+BRANCH_ID = "0.0.0.4.1.0"
 INFO_TYPE = 'process_b'
 LEAF_PROMPT = """
 You are analyzing a set of text chunks that belong to the same topic.
@@ -51,9 +51,7 @@ Identify and describe the the process covering the full input text, with the fol
 - Proces name: A short label (max 6 words). YOU MUST ALWAYS PROVIDE A LABEL.
 - Process description: A 4-8 sentences explaining what the process is about
 - Process steps: An ordered list of the key steps composing the process. Give them a sequential numeric id (the list index), a short label and a short one-line description.
-
-COVERAGE RULE:
-If the process is unclear, too small, or ambiguous, you MUST STILL provide the best possible descriptive label, warning about the quality of the given details. Never return an empty process. All text parts should map to at least one process
+- IMPORTANT: If the text does not seem to refer to a process, then DO NOT INFERE or CREATE FACTS. Just return all field blanks
 
 TEXTS:
 {text}

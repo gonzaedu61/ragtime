@@ -1,0 +1,3 @@
+- Eliminate all Vorwort chunks and reprocess the tree
+- Indicate in process_b to not hallucinate with the steps. Do not create steps if not clearly described in the text
+- If one process is empty do not use in further expansions

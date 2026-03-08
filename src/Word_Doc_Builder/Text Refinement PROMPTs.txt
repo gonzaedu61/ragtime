@@ -1,0 +1,5 @@
+PROCESS DESCRIPTION
+Would you please break this text into few different paragraphs and if sensible create even buletpoints in some of them?
+
+Q&A REPHRASING
+Rephrase this text eliminating the words "In der industriellen Druckbranche": "In der industriellen Druckbranche werden oft mehrere Druckexemplare für unterschiedliche Empfänger oder interne Abteilungen benötigt."

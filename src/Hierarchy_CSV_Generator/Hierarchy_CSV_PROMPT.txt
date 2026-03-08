@@ -1,0 +1,41 @@
+I need your help to draft a script to generate 2 CSV files (chunks and clusters)taking and combining information from:
+ - A JSON tree of cluster nodes each with its own metadata and references to text chunks hosted in a Vector DB
+ - The chunks in the Vector DB
+
+REQUIREMENTS:
+1. From the uploaded python script understand the tree structure and navigation logic.
+2. Create a new class named Hierarchy_CSV_Generator() receiving as input:
+   - The JSON hierarchy file pathname
+   - The vector DB object (see uploaded its API implementation)
+   - The output Chunks' CSV filename (first output file)
+   - The output Cluster' CSV filename (second output file)
+3. The output directory should be the same of the JSON hierarchy
+4. The logic should go first through all leaf nodes. A leaf node is recognized because its "children" field is null.
+5. Each leaf node has a list of chunk ids ("ids"). For each chunk go to the Vector DB and retrieve its metadata
+6. Use a semicolon as a field separator for the CSV records
+
+FIRST CSV (chunk records)
+1. Each chunk will generate one CSV record for the first CSV file with the following fields extracted from the vector DB:
+   - chunk_id
+   - chunk_type
+   - document_name
+   - pages
+   - heading_path
+   - image_paths
+   - token_count
+   - cluster_id (the cluster node id this chunk belongs to)
+2. For the list type of values (pages, heading_path, image_paths) create a single string of values concatenated with a newline character
+
+SECOND CSV (cluster node records)
+1. For the second CSV file, each cluster node will generate a CSV record with fields from the json tree plus one more as agregation of the contained chunks data:
+   - cluster_id
+   - size
+   - children (zero if it s null)
+   - summary
+   - label
+   - token_count (the sum of all its leaf level chunks token_count)
+   - document_cluster (boolean value - see logic below)
+2. To define whether a cluster node is a "document_cluster" there is a need to do a two-pass analysis:
+   - First pass: Find all clusters having at least one children, and where all of these contained children are leaf nodes (children = null). These found "low-level parent" clusters should then be flagged as "document_cluster"
+   - Second pass: Find all leaf cluster nodes having at least one sibling flagged as "document_cluster". These found leaf clusters with "document_cluster" siblings are also a "document_cluster". Flag them as so. 
+

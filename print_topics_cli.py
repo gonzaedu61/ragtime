@@ -1,6 +1,5 @@
 # USE:
-# python print_topics_cli.py -ds -cl  ./data/KBs/Almendro/6_Topics_Hierarchy/Topics_Hierarchy.json -o Tree.log
-
+# python print_topics_cli.py -ds -cl ./data/KBs/Almendro/6_Topics_Hierarchy/Labeled_Topics_Hierarchy_DE.json -o Tree.log -sort cid
 
 #!/usr/bin/env python3
 import argparse

@@ -1,3 +1,12 @@
+- Assign a "content_type" to each chunk:
+   * Product description
+   * Process description
+   * Usage Instructions
+   * Application description
+   * Legal terms
+   * Tale
+   * Person description
+   * Other
 - Eliminate all Vorwort chunks and reprocess the tree
 - Indicate in process_b to not hallucinate with the steps. Do not create steps if not clearly described in the text
 - If one process is empty do not use in further expansions

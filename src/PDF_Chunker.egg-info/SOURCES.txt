@@ -5,10 +5,16 @@ src/Cluster_Info_Extractor/Cluster_Info_Extender.1.py
 src/Cluster_Info_Extractor/Cluster_Info_Extender.py
 src/Cluster_Info_Extractor/Cluster_Info_Extractor.py
 src/Cluster_Info_Extractor/__init__.py
+src/Embedders/Structural_Chunks_Embedder.0.py
+src/Embedders/Structural_Chunks_Embedder.1.py
 src/Embedders/Structural_Chunks_Embedder.py
 src/Embedders/Tokenized_Chunks_Embedder.py
 src/Embedders/__init__.py
 src/Embedders/embedding_backends.py
+src/Hierarchy_CSV_Generator/Hierarchy_CSV_Generator.0.py
+src/Hierarchy_CSV_Generator/Hierarchy_CSV_Generator.1.py
+src/Hierarchy_CSV_Generator/Hierarchy_CSV_Generator.py
+src/Hierarchy_CSV_Generator/__init__.py
 src/LLM_Factory/LLM_Factory.py
 src/LLM_Factory/__init__.py
 src/LLM_Factory/llm_backends.py
@@ -48,5 +54,7 @@ src/Utilities/__init__.py
 src/VectorDB_Factory/VectorDB_Factory.py
 src/VectorDB_Factory/__init__.py
 src/VectorDB_Factory/vectordb_backends.py
+src/Word_Doc_Builder/Word_Doc_Builder.0.py
 src/Word_Doc_Builder/Word_Doc_Builder.py
 src/Word_Doc_Builder/__init__.py
+src/Word_Doc_Builder/changes.py

@@ -29,7 +29,7 @@ class Hierarchy_CSV_Generator:
         self.output_dir = os.path.dirname(os.path.abspath(hierarchy_json_path))
 
         # Internal accumulators
-        self.all_clusters = []
+        self.all_clusters = []          # list of cluster dicts
         self.leaf_chunks = []           # list of (cluster_id, chunk_id)
         self.cluster_token_sums = {}    # cluster_id → token sum
         self.cluster_children_map = {}  # cluster_id → list of child cluster_ids
@@ -38,17 +38,11 @@ class Hierarchy_CSV_Generator:
         # document_cluster flags
         self.document_cluster = defaultdict(lambda: False)
 
-        # Document names per cluster
+        # NEW: document names per cluster
         self.cluster_documents = defaultdict(set)
 
-        # Token contribution per document per cluster
+        # NEW: token contribution per document per cluster
         self.cluster_doc_token_sums = defaultdict(lambda: defaultdict(int))
-
-        # Text class per cluster
-        self.cluster_text_classes = defaultdict(set)
-
-        # Token contribution per text_class per cluster
-        self.cluster_textclass_token_sums = defaultdict(lambda: defaultdict(int))
 
 
     # ------------------------------------------------------------
@@ -58,15 +52,20 @@ class Hierarchy_CSV_Generator:
         tree = self._load_json()
         self._walk_tree(tree, parent_id=None)
 
+        # First pass: detect low-level parent clusters
         self._detect_document_clusters_pass1()
+
+        # Second pass: detect leaf clusters with document_cluster siblings
         self._detect_document_clusters_pass2()
 
+        # Write chunks CSV (collects leaf-level token counts + documents)
         self._write_chunks_csv()
 
+        # Aggregate token counts + document names upward
         self._aggregate_token_counts_upwards()
 
+        # Write clusters CSV
         self._write_clusters_csv()
-        self._write_cluster_category_json_files()
 
 
     # ------------------------------------------------------------
@@ -86,25 +85,26 @@ class Hierarchy_CSV_Generator:
             cid = cluster["cluster_id"]
             children = cluster.get("children")
 
+            # Register cluster
             self.all_clusters.append(cluster)
 
+            # Track parent
             if parent_id is not None:
                 self.cluster_parent_map[cid] = parent_id
 
-            # children = null → leaf
+            # Track children
             if children is None:
                 self.cluster_children_map[cid] = []
             else:
                 child_ids = [c["cluster_id"] for c in children["clusters"]]
                 self.cluster_children_map[cid] = child_ids
 
-            # LEAF NODE: collect chunk_ids
+            # Leaf node → collect chunk ids
             if children is None:
-                chunk_list = cluster.get("chunk_ids", [])
-                for chunk_id in chunk_list:
+                for chunk_id in cluster.get("ids", []):
                     self.leaf_chunks.append((cid, chunk_id))
 
-            # RECURSE
+            # Recurse
             if children is not None:
                 self._walk_tree(children, parent_id=cid)
 
@@ -147,7 +147,7 @@ class Hierarchy_CSV_Generator:
 
 
     # ------------------------------------------------------------
-    # AGGREGATE TOKEN_COUNT + DOCUMENT NAMES + TEXT CLASS UPWARD
+    # AGGREGATE TOKEN_COUNT + DOCUMENT NAMES UPWARD
     # ------------------------------------------------------------
     def _aggregate_token_counts_upwards(self):
 
@@ -178,16 +178,9 @@ class Hierarchy_CSV_Generator:
                     self.cluster_documents.get(child, set())
                 )
 
+                # Document token aggregation
                 for doc, tok in self.cluster_doc_token_sums[child].items():
                     self.cluster_doc_token_sums[cid][doc] += tok
-
-                # Text class aggregation
-                self.cluster_text_classes[cid].update(
-                    self.cluster_text_classes.get(child, set())
-                )
-
-                for cls, tok in self.cluster_textclass_token_sums[child].items():
-                    self.cluster_textclass_token_sums[cid][cls] += tok
 
 
     # ------------------------------------------------------------
@@ -207,8 +200,7 @@ class Hierarchy_CSV_Generator:
                 "pages",
                 "heading_path",
                 "image_paths",
-                "token_count",
-                "chunk_text_class"
+                "token_count"
             ])
 
             for cluster_id, chunk_id in self.leaf_chunks:
@@ -225,7 +217,6 @@ class Hierarchy_CSV_Generator:
                 heading_path = "\n".join(meta.get("heading_path", []))
                 image_paths = "\n".join(meta.get("image_paths", []))
                 token_count = meta.get("token_count", 0)
-                text_class = meta.get("chunk_text_class", "")
 
                 # Token aggregation
                 self.cluster_token_sums[cluster_id] = \
@@ -236,11 +227,6 @@ class Hierarchy_CSV_Generator:
                     self.cluster_documents[cluster_id].add(document_name)
                     self.cluster_doc_token_sums[cluster_id][document_name] += token_count
 
-                # Text class aggregation
-                if text_class:
-                    self.cluster_text_classes[cluster_id].add(text_class)
-                    self.cluster_textclass_token_sums[cluster_id][text_class] += token_count
-
                 writer.writerow([
                     cluster_id,
                     chunk_id,
@@ -249,8 +235,7 @@ class Hierarchy_CSV_Generator:
                     pages,
                     heading_path,
                     image_paths,
-                    token_count,
-                    text_class
+                    token_count
                 ])
 
 
@@ -271,8 +256,7 @@ class Hierarchy_CSV_Generator:
                 "label",
                 "token_count",
                 "document_cluster",
-                "Source_Documents",
-                "text_class"
+                "Source_Documents"
             ])
 
             for cluster in self.all_clusters:
@@ -293,15 +277,6 @@ class Hierarchy_CSV_Generator:
 
                 source_docs = "\n".join(docs)
 
-                # Build text_class with percentages
-                classes = []
-                for cls in sorted(self.cluster_text_classes.get(cid, [])):
-                    cls_tokens = self.cluster_textclass_token_sums[cid].get(cls, 0)
-                    pct = (cls_tokens / token_sum * 100) if token_sum > 0 else 0
-                    classes.append(f"{cls} ({pct:.1f}%)")
-
-                text_class_str = "\n".join(classes)
-
                 writer.writerow([
                     cid,
                     size,
@@ -310,51 +285,5 @@ class Hierarchy_CSV_Generator:
                     label,
                     token_sum,
                     doc_cluster_flag,
-                    source_docs,
-                    text_class_str
+                    source_docs
                 ])
-
-
-    # ------------------------------------------------------------
-    # WRITE PER-CLUSTER CATEGORY JSON FILES
-    # ------------------------------------------------------------
-    def _write_cluster_category_json_files(self):
-
-        for cluster in self.all_clusters:
-            cid = cluster["cluster_id"]
-            token_sum = self.cluster_token_sums.get(cid, 0)
-
-            # Prepare directory
-            cluster_dir = os.path.join(self.output_dir, str(cid))
-            os.makedirs(cluster_dir, exist_ok=True)
-
-            # Build JSON structure
-            data = {
-                "cluster_id": cid,
-                "is_document_cluster": self.document_cluster[cid],
-                "source_documents": [],
-                "text_class": []
-            }
-
-            # Source documents
-            for doc in sorted(self.cluster_documents.get(cid, [])):
-                doc_tokens = self.cluster_doc_token_sums[cid].get(doc, 0)
-                pct = (doc_tokens / token_sum * 100) if token_sum > 0 else 0
-                data["source_documents"].append({
-                    "document_name": doc,
-                    "tokens_percentage": round(pct, 2)
-                })
-
-            # Text classes
-            for cls in sorted(self.cluster_text_classes.get(cid, [])):
-                cls_tokens = self.cluster_textclass_token_sums[cid].get(cls, 0)
-                pct = (cls_tokens / token_sum * 100) if token_sum > 0 else 0
-                data["text_class"].append({
-                    "class": cls,
-                    "tokens_percentage": round(pct, 2)
-                })
-
-            # Write JSON file
-            json_path = os.path.join(cluster_dir, f"{cid}_category.json")
-            with open(json_path, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=4, ensure_ascii=False)

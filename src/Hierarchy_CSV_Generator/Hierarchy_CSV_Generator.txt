@@ -29,11 +29,11 @@ class Hierarchy_CSV_Generator:
         self.output_dir = os.path.dirname(os.path.abspath(hierarchy_json_path))
 
         # Internal accumulators
-        self.all_clusters = []
-        self.leaf_chunks = []           # list of (cluster_id, chunk_id)
-        self.cluster_token_sums = {}    # cluster_id → token sum
-        self.cluster_children_map = {}  # cluster_id → list of child cluster_ids
-        self.cluster_parent_map = {}    # cluster_id → parent cluster_id
+        self.all_clusters = []          
+        self.leaf_chunks = []           
+        self.cluster_token_sums = {}    
+        self.cluster_children_map = {}  
+        self.cluster_parent_map = {}    
 
         # document_cluster flags
         self.document_cluster = defaultdict(lambda: False)
@@ -44,10 +44,10 @@ class Hierarchy_CSV_Generator:
         # Token contribution per document per cluster
         self.cluster_doc_token_sums = defaultdict(lambda: defaultdict(int))
 
-        # Text class per cluster
+        # NEW: text_class per cluster
         self.cluster_text_classes = defaultdict(set)
 
-        # Token contribution per text_class per cluster
+        # NEW: token contribution per text_class per cluster
         self.cluster_textclass_token_sums = defaultdict(lambda: defaultdict(int))
 
 
@@ -91,20 +91,16 @@ class Hierarchy_CSV_Generator:
             if parent_id is not None:
                 self.cluster_parent_map[cid] = parent_id
 
-            # children = null → leaf
             if children is None:
                 self.cluster_children_map[cid] = []
             else:
                 child_ids = [c["cluster_id"] for c in children["clusters"]]
                 self.cluster_children_map[cid] = child_ids
 
-            # LEAF NODE: collect chunk_ids
             if children is None:
-                chunk_list = cluster.get("chunk_ids", [])
-                for chunk_id in chunk_list:
+                for chunk_id in cluster.get("ids", []):
                     self.leaf_chunks.append((cid, chunk_id))
 
-            # RECURSE
             if children is not None:
                 self._walk_tree(children, parent_id=cid)
 
@@ -267,11 +263,11 @@ class Hierarchy_CSV_Generator:
                 "cluster_id",
                 "size",
                 "children",
-                "summary",
                 "label",
+                "summary",
                 "token_count",
                 "document_cluster",
-                "Source_Documents",
+                "source_documents",
                 "text_class"
             ])
 
@@ -306,8 +302,8 @@ class Hierarchy_CSV_Generator:
                     cid,
                     size,
                     children,
-                    summary,
                     label,
+                    summary,
                     token_sum,
                     doc_cluster_flag,
                     source_docs,

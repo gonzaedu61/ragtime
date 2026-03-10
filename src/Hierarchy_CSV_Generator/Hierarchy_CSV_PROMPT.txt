@@ -39,3 +39,27 @@ SECOND CSV (cluster node records)
    - First pass: Find all clusters having at least one children, and where all of these contained children are leaf nodes (children = null). These found "low-level parent" clusters should then be flagged as "document_cluster"
    - Second pass: Find all leaf cluster nodes having at least one sibling flagged as "document_cluster". These found leaf clusters with "document_cluster" siblings are also a "document_cluster". Flag them as so. 
 
+
+
+
+UPDATES:
+- Similar to what has been done with the "Source_Documents" field, a new field named "text_class" should be created for the Clusters CSV file. 
+It should show the deduplicated list of all the "chunk_text_class" assigned to all the underneath chunks. Concatenate all of the values in a single string separated by a newline character.
+- And for each one of these deduplicated "chunk_text_class", based on the corresponding total of tokens it has in the cluster being processed, calculate the percentage of tokens it contribute to the cluster. Add the percentage value between parentesis in the string after the text_class label and before the newline character.
+- Finally, create in the output directory a folder named after the "cluster_id" and within it create a new json file named "<cluster_id>_category" describing the details of the "Source_Documents" and "text_class" fields. Here is the target json structure: 
+{ 
+   cluster_id: "...",
+   is_document_cluster: boolean,
+   source_documents: [
+      { 
+         document_name: "...",
+         tokens_percentage: float (2 decimals)
+      }
+   ]
+   text_class: [
+      {
+         class: "...",
+         tokens_percentage: float (2 decimals)
+      }
+   ] 
+}

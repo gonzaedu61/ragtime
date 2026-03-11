@@ -33,10 +33,12 @@ class Docx_Rewriter:
         self.log_prompts = log_prompts
         self.progress_enabled = progress_enabled
 
+        fName, ext = os.path.splitext(source_filename)
+
         if log_prompts:
             self.log_path = os.path.join(
                 target_dir,
-                f"rewrite_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl"
+                f"{fName}_log.json"
             )
 
         self.progress = None
@@ -151,7 +153,16 @@ class Docx_Rewriter:
 
         # Progress bar update
         if self.progress:
-            self.progress.update(step=1, label=f"{metadata.get('text_type')}")
+            page = metadata.get("page")
+            text_type = metadata.get("text_type")
+
+            # Page may be None for headers/footers
+            if page is None:
+                label = f"{text_type}"
+            else:
+                label = f"Page {page} / {text_type}"
+
+            self.progress.update(step=1, label=label)
 
         return response
 

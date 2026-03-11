@@ -7,6 +7,7 @@ load_dotenv()
 
 # Define KB
 KB_NAME = os.getenv("KB_NAME")
+DOCUMENT = "auf_pos"
 
 # Initialize LLM
 LLM_BACKEND = "azure"
@@ -26,8 +27,9 @@ llm = create_llm(
 
 # Define Folders & Filenames
 TARGET_DIR = f"./DATA/KBs/{KB_NAME}/0_Word_Docs"
-SOURCE_FILENAME = "mawi_abruf.docx"
-OUTPUT_FILENAME = "mawi_abruf_(rewritten).docx"
+
+SOURCE_FILENAME = f"{DOCUMENT}.docx"
+OUTPUT_FILENAME = f"{DOCUMENT}_(rewritten).docx"
 
 PROMPT_TEMPLATE = """
 ROLE: You are the writer of ERP Training documents

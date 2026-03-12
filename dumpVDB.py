@@ -1,4 +1,4 @@
-from VectorDB_Factory import create_vectordb
+from VectorDB_Factory.VectorDB_Factory import create_vectordb
 
 import os
 from dotenv import load_dotenv

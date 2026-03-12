@@ -4,6 +4,7 @@ Hierarchy_CSV_Generator
 LLM_Factory
 Ontology_Builder
 PDF_Chunker
+RAG_Server
 Semantic_Chunker
 Tokens_Chunker
 Topic_Hierarchy_Builder

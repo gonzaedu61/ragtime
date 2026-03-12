@@ -1,0 +1,195 @@
+{
+  "answer": "A Sales Order (Kundenauftrag) is the customer-facing contract in which you record\n\n• which article will be delivered  \n• the total quantity to be delivered  \n• the price at which it is sold  \n\nA Production Order (Produktionsauftrag), by contrast, is an internal manufacturing document that is created from the contract data. In it you\n\n• plan and execute the actual production of one or more contract items (in whole or in part)  \n• generate the work papers needed for shop-floor execution  \n• post the finished goods receipt  \n\nThe customer never sees the Production Order—it merely implements the quantities and items defined on the Sales Order (or Sammelauftrag) on your shop floor.",
+  "language": "en",
+  "used_queries": [
+    "Was ist der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
+    "Worin liegt der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
+    "Was unterscheidet einen Verkaufsauftrag von einem Produktionsauftrag?"
+  ],
+  "retrieved_chunks": [
+    {
+      "query": "Was ist der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
+      "chunk_id": "ea2d49bc9bf0fe4cf253a37fa8b6a431",
+      "text": "Nein Komplett Aufträge werden komplett verknüpft → Gesamte Produktion des Einzelauftrags wird über den Sammelauftrag abgewickelt. Prod Aufträge werden auf Produktebene verknüpft → nur die Produktion eines Produkts wird über den Sammelauftrag abgewickelt. (z.B. Sammelform für Umschläge)",
+      "score": 0.8551937341690063,
+      "metadata": {
+        "mixed_combo": "paragraph",
+        "document_name": "planung",
+        "pages": [
+          214
+        ],
+        "token_count": 69,
+        "chunk_text_class": "Process description",
+        "heading_path": [
+          "21 Konfiguration",
+          "21.1 Parameter",
+          "Anzahl Kostenstellen",
+          "Zeitfaktor",
+          "EDatum Uhrzeit",
+          "EDatum TS",
+          "Option Beschreibung"
+        ],
+        "chunk_type": "paragraph",
+        "chunk_id": 428
+      }
+    },
+    {
+      "query": "Was ist der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
+      "chunk_id": "8c5df20e3eaa54363e1b29abda97d43f",
+      "text": "Für die Fertigung werden aus den Daten des Kontraktes Produktionsaufträge angelegt. In einem Produktionsauftrag werden grundsätzlich nur die Artikel eines Kontraktes gefertigt. Dabei können jedoch nur einzelne Artikel des Kontraktes und/oder Teilmengen gefertigt werden. Arbeitspapiere werden über den Produktionsauftrag erstellt. Die Fertigwarenbuchung erfolgt auf den Produktionsauftrag.",
+      "score": 0.8542312383651733,
+      "metadata": {
+        "chunk_type": "paragraph",
+        "mixed_combo": "paragraph",
+        "token_count": 74,
+        "chunk_text_class": "Process description",
+        "document_name": "auf_kpa",
+        "heading_path": [
+          "2 Allgemeines",
+          "2.2 Warum KPA",
+          "Kontrakt",
+          "Produktionsauftrag"
+        ],
+        "pages": [
+          6
+        ],
+        "chunk_id": 7
+      }
+    },
+    {
+      "query": "Was ist der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
+      "chunk_id": "7a0af86f9ce6cd847861bd9c2491b348",
+      "text": "Sind in dem Kontrakt ein oder mehrere Positionen eingetragen, kann ein Produktionsauftrag generiert werden. Produktionsaufträge werden generiert, wenn Teile der Menge eines Artikels im Kontrakt oder die gesamte Menge gefertigt werden soll. Gründe für Anlegen eines Produktionsauftrages mit anschließender Fertigung der entsprechenden Menge: - Kunde erteilt einen Abrufauftrag für bestimmte Mengen eines Artikels in einem Kontrakt - der Anwenderbetrieb möchte bestimmte Mengen eines Artikels auf Lager produzieren Der Kunde bekommt von den Produktionsaufträgen nichts mit. Diese werden intern erstellt und abgewickelt. Bei der Bearbeitung von Produktionsaufträgen gibt es in Abhängigkeit von der im Kontrakt eingesetzten Kalkulationsvariante (Variantenkalkulation bzw. Positionskalkulation) unterschiedliche Vorgehensweisen.",
+      "score": 0.854153573513031,
+      "metadata": {
+        "mixed_combo": "list_item + paragraph",
+        "document_name": "auf_kpa",
+        "token_count": 168,
+        "chunk_text_class": "Process description",
+        "chunk_id": 16,
+        "pages": [
+          11
+        ],
+        "chunk_type": "mixed",
+        "heading_path": [
+          "5 Produktionsauftrag",
+          "5.1 Allgemein"
+        ]
+      }
+    },
+    {
+      "query": "Worin liegt der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
+      "chunk_id": "ea2d49bc9bf0fe4cf253a37fa8b6a431",
+      "text": "Nein Komplett Aufträge werden komplett verknüpft → Gesamte Produktion des Einzelauftrags wird über den Sammelauftrag abgewickelt. Prod Aufträge werden auf Produktebene verknüpft → nur die Produktion eines Produkts wird über den Sammelauftrag abgewickelt. (z.B. Sammelform für Umschläge)",
+      "score": 0.8539068102836609,
+      "metadata": {
+        "chunk_text_class": "Process description",
+        "mixed_combo": "paragraph",
+        "chunk_type": "paragraph",
+        "heading_path": [
+          "21 Konfiguration",
+          "21.1 Parameter",
+          "Anzahl Kostenstellen",
+          "Zeitfaktor",
+          "EDatum Uhrzeit",
+          "EDatum TS",
+          "Option Beschreibung"
+        ],
+        "chunk_id": 428,
+        "document_name": "planung",
+        "token_count": 69,
+        "pages": [
+          214
+        ]
+      }
+    },
+    {
+      "query": "Worin liegt der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
+      "chunk_id": "7a0af86f9ce6cd847861bd9c2491b348",
+      "text": "Sind in dem Kontrakt ein oder mehrere Positionen eingetragen, kann ein Produktionsauftrag generiert werden. Produktionsaufträge werden generiert, wenn Teile der Menge eines Artikels im Kontrakt oder die gesamte Menge gefertigt werden soll. Gründe für Anlegen eines Produktionsauftrages mit anschließender Fertigung der entsprechenden Menge: - Kunde erteilt einen Abrufauftrag für bestimmte Mengen eines Artikels in einem Kontrakt - der Anwenderbetrieb möchte bestimmte Mengen eines Artikels auf Lager produzieren Der Kunde bekommt von den Produktionsaufträgen nichts mit. Diese werden intern erstellt und abgewickelt. Bei der Bearbeitung von Produktionsaufträgen gibt es in Abhängigkeit von der im Kontrakt eingesetzten Kalkulationsvariante (Variantenkalkulation bzw. Positionskalkulation) unterschiedliche Vorgehensweisen.",
+      "score": 0.8538006544113159,
+      "metadata": {
+        "chunk_text_class": "Process description",
+        "token_count": 168,
+        "mixed_combo": "list_item + paragraph",
+        "heading_path": [
+          "5 Produktionsauftrag",
+          "5.1 Allgemein"
+        ],
+        "pages": [
+          11
+        ],
+        "document_name": "auf_kpa",
+        "chunk_id": 16,
+        "chunk_type": "mixed"
+      }
+    },
+    {
+      "query": "Worin liegt der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
+      "chunk_id": "8c5df20e3eaa54363e1b29abda97d43f",
+      "text": "Für die Fertigung werden aus den Daten des Kontraktes Produktionsaufträge angelegt. In einem Produktionsauftrag werden grundsätzlich nur die Artikel eines Kontraktes gefertigt. Dabei können jedoch nur einzelne Artikel des Kontraktes und/oder Teilmengen gefertigt werden. Arbeitspapiere werden über den Produktionsauftrag erstellt. Die Fertigwarenbuchung erfolgt auf den Produktionsauftrag.",
+      "score": 0.8536174893379211,
+      "metadata": {
+        "pages": [
+          6
+        ],
+        "chunk_id": 7,
+        "chunk_type": "paragraph",
+        "document_name": "auf_kpa",
+        "token_count": 74,
+        "mixed_combo": "paragraph",
+        "chunk_text_class": "Process description",
+        "heading_path": [
+          "2 Allgemeines",
+          "2.2 Warum KPA",
+          "Kontrakt",
+          "Produktionsauftrag"
+        ]
+      }
+    },
+    {
+      "query": "Was ist der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
+      "chunk_id": "5dae28026f3e6c66e80ea4765892a679",
+      "text": "Kundenauftrag für einen oder mehrere Artikel. In einer Position eines Kontraktes werden festgelegt: - Die Leistung, also der Artikel, der geliefert wird - Die zu liefernde Gesamtmenge des Artikels - Der Preis zu welchem der Artikel geliefert wird",
+      "score": 0.8515213131904602,
+      "metadata": {
+        "document_name": "auf_kpa",
+        "heading_path": [
+          "2 Allgemeines",
+          "2.2 Warum KPA",
+          "Kontrakt"
+        ],
+        "chunk_text_class": "Process description",
+        "mixed_combo": "list_item + paragraph",
+        "token_count": 52,
+        "chunk_id": 6,
+        "pages": [
+          6
+        ],
+        "chunk_type": "mixed"
+      }
+    },
+    {
+      "query": "Worin liegt der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
+      "chunk_id": "5dae28026f3e6c66e80ea4765892a679",
+      "text": "Kundenauftrag für einen oder mehrere Artikel. In einer Position eines Kontraktes werden festgelegt: - Die Leistung, also der Artikel, der geliefert wird - Die zu liefernde Gesamtmenge des Artikels - Der Preis zu welchem der Artikel geliefert wird",
+      "score": 0.8510866761207581,
+      "metadata": {
+        "heading_path": [
+          "2 Allgemeines",
+          "2.2 Warum KPA",
+          "Kontrakt"
+        ],
+        "chunk_id": 6,
+        "token_count": 52,
+        "chunk_text_class": "Process description",
+        "document_name": "auf_kpa",
+        "pages": [
+          6
+        ],
+        "chunk_type": "mixed",
+        "mixed_combo": "list_item + paragraph"
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+Help drafting the Python code for a RAG server with these initial requirements:
+1. Use the uploaded Vector DB and LLM classes
+2. Create two entry points. One for the query and another to check the status of the server
+3. No web page yet. We will use command line CURL statements to test and run the server
+4. Detect the query input languaje and translate (if not the same) to the language of the Vector DB content 
+5. Implement a query expansion step
+6. Implement the parallel retrieval from the local Vector DB
+7. Implement re-ranking
+8. Pass the selected chunks to the LLM with the querie(s)
+9. Translate the result (if required) to the original query input language

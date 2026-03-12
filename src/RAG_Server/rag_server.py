@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 # --- Your backends / factories ---
-from embedding_backends import HFEmbeddingBackend
+from Embedders import HFEmbeddingBackend
 from VectorDB_Factory import create_vectordb
 from LLM_Factory import create_llm
 
@@ -14,37 +14,47 @@ from LLM_Factory import create_llm
 # Config (adapt to your environment)
 # ------------------------------------------------------------
 
-VECTOR_DB_LANG = "en"  # language of your indexed corpus
-
-EMBED_MODEL_NAME = os.getenv("EMBED_MODEL_NAME", "intfloat/multilingual-e5-large")
-CHROMA_COLLECTION = os.getenv("CHROMA_COLLECTION", "rag_collection")
-CHROMA_DIR = os.getenv("CHROMA_DIR", "./chroma_store")
-
-AZURE_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT", "")
-AZURE_API_KEY = os.getenv("AZURE_OPENAI_API_KEY", "")
-AZURE_DEPLOYMENT = os.getenv("AZURE_OPENAI_DEPLOYMENT", "")
-AZURE_MODEL_NAME = os.getenv("AZURE_OPENAI_MODEL_NAME", "")
-AZURE_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-15-preview")
+# Config Constants
+KB_NAME = os.getenv("KB_NAME")
 
 # ------------------------------------------------------------
 # Instantiate global components
 # ------------------------------------------------------------
 
-embedding_backend = HFEmbeddingBackend(EMBED_MODEL_NAME)
+# Initialize embedding_backend
+os.environ["SENTENCE_TRANSFORMERS_HOME"] = "C:/Models"
+os.environ["TRANSFORMERS_NO_ADVISORY_WARNINGS"] = "1"
+os.environ["DISABLE_TRANSFORMERS_AVX_CHECK"] = "1"
+embedding_backend = HFEmbeddingBackend("C:/Models/multilingual-e5-large/")
 
-vectordb = create_vectordb(
-    backend="chroma",
-    collection_name=CHROMA_COLLECTION,
-    persist_dir=CHROMA_DIR,
+
+
+# Initialize LLM
+LLM_BACKEND = "azure"
+LLM_NAME = "o4-mini"
+LLM_DEPLOYMENT = "o4-mini"
+LLM_API_VERSION = "2024-12-01-preview"
+API_KEY = os.getenv("AZURE_AI_PROJECT_API_KEY")
+END_POINT = "https://ragtime-openai.openai.azure.com/"
+llm = create_llm(
+    backend=LLM_BACKEND,
+    endpoint=END_POINT,
+    api_key=API_KEY,
+    deployment=LLM_DEPLOYMENT,
+    model_name=LLM_NAME,
+    api_version=LLM_API_VERSION
 )
 
-llm: LLMBackend = create_llm(
-    backend="azure",
-    endpoint=AZURE_ENDPOINT,
-    api_key=AZURE_API_KEY,
-    deployment=AZURE_DEPLOYMENT,
-    model_name=AZURE_MODEL_NAME,
-    api_version=AZURE_API_VERSION,
+
+# Initialize vector DB backend (Chroma or others)
+VECTOR_DB_NAME = "chroma"
+COLLECTION_NAME="Structural_Chunks"
+VDB_PATH = f"./DATA/KBs/{KB_NAME}/5_Vector_DB"
+VECTOR_DB_LANG = "en"  # language of your indexed corpus
+vectordb = create_vectordb(
+    backend=VECTOR_DB_NAME,
+    collection_name=COLLECTION_NAME,
+    persist_dir=VDB_PATH
 )
 
 # ------------------------------------------------------------

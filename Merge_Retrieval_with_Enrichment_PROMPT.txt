@@ -1,0 +1,27 @@
+I have uploaded two class scripts ("Cluster_Chunks_Retriever" and "Hierarchy_Enricher"). I needyou to generate a new single class concatenating both, eliminating some parts, keeping others and adding new ones. Here the instruction guidelines:
+
+1. Keep the current "Cluster_Chunks_Retriever" input loading logic as a starting point
+2. Remove the flattening of the cluster hierarchy (unless it is required for the next steps). Do not save any flattened json file. 
+3. Keep all of these next steps as they are:
+    a. Build synthetic queries
+    b: Perform dense + sparse retrieval
+    c. Re‑rank with keyword overlap
+    d. Deduplicate chunks
+    e. Produces top‑N relevant raw text chunks per cluster
+4. Remove the minimal output mode and do not generate any oputput file.
+5. Integrate (append) the "Hierarchy_Enricher" logic taking as input whatever data is already available at the end of the Retriever logic.
+6. Keep the complete drifting analysis as it is now
+7. Add these new final steps:
+    a. For each cluster upload additional individual information from a json file named as <cluster_id>_category.json located in folders having the same name as the cluster, already existing within a directory pathname given also as parameter to the class. Add that new information as part of the cluster metadata
+    b. Add a to the metadata as well and indication whether the cluster is a leaf or internal one
+    c. As a final step, embed and save all available cluster information in the Vector DB (one cluster -> one record)
+    d. If indicated in a flag parameter passed to the class, save the same cluster record information (without the embedding) to 
+    e. individual cluster files placed in the corresponding cluster folders with the name <cluster_id>_enrichment.json
+8 Use the already configured Progress Bar and adjust it to cover the whole new logic tracking each cluster processing
+
+OTHER CONSIDERATIONS:
+- For the moment, comment the saving to the VDB until we properly debug the whole logic looking into the individual cluster json files generated and saved as a copy of the VDB record.
+- To avoid unique-key constraints in the VDB, delete complete each cluster record if it exists before writing the new one
+- Take as an input parameter a "branch_id" value indicating the whole cluster tree area to focus on. The ürocessing should be done only on those clusters belonging to the given branch. If the branch (default value) is None then process the complete tree. This is to have a more controlled small processing scope while testing and debugging. 
+
+ 

@@ -1,0 +1,109 @@
+(ragtime) PS C:\dev\ragtime> rag "What are the core steps of Production Planning?" pepe.json                 
+Here are the core steps of production planning as described in the context:
+
+• Determine the planning sequence  
+  – Based on the product-part numbering from the technical description  
+  – And the calculation sort order from the operation master
+
+• Assign the planning stage  
+  – For example, stage 1 = sheet parts (products 1–89), stage 2 = finishing (products 90–99)
+
+• Calculate the earliest start date and time  
+  – Of the first production operation (e.g. “Drucken”/printing)
+
+• Automatically schedule the products in that sequence  
+  – The system generates or copies planning positions into the plan
+
+• Derive the scheduled production end (“ProdEnde”)  
+  – Date and time when the order is expected to finish
+
+• Apply standard deadline keys  
+  – “Kunde kommt” (customer arrival) target date/time  
+  – “Vorgabe Fertigung” (production target) date/time
+
+• Check material availability status  
+  – According to the “Vorgabe Material” schedule key of the planning type
+(ragtime) PS C:\dev\ragtime> rag "How do I determine the planning sequence using the almendro ERP?" pepe.json
+The Almendro ERP derives its shop‐floor sequence from two settings:
+
+1. Product-part numbering  
+   – The system reads the “Product-Teil-Nummer” you’ve assigned in the Technical Description and sorts all parts in ascending order of that number.  
+s
+2. Operation sort key (Kalkulationssort) in the operation master
+   – Within each part, Almendro then orders the individual operations by the “Kalkulationssort” field.
+
+In practice you’ll often simply number your cost centres so that their ascending cost-centre numbers also reflect the desired sequence of operations. If your cost-centre numbers already run in the correct order, no further configuration is required.
+(ragtime) PS C:\dev\ragtime> rag "What is the operation master?" pepe.json                                   
+Could you clarify what you mean by “operation master”? That exact term doesn’t appear in the provided context. Were you perhaps referring to “OP netto” (the net order value) or another module?
+(ragtime) PS C:\dev\ragtime> rag "What is the operation master where the the operation sort key is defined?" pepe.json
+The operation sort key is defined in the “Terminschlüssel” master data, on the “Auftrag” (order) level.
+(ragtime) PS C:\dev\ragtime> rag "Can you give me some details about how the operation sort key is defined in the Terminschlüssel?" pepe.json  
+I’m not finding any reference to an “operation sort key” in the provided Terminschlüssel‐Kontext. Could you clarify what you mean by “operation sort key”? For example:
+
+• Do you refer to a specific field or parameter in the Terminschlüssel Stammdaten?
+• Is “operation” perhaps another term for “Auftrag” or eine andere Funktion?
+
+With a bit more detail I can check again the available Beschreibungen.
+(ragtime) PS C:\dev\ragtime> rag "What is the structure of the  Terminschlüssel Stammdaten?" pepe.json                                       
+I’m sorry, but the provided context doesn’t include details on the internal field structure of the “Terminschlüssel” master data. Could you clarify which specific structural details or fields you’re looking for?
+(ragtime) PS C:\dev\ragtime> rag "What is the Terminschlüssel Stammdaten?" pepe.json                  
+Der Terminschlüssel ist ein Planungs-Kennzeichen, das in den Stammdaten unter dem Punkt „Terminschlüssel“ auf der Ebene „Auftrag“ angelegt und gepflegt wird. Er dient zur Steuerung der Terminplanung (wird in der Planungs-Maske angezeigt) und erhält dabei eine fortlaufende Nummer. Ändert man den Terminschlüssel, muss man auch die Stammdaten der Maske „Planung“ entsprechend anpassen, da sich die lfd. Nummer ändert.
+(ragtime) PS C:\dev\ragtime> rag "What is the Terminschlüssel Stammdaten? Answer in English please" pepe.json
+The “Terminschlüssel” in the master data is simply the scheduling‐key record you must maintain under the Master Data table called “Terminschlüssel” at the “Order” (Auftrag) level. In practice:
+
+• It defines your planning key for each order
+• It drives the running number display in the planning mask
+• It is also the key set by the “Change EDate” function when you adjust an order’s end date
+
+So whenever you talk about Terminschlüssel Stammdaten, you’re referring to that scheduling‐key entry in the Master Data (“Terminschlüssel” table, level = “Order”).
+
+(ragtime) PS C:\dev\ragtime> rag "In what Almwendro system module can I edit the scheduling-key entry?" pepe.json
+You edit the scheduling‐key (Terminschlüssel) in the ALMENDRO “Planning” module. For details, see the “Planung” workshop (planung.pdf).
+
+(ragtime) PS C:\dev\ragtime> rag "What are the pre-requisites to create a Delivery Note??" pepe.json             
+The only hard prerequisite mentioned is that you must have loading‐list positions (Ladelistenpositionen) and the pallets booked against those loading‐list positions. These two elements form the basis for automatically generating a delivery note.
+
+(ragtime) PS C:\dev\ragtime> rag "From what system module can I automatically create a Delivery Note?" pepe.json
+You can automatically generate a Delivery Note from the order’s “Freight Distribution” module.
+
+(ragtime) PS C:\dev\ragtime> rag "I would like to learn something new" pepe.json                                
+Could you clarify what topic you’d like to learn about? For example, are you interested in one of the workshops such as “Basis,” “Stammdaten Sonstige,” “Artikelpositionen,” or “Stamm Lohn”?
+
+(ragtime) PS C:\dev\ragtime> rag "Tell me about Stamm Lohn (in English please)" pepe.json
+I’m sorry, but I only see a reference to “Workshop ‘stamm_lohn’” in the provided context and no detailed information. Could you please share more details or specify which aspects of “Stamm Lohn” you’d like to learn about?
+
+(ragtime) PS C:\dev\ragtime> rag "Tell me what is Stamm Lohn (in English please)" pepe.json
+I’m sorry, but I don’t have a definition for “Stamm Lohn” in the provided materials. Could you share a bit more context or the exact passage where it’s described? For example, is it coming from a specific slide or section of the “stamm_lohn” workshop?
+
+(ragtime) PS C:\dev\ragtime> rag "Tell me what is meant by Stamm Lohn (in English please)" pepe.json
+I’m sorry, but I don’t have a definition of “Stamm Lohn” in the provided context. Could you share a bit more from the “Workshop stamm_lohn” or where you encountered the term? That will help me give you an accurate English explanation.
+
+(ragtime) PS C:\dev\ragtime> rag "Wwhat is meant by Stamm (in English please)" pepe.json
+In this context “Stamm” is short for “Stammdaten,” i.e. “master data” (or “master record”) in an ERP‐style system.
+
+(ragtime) PS C:\dev\ragtime> rag "How can I learn more about Stammdate? What type of them and how to administer them?" pepe.json
+You’ll find all details zu Stammdaten – welche Typen es gibt und wie man sie anlegt bzw. pflegt – in den folgenden Unterlagen/Workshops:
+
+• Workshop „Positionskalkulation“ – Abschnitt Stammdaten
+• Workshop „Stammdaten Sonstiges“ (Beschreibung der übrigen Stammdaten)
+• Workshop „Stammdaten Kostenstellen, Kalkulation“
+• PDF-Datei „stamm_adr.pdf“ (Stammdaten Adressen)
+
+Bitte die jeweiligen Workshops bzw. das PDF öffnen, dort ist jeweils beschrieben
+
+  1. welche Stammdaten-Typen existieren (z. B. Adressen, Kostenstellen, Kalkulationsdaten …)
+  2. wie sie im System angelegt, bearbeitet und verwaltet werden.
+(ragtime) PS C:\dev\ragtime> rag "Can you list here the core master data types?" pepe.json
+Based on the workshops referenced in the provided context, the core master-data types are:
+
+• Addresses (Stammdaten Adressen)
+• Material (Stammdaten Material)
+• Miscellaneous/Other (Stammdaten Sonstiges)
+
+In addition, there is the management of text information (various text types) within master data (see Workshop “Basis”).
+
+(ragtime) PS C:\dev\ragtime> rag "Can you list here the Sonstiges Stammdaten?" pepe.json
+I’m sorry, but the provided context only refers to the document “stamm_sonst.pdf” (Workshop “Stammdaten Sonstiges”) and does not include the actual list of items. Could you please share the specific entries or details you’d like to see listed?
+
+(ragtime) PS C:\dev\ragtime> rag "I want to know the names of the main Sonstiges Stammdaten described in the stamm_sonst.pdf?" pepe.json
+I’m sorry, but I don’t see the actual list of “Sonstiges Stammdaten” names in the provided context. Could you please share the specific entries or a bit more detail from the stamm_sonst.pdf so I can help identify the main data items?jj

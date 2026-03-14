@@ -67,7 +67,7 @@ class Simple_Progress_Bar:
         label_str = f" | {self.last_label}" if self.last_label else ""
 
         # Clear tail to overwrite previous content
-        clear_tail = " " * 20
+        clear_tail = " " * 6
 
         # Render line
         sys.stdout.write("\r")

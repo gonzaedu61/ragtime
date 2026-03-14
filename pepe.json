@@ -1,194 +1,187 @@
 {
-  "answer": "A Sales Order (Kundenauftrag) is the customer-facing contract in which you record\n\n• which article will be delivered  \n• the total quantity to be delivered  \n• the price at which it is sold  \n\nA Production Order (Produktionsauftrag), by contrast, is an internal manufacturing document that is created from the contract data. In it you\n\n• plan and execute the actual production of one or more contract items (in whole or in part)  \n• generate the work papers needed for shop-floor execution  \n• post the finished goods receipt  \n\nThe customer never sees the Production Order—it merely implements the quantities and items defined on the Sales Order (or Sammelauftrag) on your shop floor.",
+  "answer": "I’m sorry, but the provided context only refers to “Workshop ‘stamm_lohn’” without defining the term. Could you please provide more details or clarify what you mean by “Stamm Lohn”?",
   "language": "en",
   "used_queries": [
-    "Was ist der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
-    "Worin liegt der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
-    "Was unterscheidet einen Verkaufsauftrag von einem Produktionsauftrag?"
+    "Sag mir, was mit Stamm Lohn gemeint ist (auf Englisch bitte)",
+    "Bitte erkläre, was mit „Stamm Lohn“ gemeint ist, und gib die Antwort auf Englisch.",
+    "Was versteht man unter „Stamm Lohn“? Bitte antworte auf Englisch."
   ],
   "retrieved_chunks": [
     {
-      "query": "Was ist der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
-      "chunk_id": "ea2d49bc9bf0fe4cf253a37fa8b6a431",
-      "text": "Nein Komplett Aufträge werden komplett verknüpft → Gesamte Produktion des Einzelauftrags wird über den Sammelauftrag abgewickelt. Prod Aufträge werden auf Produktebene verknüpft → nur die Produktion eines Produkts wird über den Sammelauftrag abgewickelt. (z.B. Sammelform für Umschläge)",
-      "score": 0.8551937341690063,
+      "query": "Was versteht man unter „Stamm Lohn“? Bitte antworte auf Englisch.",
+      "chunk_id": "8408712c635dadba31d53c4d8af9da59",
+      "text": "Siehe Workshop „stamm_lohn“.",
+      "score": 0.9022913575172424,
       "metadata": {
         "mixed_combo": "paragraph",
-        "document_name": "planung",
+        "token_count": 9,
+        "image_paths": [
+          "..\\3_Extracted_Images\\stamm_kalk\\page_94_block_21.jpg"
+        ],
         "pages": [
-          214
+          94
         ],
-        "token_count": 69,
-        "chunk_text_class": "Process description",
+        "document_name": "stamm_kalk",
+        "chunk_text_class": "Other",
         "heading_path": [
-          "21 Konfiguration",
-          "21.1 Parameter",
-          "Anzahl Kostenstellen",
-          "Zeitfaktor",
-          "EDatum Uhrzeit",
-          "EDatum TS",
-          "Option Beschreibung"
+          "16 Tabellen Kostenstellen",
+          "16.1 Lohnartenermittlung"
         ],
-        "chunk_type": "paragraph",
-        "chunk_id": 428
+        "chunk_id": 151,
+        "chunk_type": "paragraph"
       }
     },
     {
-      "query": "Was ist der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
-      "chunk_id": "8c5df20e3eaa54363e1b29abda97d43f",
-      "text": "Für die Fertigung werden aus den Daten des Kontraktes Produktionsaufträge angelegt. In einem Produktionsauftrag werden grundsätzlich nur die Artikel eines Kontraktes gefertigt. Dabei können jedoch nur einzelne Artikel des Kontraktes und/oder Teilmengen gefertigt werden. Arbeitspapiere werden über den Produktionsauftrag erstellt. Die Fertigwarenbuchung erfolgt auf den Produktionsauftrag.",
-      "score": 0.8542312383651733,
+      "query": "Bitte erkläre, was mit „Stamm Lohn“ gemeint ist, und gib die Antwort auf Englisch.",
+      "chunk_id": "8408712c635dadba31d53c4d8af9da59",
+      "text": "Siehe Workshop „stamm_lohn“.",
+      "score": 0.8943490982055664,
+      "metadata": {
+        "document_name": "stamm_kalk",
+        "mixed_combo": "paragraph",
+        "chunk_text_class": "Other",
+        "image_paths": [
+          "..\\3_Extracted_Images\\stamm_kalk\\page_94_block_21.jpg"
+        ],
+        "heading_path": [
+          "16 Tabellen Kostenstellen",
+          "16.1 Lohnartenermittlung"
+        ],
+        "chunk_type": "paragraph",
+        "pages": [
+          94
+        ],
+        "token_count": 9,
+        "chunk_id": 151
+      }
+    },
+    {
+      "query": "Sag mir, was mit Stamm Lohn gemeint ist (auf Englisch bitte)",
+      "chunk_id": "8408712c635dadba31d53c4d8af9da59",
+      "text": "Siehe Workshop „stamm_lohn“.",
+      "score": 0.886114776134491,
+      "metadata": {
+        "chunk_text_class": "Other",
+        "document_name": "stamm_kalk",
+        "pages": [
+          94
+        ],
+        "chunk_type": "paragraph",
+        "image_paths": [
+          "..\\3_Extracted_Images\\stamm_kalk\\page_94_block_21.jpg"
+        ],
+        "mixed_combo": "paragraph",
+        "heading_path": [
+          "16 Tabellen Kostenstellen",
+          "16.1 Lohnartenermittlung"
+        ],
+        "chunk_id": 151,
+        "token_count": 9
+      }
+    },
+    {
+      "query": "Was versteht man unter „Stamm Lohn“? Bitte antworte auf Englisch.",
+      "chunk_id": "2805caae396dd1ad773ead0dfa20ee06",
+      "text": "Dateiname lohn.pdf Beschreibung Lohnbearbeitung",
+      "score": 0.8498506546020508,
       "metadata": {
         "chunk_type": "paragraph",
-        "mixed_combo": "paragraph",
-        "token_count": 74,
-        "chunk_text_class": "Process description",
-        "document_name": "auf_kpa",
+        "document_name": "ws_info",
         "heading_path": [
-          "2 Allgemeines",
-          "2.2 Warum KPA",
-          "Kontrakt",
-          "Produktionsauftrag"
+          "8 Lohn",
+          "8.1 Lohn"
         ],
+        "pages": [
+          13
+        ],
+        "chunk_id": 36,
+        "token_count": 10,
+        "mixed_combo": "paragraph",
+        "chunk_text_class": "Other"
+      }
+    },
+    {
+      "query": "Bitte erkläre, was mit „Stamm Lohn“ gemeint ist, und gib die Antwort auf Englisch.",
+      "chunk_id": "be9f08ee584075918c264d3b99eb4985",
+      "text": "Dateiname stamm_kalk.pdf Beschreibung Stammdaten Kalkulation Kostenstelle, Arbeitsgang, Leistungskatalog, …",
+      "score": 0.8486282229423523,
+      "metadata": {
+        "mixed_combo": "paragraph",
+        "heading_path": [
+          "2 Grundlagen",
+          "2.4 Stammdaten Kalkulation"
+        ],
+        "chunk_id": 5,
+        "token_count": 24,
         "pages": [
           6
         ],
-        "chunk_id": 7
+        "chunk_type": "paragraph",
+        "chunk_text_class": "Other",
+        "document_name": "ws_info"
       }
     },
     {
-      "query": "Was ist der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
-      "chunk_id": "7a0af86f9ce6cd847861bd9c2491b348",
-      "text": "Sind in dem Kontrakt ein oder mehrere Positionen eingetragen, kann ein Produktionsauftrag generiert werden. Produktionsaufträge werden generiert, wenn Teile der Menge eines Artikels im Kontrakt oder die gesamte Menge gefertigt werden soll. Gründe für Anlegen eines Produktionsauftrages mit anschließender Fertigung der entsprechenden Menge: - Kunde erteilt einen Abrufauftrag für bestimmte Mengen eines Artikels in einem Kontrakt - der Anwenderbetrieb möchte bestimmte Mengen eines Artikels auf Lager produzieren Der Kunde bekommt von den Produktionsaufträgen nichts mit. Diese werden intern erstellt und abgewickelt. Bei der Bearbeitung von Produktionsaufträgen gibt es in Abhängigkeit von der im Kontrakt eingesetzten Kalkulationsvariante (Variantenkalkulation bzw. Positionskalkulation) unterschiedliche Vorgehensweisen.",
-      "score": 0.854153573513031,
+      "query": "Sag mir, was mit Stamm Lohn gemeint ist (auf Englisch bitte)",
+      "chunk_id": "36653fe0343ff5dd68ce97108e7104fb",
+      "text": "Siehe Workshop „Stammdaten Sonstige“ (stamm_sonst.pdf)",
+      "score": 0.84779953956604,
       "metadata": {
-        "mixed_combo": "list_item + paragraph",
-        "document_name": "auf_kpa",
-        "token_count": 168,
-        "chunk_text_class": "Process description",
-        "chunk_id": 16,
-        "pages": [
-          11
-        ],
-        "chunk_type": "mixed",
         "heading_path": [
-          "5 Produktionsauftrag",
-          "5.1 Allgemein"
-        ]
+          "4 Stammdaten",
+          "4.4 BDE-Terminalstamm I"
+        ],
+        "chunk_text_class": "Other",
+        "token_count": 19,
+        "document_name": "leist_bde",
+        "pages": [
+          15
+        ],
+        "chunk_type": "paragraph",
+        "chunk_id": 32,
+        "mixed_combo": "paragraph"
       }
     },
     {
-      "query": "Worin liegt der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
-      "chunk_id": "ea2d49bc9bf0fe4cf253a37fa8b6a431",
-      "text": "Nein Komplett Aufträge werden komplett verknüpft → Gesamte Produktion des Einzelauftrags wird über den Sammelauftrag abgewickelt. Prod Aufträge werden auf Produktebene verknüpft → nur die Produktion eines Produkts wird über den Sammelauftrag abgewickelt. (z.B. Sammelform für Umschläge)",
-      "score": 0.8539068102836609,
+      "query": "Was versteht man unter „Stamm Lohn“? Bitte antworte auf Englisch.",
+      "chunk_id": "be9f08ee584075918c264d3b99eb4985",
+      "text": "Dateiname stamm_kalk.pdf Beschreibung Stammdaten Kalkulation Kostenstelle, Arbeitsgang, Leistungskatalog, …",
+      "score": 0.8457455635070801,
       "metadata": {
-        "chunk_text_class": "Process description",
+        "pages": [
+          6
+        ],
+        "document_name": "ws_info",
+        "chunk_id": 5,
         "mixed_combo": "paragraph",
+        "chunk_text_class": "Other",
         "chunk_type": "paragraph",
         "heading_path": [
-          "21 Konfiguration",
-          "21.1 Parameter",
-          "Anzahl Kostenstellen",
-          "Zeitfaktor",
-          "EDatum Uhrzeit",
-          "EDatum TS",
-          "Option Beschreibung"
+          "2 Grundlagen",
+          "2.4 Stammdaten Kalkulation"
         ],
-        "chunk_id": 428,
-        "document_name": "planung",
-        "token_count": 69,
-        "pages": [
-          214
-        ]
+        "token_count": 24
       }
     },
     {
-      "query": "Worin liegt der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
-      "chunk_id": "7a0af86f9ce6cd847861bd9c2491b348",
-      "text": "Sind in dem Kontrakt ein oder mehrere Positionen eingetragen, kann ein Produktionsauftrag generiert werden. Produktionsaufträge werden generiert, wenn Teile der Menge eines Artikels im Kontrakt oder die gesamte Menge gefertigt werden soll. Gründe für Anlegen eines Produktionsauftrages mit anschließender Fertigung der entsprechenden Menge: - Kunde erteilt einen Abrufauftrag für bestimmte Mengen eines Artikels in einem Kontrakt - der Anwenderbetrieb möchte bestimmte Mengen eines Artikels auf Lager produzieren Der Kunde bekommt von den Produktionsaufträgen nichts mit. Diese werden intern erstellt und abgewickelt. Bei der Bearbeitung von Produktionsaufträgen gibt es in Abhängigkeit von der im Kontrakt eingesetzten Kalkulationsvariante (Variantenkalkulation bzw. Positionskalkulation) unterschiedliche Vorgehensweisen.",
-      "score": 0.8538006544113159,
-      "metadata": {
-        "chunk_text_class": "Process description",
-        "token_count": 168,
-        "mixed_combo": "list_item + paragraph",
-        "heading_path": [
-          "5 Produktionsauftrag",
-          "5.1 Allgemein"
-        ],
-        "pages": [
-          11
-        ],
-        "document_name": "auf_kpa",
-        "chunk_id": 16,
-        "chunk_type": "mixed"
-      }
-    },
-    {
-      "query": "Worin liegt der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
-      "chunk_id": "8c5df20e3eaa54363e1b29abda97d43f",
-      "text": "Für die Fertigung werden aus den Daten des Kontraktes Produktionsaufträge angelegt. In einem Produktionsauftrag werden grundsätzlich nur die Artikel eines Kontraktes gefertigt. Dabei können jedoch nur einzelne Artikel des Kontraktes und/oder Teilmengen gefertigt werden. Arbeitspapiere werden über den Produktionsauftrag erstellt. Die Fertigwarenbuchung erfolgt auf den Produktionsauftrag.",
-      "score": 0.8536174893379211,
+      "query": "Sag mir, was mit Stamm Lohn gemeint ist (auf Englisch bitte)",
+      "chunk_id": "ef869c112c18855114e52dd5aee69e59",
+      "text": "Siehe Beschreibung in Workshop „Workshop Stammdaten Kostenstellen, Kalkulation“.",
+      "score": 0.845734179019928,
       "metadata": {
         "pages": [
-          6
+          5
         ],
-        "chunk_id": 7,
-        "chunk_type": "paragraph",
-        "document_name": "auf_kpa",
-        "token_count": 74,
         "mixed_combo": "paragraph",
-        "chunk_text_class": "Process description",
         "heading_path": [
-          "2 Allgemeines",
-          "2.2 Warum KPA",
-          "Kontrakt",
-          "Produktionsauftrag"
-        ]
-      }
-    },
-    {
-      "query": "Was ist der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
-      "chunk_id": "5dae28026f3e6c66e80ea4765892a679",
-      "text": "Kundenauftrag für einen oder mehrere Artikel. In einer Position eines Kontraktes werden festgelegt: - Die Leistung, also der Artikel, der geliefert wird - Die zu liefernde Gesamtmenge des Artikels - Der Preis zu welchem der Artikel geliefert wird",
-      "score": 0.8515213131904602,
-      "metadata": {
-        "document_name": "auf_kpa",
-        "heading_path": [
-          "2 Allgemeines",
-          "2.2 Warum KPA",
-          "Kontrakt"
+          "3 Stammdaten",
+          "3.2 Tabellen Kostenstellen"
         ],
-        "chunk_text_class": "Process description",
-        "mixed_combo": "list_item + paragraph",
-        "token_count": 52,
-        "chunk_id": 6,
-        "pages": [
-          6
-        ],
-        "chunk_type": "mixed"
-      }
-    },
-    {
-      "query": "Worin liegt der Unterschied zwischen einem Verkaufsauftrag und einem Produktionsauftrag?",
-      "chunk_id": "5dae28026f3e6c66e80ea4765892a679",
-      "text": "Kundenauftrag für einen oder mehrere Artikel. In einer Position eines Kontraktes werden festgelegt: - Die Leistung, also der Artikel, der geliefert wird - Die zu liefernde Gesamtmenge des Artikels - Der Preis zu welchem der Artikel geliefert wird",
-      "score": 0.8510866761207581,
-      "metadata": {
-        "heading_path": [
-          "2 Allgemeines",
-          "2.2 Warum KPA",
-          "Kontrakt"
-        ],
-        "chunk_id": 6,
-        "token_count": 52,
-        "chunk_text_class": "Process description",
-        "document_name": "auf_kpa",
-        "pages": [
-          6
-        ],
-        "chunk_type": "mixed",
-        "mixed_combo": "list_item + paragraph"
+        "chunk_text_class": "Other",
+        "token_count": 16,
+        "document_name": "leist_analysen",
+        "chunk_type": "paragraph",
+        "chunk_id": 6
       }
     }
   ]

@@ -99,8 +99,22 @@ def detect_language(text: str) -> str:
         return "en"
 
 
+async def translate_to_german(text: str) -> str:
+    """
+    Translate arbitrary user text into German for retrieval against a German KB.
+    Returns ONLY the translation.
+    """
+    prompt = (
+        "Translate the following text into German. "
+        "Return ONLY the translation, with no explanations or quotes.\n\n"
+        f"{text}"
+    )
+    translation = await llm.acomplete(prompt)
+    return translation.strip()
+
+
 # ------------------------------------------------------------
-# Query expansion (language-agnostic)
+# Query expansion (language-agnostic, but fed with DB-language query)
 # ------------------------------------------------------------
 
 async def expand_query(base_query: str, k: int) -> List[str]:
@@ -143,7 +157,8 @@ async def retrieve_for_single_query(
 ) -> List[Dict[str, Any]]:
     """
     Embed a single query and search in the Vector DB.
-    Multilingual embeddings allow cross-lingual retrieval.
+    Multilingual embeddings allow cross-lingual retrieval,
+    but we now prefer DB-language queries (German) for better alignment.
     """
     print("  [retrieve_for_single_query] QUERY:", query)
 
@@ -229,11 +244,9 @@ def build_context_prompt(query: str, chunks: List[Dict[str, Any]], user_lang: st
     prompt = (
         "You are a retrieval-augmented assistant.\n"
         "Use ONLY the context below to answer the question.\n"
-
         "If the retrieved context is empty or below a similarity threshold, ask the user for clarification instead of answering.\n"
         "If the query contains a domain-specific term that does not appear in the knowledge base, ask the user whether they meant one of the known terms."
         "If the query contains a term semantically close to known domain terms but not identical, ask the user to confirm which one they meant."
-
         "If after all of the above the answer is still not in the context, say you don't know.\n"
         f"IMPORTANT: The answer MUST be written in the same language as the user's question ({user_lang}).\n"
         "Do NOT translate the question. Do NOT answer in English unless the user asked in English.\n\n"
@@ -281,10 +294,15 @@ async def query_rag(request: QueryRequest) -> QueryResponse:
     t1 = time.perf_counter()
     print(f"[step] Language detection: {t1 - t0:.4f}s → {input_lang}")
 
-    # 2) Use query as-is for retrieval (multilingual embeddings)
+    # 2) Prepare query for DB retrieval
+    #    KB content is German → translate non-German queries to German for retrieval.
     query_for_db = request.query
+    if input_lang != "de":
+        print("[info] Translating query to German for retrieval against German KB...")
+        query_for_db = await translate_to_german(request.query)
+        print("       Translated query for DB:", query_for_db)
 
-    # 3) Query expansion
+    # 3) Query expansion (in DB language: German)
     t2 = time.perf_counter()
     expanded_queries = await expand_query(
         base_query=query_for_db,
@@ -292,7 +310,7 @@ async def query_rag(request: QueryRequest) -> QueryResponse:
     )
     t3 = time.perf_counter()
     print(f"[step] Query expansion: {t3 - t2:.4f}s (k={request.expansion_k})")
-    print("  Expanded queries:")
+    print("  Expanded queries (DB language):")
     for q in expanded_queries:
         print("   -", q)
 
@@ -315,8 +333,9 @@ async def query_rag(request: QueryRequest) -> QueryResponse:
     print(f"[step] Reranking: {t7 - t6:.4f}s")
 
     # 6) Build prompt and call LLM
+    #    QUESTION stays in original user language; CONTEXT is German.
     t8 = time.perf_counter()
-    prompt = build_context_prompt(query_for_db, reranked_chunks, input_lang)
+    prompt = build_context_prompt(request.query, reranked_chunks, input_lang)
     t9 = time.perf_counter()
     print(f"[step] Prompt construction: {t9 - t8:.4f}s")
 

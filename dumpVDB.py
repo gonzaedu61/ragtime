@@ -1,28 +1,38 @@
 from VectorDB_Factory.VectorDB_Factory import create_vectordb
 
 import os
+import argparse
 from dotenv import load_dotenv
 load_dotenv()
+
+# CLI arguments
+parser = argparse.ArgumentParser(description="Dump records from the vector DB")
+parser.add_argument("--top", type=int, default=None,
+                    help="Number of top items to dump (default: all)")
+parser.add_argument("--collection", type=str, default="Structural_Chunks",
+                    help="Name of the VDB collection to dump from")
+args = parser.parse_args()
 
 # Config Constants
 KB_NAME = os.getenv("KB_NAME")
 VECTOR_DB_NAME = "chroma"
-COLLECTION_NAME="Structural_Chunks"
+COLLECTION_NAME = args.collection
 VDB_PATH = f"./DATA/KBs/{KB_NAME}/5_Vector_DB"
 
+print(f"📦 Dumping from collection: {COLLECTION_NAME}")
 
-# Initialize vector DB backend (Chroma or others)
+# Initialize vector DB backend
 vectordb = create_vectordb(
     backend=VECTOR_DB_NAME,
     collection_name=COLLECTION_NAME,
     persist_dir=VDB_PATH
 )
 
-# Dump records from vector DB
-all_docs = vectordb.get()
+# Dump records
+all_docs = vectordb.get(limit=args.top)
+
 for i in range(len(all_docs["ids"])):
     print("\n--- Document", i+1, "---")
     print("ID:", all_docs["ids"][i])
     print("Metadata:", all_docs["metadatas"][i])
     print("Text:", all_docs["documents"][i])
-

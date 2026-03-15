@@ -149,103 +149,18 @@ class ChromaBackend:
             "metadata": result["metadatas"][0],
         }
     
-    def search(self, embedding, top_n=30, filter_ids=None):
-        """
-        Extended search() supporting optional ID-restricted search.
-        If filter_ids is None → normal Chroma vector search (fast).
-        If filter_ids is provided → manual similarity search over those IDs.
-        """
-
-        # ------------------------------------------------------------
-        # FAST PATH: Normal vector search
-        # ------------------------------------------------------------
-        if filter_ids is None:
-            result = self.query(query_embeddings=[embedding], n_results=top_n)
-            return [
-                {
-                    "chunk_id": result["ids"][0][i],
-                    "text": result["documents"][0][i],
-                    "score": 1 - result["distances"][0][i],
-                    "metadata": result["metadatas"][0][i],
-                }
-                for i in range(len(result["ids"][0]))
-            ]
-
-        # ------------------------------------------------------------
-        # FILTERED PATH
-        # ------------------------------------------------------------
-        import numpy as np
-
-        # 1) Deduplicate filter_ids while preserving order
-        seen = set()
-        unique_ids = []
-        for cid in filter_ids:
-            if cid not in seen:
-                seen.add(cid)
-                unique_ids.append(cid)
-
-        # 2) Fetch embeddings for all requested IDs
-        embeddings = []
-        metadatas = []
-        texts = []
-        valid_ids = []
-        seen = set()  # dedupe again in case Chroma returns duplicates
-
-        for cid in unique_ids:
-            if cid in seen:
-                continue
-            seen.add(cid)
-
-            item = self.collection.get(
-                ids=[cid],
-                include=["embeddings", "documents", "metadatas"]
-            )
-
-            emb = item.get("embeddings")
-            docs = item.get("documents")
-            meta = item.get("metadatas")
-
-
-            valid_ids.append(cid)
-            embeddings.append(np.array(emb[0], dtype=np.float32))
-            texts.append(docs[0])
-            metadatas.append(meta[0])
-
-        if not embeddings:
-            return []
-
-        # 3) Compute cosine similarity manually
-        query_vec = np.array(embedding, dtype=np.float32)
-        chunk_matrix = np.vstack(embeddings)
-
-        q_norm = query_vec / (np.linalg.norm(query_vec) + 1e-9)
-        c_norm = chunk_matrix / (np.linalg.norm(chunk_matrix, axis=1, keepdims=True) + 1e-9)
-
-        sims = np.dot(c_norm, q_norm)
-
-        # 4) Sort by similarity
-        top_idx = np.argsort(sims)[::-1][:top_n]
-
-        # 5) Build final results with deduplication
-        results = []
-        seen_ids = set()
-
-        for i in top_idx:
-            cid = valid_ids[i]
-            if cid in seen_ids:
-                continue
-            seen_ids.add(cid)
-
-            results.append(
-                {
-                    "chunk_id": cid,
-                    "text": texts[i],
-                    "score": float(sims[i]),
-                    "metadata": metadatas[i],
-                }
-            )
-
-        return results
+    def search(self, embedding, top_n=30):
+        result = self.query(query_embeddings=[embedding], n_results=top_n)
+        # Chroma returns lists inside lists → unwrap
+        return [
+            {
+                "chunk_id": result["ids"][0][i],
+                "text": result["documents"][0][i],
+                "score": 1 - result["distances"][0][i],  # convert distance to similarity
+                "metadata": result["metadatas"][0][i],
+            }
+            for i in range(len(result["ids"][0]))
+        ]
     
 
     def all_chunks(self):

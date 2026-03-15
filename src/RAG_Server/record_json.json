@@ -1,0 +1,23 @@
+{
+    "cluster_id": "0.0.0.6.1.0.1", 
+    "label": "...", 
+    "summary": "...", 
+    "keywords": ["..."], 
+    "metadata": {
+        "cluster_id": "0.0.0.6.1.0.1", 
+        "is_document_cluster": false, 
+        "source_documents": [
+            {"document_name": "...", "tokens_percentage": 100.0}
+        ],
+        "text_class": [
+            {"class": "...", "tokens_percentage": 42.19}, 
+            {"class": "...", "tokens_percentage": 10.12}, 
+            {"class": "...", "tokens_percentage": 47.7}
+        ], 
+        "is_leaf": true, 
+        "depth": 6, 
+        "drift": {"overlap_distance": 0.5, "semantic_shift": 0.0175112563521459},
+        "semantic_lineage_path": ["..."], 
+        "semantic_heading_path": ["..."]
+    }
+}

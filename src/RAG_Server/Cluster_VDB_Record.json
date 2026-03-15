@@ -1,0 +1,10 @@
+{
+    "ID": "0.0.0.6.1.0.1",
+    "Metadata": {
+        "cluster_id": "0.0.0.6.1.0.1",
+        "record_json": "...",
+        "cluster_chunks": ["ed43d9ab67b4877b0704cb8ed4c42427", "b70471bf549a3b2ba2182d7d39f7b1f5", "c7139b86212858b5bbe2db55d7c9f2f5", "1f33d0a7430ade109656574229ba3b09", "3b95b07ee48eadad68d0ce8afac6ea07", "868b608c1e60aa8f10b410b1e95ffefd", "4aefe3b84fcf0f3b7104425251d6fd6c", "f7c361eee7418ef6c578f0325e8a76c8", "d7d3dc371ed6f9cdbc6a471111182e14", "f19a4e76e21fb458c8a22cc7c314edc1"], 
+        "leaf_chunks": ["b70471bf549a3b2ba2182d7d39f7b1f5", "d7d3dc371ed6f9cdbc6a471111182e14", "c2fd06eaa464ec52c810d5ad5603fab6", "1f33d0a7430ade109656574229ba3b09", "c3172218213ed4b9c06a956105c18eea", "f19a4e76e21fb458c8a22cc7c314edc1", "868b608c1e60aa8f10b410b1e95ffefd", "ed43d9ab67b4877b0704cb8ed4c42427"]
+    },
+    "Text": "..."
+}

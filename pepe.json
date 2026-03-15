@@ -1,187 +1,444 @@
 {
-  "answer": "I’m sorry, but the provided context only refers to “Workshop ‘stamm_lohn’” without defining the term. Could you please provide more details or clarify what you mean by “Stamm Lohn”?",
+  "answer": "Based on the provided context, the Lohnarten actually referenced are:\n\n• Lohnart 251 – covers the period 14:00–15:00  \n• Lohnart 252 – covers the period 15:30–16:00  \n• Lohnart 21  – applied to the first two overtime hours  \n• Lohnart 22  – applied to the next (up to five) overtime hours",
   "language": "en",
   "used_queries": [
-    "Sag mir, was mit Stamm Lohn gemeint ist (auf Englisch bitte)",
-    "Bitte erkläre, was mit „Stamm Lohn“ gemeint ist, und gib die Antwort auf Englisch.",
-    "Was versteht man unter „Stamm Lohn“? Bitte antworte auf Englisch."
+    "Welche verschiedenen Lohnarten gibt es?",
+    "Welche Lohnformen gibt es?",
+    "Welche Arten von Lohn werden unterschieden?"
   ],
   "retrieved_chunks": [
     {
-      "query": "Was versteht man unter „Stamm Lohn“? Bitte antworte auf Englisch.",
-      "chunk_id": "8408712c635dadba31d53c4d8af9da59",
-      "text": "Siehe Workshop „stamm_lohn“.",
-      "score": 0.9022913575172424,
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "a78fc54b83937548b379480d9ec97fa4",
+      "text": "0 Lohnart wird unabhängig vom Wert übergeben. 1 Lohnart wird nicht übergeben, wenn der Wert negativ ist.",
+      "score": 0.8518679141998291,
       "metadata": {
-        "mixed_combo": "paragraph",
-        "token_count": 9,
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_kalk\\page_94_block_21.jpg"
-        ],
-        "pages": [
-          94
-        ],
-        "document_name": "stamm_kalk",
-        "chunk_text_class": "Other",
-        "heading_path": [
-          "16 Tabellen Kostenstellen",
-          "16.1 Lohnartenermittlung"
-        ],
-        "chunk_id": 151,
-        "chunk_type": "paragraph"
-      }
-    },
-    {
-      "query": "Bitte erkläre, was mit „Stamm Lohn“ gemeint ist, und gib die Antwort auf Englisch.",
-      "chunk_id": "8408712c635dadba31d53c4d8af9da59",
-      "text": "Siehe Workshop „stamm_lohn“.",
-      "score": 0.8943490982055664,
-      "metadata": {
-        "document_name": "stamm_kalk",
-        "mixed_combo": "paragraph",
-        "chunk_text_class": "Other",
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_kalk\\page_94_block_21.jpg"
-        ],
-        "heading_path": [
-          "16 Tabellen Kostenstellen",
-          "16.1 Lohnartenermittlung"
-        ],
-        "chunk_type": "paragraph",
-        "pages": [
-          94
-        ],
-        "token_count": 9,
-        "chunk_id": 151
-      }
-    },
-    {
-      "query": "Sag mir, was mit Stamm Lohn gemeint ist (auf Englisch bitte)",
-      "chunk_id": "8408712c635dadba31d53c4d8af9da59",
-      "text": "Siehe Workshop „stamm_lohn“.",
-      "score": 0.886114776134491,
-      "metadata": {
-        "chunk_text_class": "Other",
-        "document_name": "stamm_kalk",
-        "pages": [
-          94
-        ],
-        "chunk_type": "paragraph",
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_kalk\\page_94_block_21.jpg"
-        ],
+        "token_count": 27,
+        "chunk_id": 15,
         "mixed_combo": "paragraph",
         "heading_path": [
-          "16 Tabellen Kostenstellen",
-          "16.1 Lohnartenermittlung"
+          "2 Stammdaten",
+          "2.5 Lohnarten",
+          "Negativlohnarten"
         ],
-        "chunk_id": 151,
-        "token_count": 9
-      }
-    },
-    {
-      "query": "Was versteht man unter „Stamm Lohn“? Bitte antworte auf Englisch.",
-      "chunk_id": "2805caae396dd1ad773ead0dfa20ee06",
-      "text": "Dateiname lohn.pdf Beschreibung Lohnbearbeitung",
-      "score": 0.8498506546020508,
-      "metadata": {
-        "chunk_type": "paragraph",
-        "document_name": "ws_info",
-        "heading_path": [
-          "8 Lohn",
-          "8.1 Lohn"
+        "chunk_text_class": "Requirements specification",
+        "document_name": "lohn",
+        "image_paths": [
+          "..\\3_Extracted_Images\\lohn\\page_13_block_18.jpg"
         ],
         "pages": [
           13
         ],
-        "chunk_id": 36,
-        "token_count": 10,
+        "chunk_type": "paragraph"
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "ace62b23b351153a3e8f42034f308549",
+      "text": "14,00 – 15,00 14:00 – 15:00 Uhr Lohnart 251 15,30 – 16,00 15Uhr30Min – 16Uhr Lohnart 252",
+      "score": 0.8503931760787964,
+      "metadata": {
         "mixed_combo": "paragraph",
+        "token_count": 48,
+        "chunk_id": 39,
+        "heading_path": [
+          "2 Stammdaten",
+          "2.9 Lohnartentabellen",
+          "2.9.3 Nachtzuschläge",
+          "von/bis Zeit Funktion"
+        ],
+        "pages": [
+          27
+        ],
+        "chunk_type": "paragraph",
+        "document_name": "lohn",
         "chunk_text_class": "Other"
       }
     },
     {
-      "query": "Bitte erkläre, was mit „Stamm Lohn“ gemeint ist, und gib die Antwort auf Englisch.",
-      "chunk_id": "be9f08ee584075918c264d3b99eb4985",
-      "text": "Dateiname stamm_kalk.pdf Beschreibung Stammdaten Kalkulation Kostenstelle, Arbeitsgang, Leistungskatalog, …",
-      "score": 0.8486282229423523,
-      "metadata": {
-        "mixed_combo": "paragraph",
-        "heading_path": [
-          "2 Grundlagen",
-          "2.4 Stammdaten Kalkulation"
-        ],
-        "chunk_id": 5,
-        "token_count": 24,
-        "pages": [
-          6
-        ],
-        "chunk_type": "paragraph",
-        "chunk_text_class": "Other",
-        "document_name": "ws_info"
-      }
-    },
-    {
-      "query": "Sag mir, was mit Stamm Lohn gemeint ist (auf Englisch bitte)",
-      "chunk_id": "36653fe0343ff5dd68ce97108e7104fb",
-      "text": "Siehe Workshop „Stammdaten Sonstige“ (stamm_sonst.pdf)",
-      "score": 0.84779953956604,
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "37e7c1837e7bf2dca19d18e439eb8b7b",
+      "text": "Die Ermittlung der Lohnarten wird über die Lohnartentabellen und die Lohnregeln (Berechnungen) vorgenommen. Die Lohnartentabellen werden im Programm \"Tabellen Kostenstellen\" unter Punkt \"Lohnermittlung\" im System hinterlegt. Über die Kombination Kostenstelle, Tagesart und Schicht können unterschiedliche Regelwerke für die Erstellung der Lohnarten hinterlegt werden. Dabei besteht ein Regelwerk aus folgenden Tabellenarten.",
+      "score": 0.848320722579956,
       "metadata": {
         "heading_path": [
-          "4 Stammdaten",
-          "4.4 BDE-Terminalstamm I"
-        ],
-        "chunk_text_class": "Other",
-        "token_count": 19,
-        "document_name": "leist_bde",
-        "pages": [
-          15
+          "2 Stammdaten",
+          "2.9 Lohnartentabellen"
         ],
         "chunk_type": "paragraph",
-        "chunk_id": 32,
+        "document_name": "lohn",
+        "pages": [
+          24
+        ],
+        "chunk_text_class": "Process description",
+        "image_paths": [
+          "..\\3_Extracted_Images\\lohn\\page_24_block_10.jpg",
+          "..\\3_Extracted_Images\\lohn\\page_24_block_11.jpg",
+          "..\\3_Extracted_Images\\lohn\\page_24_block_12.jpg"
+        ],
+        "token_count": 95,
+        "chunk_id": 34,
         "mixed_combo": "paragraph"
       }
     },
     {
-      "query": "Was versteht man unter „Stamm Lohn“? Bitte antworte auf Englisch.",
-      "chunk_id": "be9f08ee584075918c264d3b99eb4985",
-      "text": "Dateiname stamm_kalk.pdf Beschreibung Stammdaten Kalkulation Kostenstelle, Arbeitsgang, Leistungskatalog, …",
-      "score": 0.8457455635070801,
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "e23d768f1daaedce27c762dbb0b60f85",
+      "text": "Mit diesem Programm werden die Pseudolohnarten in echte Lohnarten (Lohnartenstamm: echte Lohnart) umgesetzt. Es werden keine Zusatzverbuchungen durchgeführt. Es können maximal 450 Lohnarten bearbeitet werden, die einen Eintrag im Feld echte Lohnart (Lohnartenstamm) aufweisen. bis Datum Es werden alle vorhandenen Pseudolohnarten in echte Lohnarten getauscht, bis einschließlich diesem Datum.",
+      "score": 0.8465181589126587,
       "metadata": {
-        "pages": [
-          6
+        "image_paths": [
+          "..\\3_Extracted_Images\\lohn\\page_40_block_9.jpg"
         ],
-        "document_name": "ws_info",
-        "chunk_id": 5,
-        "mixed_combo": "paragraph",
-        "chunk_text_class": "Other",
         "chunk_type": "paragraph",
+        "mixed_combo": "paragraph",
         "heading_path": [
-          "2 Grundlagen",
-          "2.4 Stammdaten Kalkulation"
+          "6 Lohnaufbereitung",
+          "6.2 Pseudolohnarten"
         ],
-        "token_count": 24
+        "chunk_id": 64,
+        "document_name": "lohn",
+        "chunk_text_class": "Application description",
+        "pages": [
+          40
+        ],
+        "token_count": 96
       }
     },
     {
-      "query": "Sag mir, was mit Stamm Lohn gemeint ist (auf Englisch bitte)",
-      "chunk_id": "ef869c112c18855114e52dd5aee69e59",
-      "text": "Siehe Beschreibung in Workshop „Workshop Stammdaten Kostenstellen, Kalkulation“.",
-      "score": 0.845734179019928,
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "9106e93871bdb13c62933a7caa05b410",
+      "text": "Tagesarten werden benötigt, um unterschiedliche Lohnartentabellen in Abhängigkeit von der Tagesart im System hinterlegen zu können. → Tabellen Kostenstellen, Lohnermittlung",
+      "score": 0.8445919752120972,
       "metadata": {
+        "mixed_combo": "paragraph",
+        "image_paths": [
+          "..\\3_Extracted_Images\\lohn\\page_5_block_11.jpg"
+        ],
+        "document_name": "lohn",
+        "heading_path": [
+          "2 Stammdaten",
+          "2.1 Tagesarten"
+        ],
+        "chunk_text_class": "Requirements specification",
+        "chunk_id": 4,
+        "chunk_type": "paragraph",
         "pages": [
           5
         ],
+        "token_count": 39
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "b541575865c2bf4206df6464fa4a7a35",
+      "text": "nein Lohnarten werden nicht neu ermittelt, wenn Daten des Tagszettelkopfes (Schicht, von/bis Zeit) und/oder Leistungspositionen geändert werden. ja Lohnarten werden jedesmal neu ermittelt, wenn Daten des Tagszettelkopfes (Schicht, von/bis Zeit) und/oder Leistungspositionen geändert werden.",
+      "score": 0.8432762622833252,
+      "metadata": {
         "mixed_combo": "paragraph",
+        "token_count": 72,
         "heading_path": [
-          "3 Stammdaten",
-          "3.2 Tabellen Kostenstellen"
+          "3 Parameter",
+          "3.1 Tageszettelerfassung",
+          "Abgleich Leistung-Lohn",
+          "Abbruch TZ (Neu) löschen TZ und Lohndaten",
+          "Lohnermittlung bei Änderung Tageszettel"
+        ],
+        "document_name": "lohn",
+        "chunk_id": 43,
+        "pages": [
+          28
+        ],
+        "chunk_type": "paragraph",
+        "chunk_text_class": "Requirements specification"
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "10b120f4d3896d54cd7b466f36b87775",
+      "text": "Lohnarten Übername der von/bis Zeit aus dem Schichtplan, Generieren der Lohnarten auf der Basis der Lohnartentabellen und der Zusatzfunktionen laut Par-1 und Par- 2.",
+      "score": 0.8418705463409424,
+      "metadata": {
+        "heading_path": [
+          "3 Parameter",
+          "3.2 Lohnregel",
+          "3.2.2 Aufruf Lohnregeln in Programmen",
+          "3.2.2.3 Schicht in Lohnart",
+          "Ermittlung der Lohnarten über Schichtplan und Lohnartenstamm",
+          "Ermittlung der Lohnarten über Schichtplan inkl. von/bis Zeiten, Lohnartentabellen und Lohnregeln"
+        ],
+        "chunk_text_class": "Process description",
+        "mixed_combo": "table",
+        "chunk_id": 53,
+        "document_name": "lohn",
+        "token_count": 47,
+        "pages": [
+          32
+        ],
+        "chunk_type": "table"
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "443033fbc66fe81fe991582638dca467",
+      "text": "Neuermittlung der Lohnarten auf der Basis der Kopfdaten und der aktuellen Stammdaten / Parameter. Die Lohnarten werden gelöscht (auch manuell erfasste Lohnarten) und über die Lohnartentabellen (und ggf. Lohnregeln) neu ermittelt !",
+      "score": 0.8403412699699402,
+      "metadata": {
+        "chunk_id": 59,
+        "chunk_text_class": "Process description",
+        "pages": [
+          36
+        ],
+        "heading_path": [
+          "4 Lohnerfassung",
+          "4.2 Lohnartenbearbeitung",
+          "4.2.3 Lohnermittlung"
+        ],
+        "mixed_combo": "paragraph",
+        "document_name": "lohn",
+        "chunk_type": "paragraph",
+        "token_count": 63,
+        "image_paths": [
+          "..\\3_Extracted_Images\\lohn\\page_36_block_12.jpg"
+        ]
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "fbbdcc968a8b8b415c5074da32716f13",
+      "text": "Für die Lohnartenermittlung in Abhängigkeit von der Tagesart wird die Angabe unter „Tagesart“ verwendet.",
+      "score": 0.8399950861930847,
+      "metadata": {
+        "pages": [
+          26
+        ],
+        "chunk_type": "paragraph",
+        "chunk_id": 63,
+        "heading_path": [
+          "3 Betriebskalender",
+          "3.1 Einsatz",
+          "3.1.4 Lohn"
+        ],
+        "document_name": "stamm_sonst",
+        "token_count": 27,
+        "chunk_text_class": "Usage instructions",
+        "mixed_combo": "paragraph"
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "8408712c635dadba31d53c4d8af9da59",
+      "text": "Siehe Workshop „stamm_lohn“.",
+      "score": 0.8347840309143066,
+      "metadata": {
+        "pages": [
+          94
         ],
         "chunk_text_class": "Other",
-        "token_count": 16,
-        "document_name": "leist_analysen",
         "chunk_type": "paragraph",
-        "chunk_id": 6
+        "image_paths": [
+          "..\\3_Extracted_Images\\stamm_kalk\\page_94_block_21.jpg"
+        ],
+        "mixed_combo": "paragraph",
+        "heading_path": [
+          "16 Tabellen Kostenstellen",
+          "16.1 Lohnartenermittlung"
+        ],
+        "chunk_id": 151,
+        "token_count": 9,
+        "document_name": "stamm_kalk"
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "e64fc5641a28d9ecfb5076a8ce335e7e",
+      "text": "Wert je Lohnart auf der Basis der Lohnartentabellen und der Zusatzfunktionen laut Par-1 und Par- 2. Achtung Im Mandantenstamm muss der Parameter \"Lohn\" im Mandantenstamm (Parametersatz 3) gesetzt sein (mindestens \"00\").",
+      "score": 0.8338120579719543,
+      "metadata": {
+        "chunk_id": 54,
+        "heading_path": [
+          "3 Parameter",
+          "3.2 Lohnregel",
+          "3.2.2 Aufruf Lohnregeln in Programmen",
+          "3.2.2.3 Schicht in Lohnart",
+          "Ermittlung der Lohnarten über Schichtplan und Lohnartenstamm",
+          "Ermittlung der Lohnarten über Schichtplan inkl. von/bis Zeiten, Lohnartentabellen und Lohnregeln"
+        ],
+        "pages": [
+          32
+        ],
+        "token_count": 64,
+        "image_paths": [
+          "..\\3_Extracted_Images\\lohn\\page_32_block_21.jpg"
+        ],
+        "chunk_text_class": "Usage instructions",
+        "mixed_combo": "paragraph",
+        "document_name": "lohn",
+        "chunk_type": "paragraph"
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "6a588904109233302edc687e824a9c66",
+      "text": "Anzeige und Bearbeitung der Lohnarten-Maske (weitere Informationen siehe Workshop „Lohn“).",
+      "score": 0.8335553407669067,
+      "metadata": {
+        "token_count": 22,
+        "document_name": "leist_tz",
+        "mixed_combo": "paragraph",
+        "chunk_id": 24,
+        "pages": [
+          10
+        ],
+        "heading_path": [
+          "3 Tageszettelerfassung",
+          "3.3 Tageszettelpositionen",
+          "3.3.1 Sonderfunktionen",
+          "3.3.1.2 Lohnarten"
+        ],
+        "chunk_text_class": "Process description",
+        "chunk_type": "paragraph"
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "aa464ce8bc415bdbb63474927744438f",
+      "text": "Beim Aufruf eines vorhandenen Datensatzes mit der Funktion \"Ändern\" werden die Lohnarten nicht neu ermittelt . Dies ist auch nicht der Fall, wenn Daten im Kopf (Schicht oder von/bis Zeit) geändert werden. Die Lohnarten können/müssen manuell bearbeitet werden.",
+      "score": 0.8334783315658569,
+      "metadata": {
+        "chunk_text_class": "Process description",
+        "heading_path": [
+          "4 Lohnerfassung",
+          "4.2 Lohnartenbearbeitung",
+          "4.2.2 Änderung"
+        ],
+        "token_count": 64,
+        "image_paths": [
+          "..\\3_Extracted_Images\\lohn\\page_36_block_11.jpg"
+        ],
+        "pages": [
+          36
+        ],
+        "chunk_id": 58,
+        "mixed_combo": "paragraph",
+        "chunk_type": "paragraph",
+        "document_name": "lohn"
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "1121a945dc3aab02f3ad8465f08f4642",
+      "text": "Änderung Im Änderungsdienst werden die Lohnarten nicht neu ermittelt, wird also Schicht, von/bis Zeit geändert hat dies keine Auswirkung auf die bereits ermittelten Lohnarten. Die Lohnarten können dann, nur manuell über den Button „Lohnart F10“ geändert werden oder über das Programm Lohnartenbearbeitung.",
+      "score": 0.832770824432373,
+      "metadata": {
+        "heading_path": [
+          "4 Lohnerfassung",
+          "4.1 Tageszettel"
+        ],
+        "mixed_combo": "paragraph",
+        "chunk_text_class": "Usage instructions",
+        "chunk_id": 56,
+        "document_name": "lohn",
+        "pages": [
+          34
+        ],
+        "token_count": 74,
+        "chunk_type": "paragraph"
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "4dfa159858b2a0fba44e251aa4a7a5a4",
+      "text": "2,00 Die ersten beiden Überstunden werden mit Lohnart 21 abgestellt. 5,00 Die verbleibenden Überstunden werden mit Lohnart 22 abgestellt, jedoch nur bis Maximal 5 verbleibende Überstunden. Hinweis Weitere Überstunden (>7) werden nicht berücksichtigt und gehen bei der Lohnartenermittlung verloren. Beim Eintrag der Überstunden muss daher unbedingt darauf geachtet werden, dass ein Überschreiten der Überstundenvorgabe ausgeschlossen ist!!!",
+      "score": 0.8316683769226074,
+      "metadata": {
+        "token_count": 101,
+        "document_name": "lohn",
+        "pages": [
+          26
+        ],
+        "heading_path": [
+          "2 Stammdaten",
+          "2.9 Lohnartentabellen",
+          "2.9.2 Überstunden",
+          "Wert Funktion"
+        ],
+        "chunk_id": 37,
+        "chunk_type": "paragraph",
+        "mixed_combo": "paragraph",
+        "chunk_text_class": "Usage instructions"
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "5c2a111083ac597a20a095add643864d",
+      "text": "Neuermittlung der Lohnarten für alle Erfassungen laut „Suche“ auf der Basis der jeweiligen Kopfdaten und der aktuellen Stammdaten / Parameter. Nach Eingabe und Bestätigung der „Suche“ erfolgt Sicherheitsabfrage, die bestätigt werden muss. Die Lohnarten werden gelöscht (auch manuell erfasste Lohnarten) und über die Lohnartentabellen (und ggf. Lohnregeln) neu ermittelt !",
+      "score": 0.8315616846084595,
+      "metadata": {
+        "image_paths": [
+          "..\\3_Extracted_Images\\lohn\\page_37_block_11.jpg",
+          "..\\3_Extracted_Images\\lohn\\page_37_block_12.jpg"
+        ],
+        "chunk_text_class": "Process description",
+        "mixed_combo": "paragraph",
+        "token_count": 95,
+        "document_name": "lohn",
+        "chunk_type": "paragraph",
+        "heading_path": [
+          "4 Lohnerfassung",
+          "4.2 Lohnartenbearbeitung",
+          "4.2.4 Lohnermittlung über Suche"
+        ],
+        "pages": [
+          37
+        ],
+        "chunk_id": 60
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "971c10a3f94fee18024fece6d6b41174",
+      "text": "von/bis Kostenstelle Es besteht die Möglichkeit die Liste über die Angabe von/bis Lohnkostenstelle (z.B. nur Aushilfen, Lohnempfänger) einzugrenzen. von/bis Personalnummer Es besteht die Möglichkeit die Liste über die Angabe von/bis Personalnummer einzugrenzen. von/bis Lohnart Es besteht die Möglichkeit die Liste über die Angabe von/bis Lohnart einzugrenzen. von/bis Datum Es besteht die Möglichkeit die Liste über die Angabe von/bis Datum einzugrenzen.",
+      "score": 0.8297178745269775,
+      "metadata": {
+        "chunk_id": 62,
+        "chunk_type": "paragraph",
+        "heading_path": [
+          "5 Auswertungen",
+          "5.1 Liste Lohnarten"
+        ],
+        "chunk_text_class": "Usage instructions",
+        "mixed_combo": "paragraph",
+        "image_paths": [
+          "..\\3_Extracted_Images\\lohn\\page_38_block_10.jpg"
+        ],
+        "pages": [
+          38
+        ],
+        "document_name": "lohn",
+        "token_count": 117
+      }
+    },
+    {
+      "query": "Welche verschiedenen Lohnarten gibt es?",
+      "chunk_id": "b6585c1b333daf0f3743b5cdada9b746",
+      "text": "Innerhalb der Lohnregeln kann auf folgende Informationen zugegriffen werden:",
+      "score": 0.8290139436721802,
+      "metadata": {
+        "chunk_type": "paragraph",
+        "document_name": "lohn",
+        "pages": [
+          30
+        ],
+        "token_count": 16,
+        "chunk_id": 45,
+        "mixed_combo": "paragraph",
+        "chunk_text_class": "Application description",
+        "heading_path": [
+          "3 Parameter",
+          "3.2 Lohnregel",
+          "3.2.1 Parameter"
+        ]
       }
     }
   ]

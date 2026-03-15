@@ -2,6 +2,9 @@ import os
 import asyncio
 import time
 from typing import List, Dict, Any
+import json
+import statistics
+import math
 
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -50,7 +53,10 @@ llm = create_llm(
 # Vector DB backend (Chroma or others)
 VECTOR_DB_NAME = "chroma"
 COLLECTION_NAME = "Structural_Chunks"
+CLUSTERS_COLLECTION_NAME = "Clusters"
 VDB_PATH = f"./DATA/KBs/{KB_NAME}/5_Vector_DB"
+
+CLUSTER_TOP_K = 40
 
 vectordb = create_vectordb(
     backend=VECTOR_DB_NAME,
@@ -58,15 +64,78 @@ vectordb = create_vectordb(
     persist_dir=VDB_PATH,
 )
 
+
+vdb_clusters = create_vectordb(
+    backend=VECTOR_DB_NAME,
+    collection_name=CLUSTERS_COLLECTION_NAME,
+    persist_dir=VDB_PATH,
+)
+
+
+GERMAN_ROOTS = {
+    "stamm", "lohn", "daten", "kosten", "stelle", "stellen",
+    "personal", "art", "arten", "zeit", "plan", "auftrag",
+    "material", "artikel", "kunde", "adresse", "nummer",
+    "regel", "regelung", "kalkulation", "preis", "gruppe",
+}
+
+
+def load_all_cluster_metadata():
+    """
+    Loads all cluster metadata from the Clusters VDB.
+    Each cluster record contains:
+      - cluster_id
+      - representative text (record["Text"])
+      - cluster_chunks
+      - leaf_chunks
+      - keywords
+      - summary
+    """
+
+    all_clusters = []
+
+    # Iterate over all cluster records in the cluster VDB
+
+    clusters = vdb_clusters.get()
+    for i in range(len(clusters["ids"])):
+
+        meta = clusters["metadatas"][i]
+        text = clusters["documents"][i]
+
+        record_json = meta.get("record_json")
+
+        if not record_json:
+            continue
+
+        data = json.loads(record_json)
+
+        cluster_info = {
+            "id": data.get("cluster_id"),
+            "representative_text": text,
+            "cluster_chunks": data.get("cluster_chunks", []),
+            "leaf_chunks": data.get("leaf_chunks", []),
+            "keywords": data.get("keywords", []),
+            "summary": data.get("summary", ""),
+            "raw_metadata": meta,
+        }
+
+        all_clusters.append(cluster_info)
+
+    print(f"Loaded {len(all_clusters)} clusters.")
+    return all_clusters
+
+ALL_CLUSTERS = load_all_cluster_metadata()
+
+
 # ------------------------------------------------------------
 # Pydantic models
 # ------------------------------------------------------------
 
 class QueryRequest(BaseModel):
     query: str
-    max_chunks: int = 20          # per expanded query
+    max_chunks: int = 40          # per expanded query
     expansion_k: int = 3          # number of expanded queries
-    top_k_rerank: int = 8         # final chunks passed to LLM
+    top_k_rerank: int = 10         # final chunks passed to LLM
 
 
 class QueryResponse(BaseModel):
@@ -114,6 +183,83 @@ async def translate_to_german(text: str) -> str:
 
 
 # ------------------------------------------------------------
+# Terms extraction
+# ------------------------------------------------------------
+def extract_terms(q: str) -> List[str]:
+    q = q.replace("_", " ")
+    tokens = q.lower().split()
+
+    terms = set(tokens)
+
+    # Add concatenated forms
+    terms.add("".join(tokens))
+
+    # Add compound splits
+    for tok in tokens:
+        if tok.isalpha():
+            for part in split_german_compound(tok):
+                terms.add(part)
+
+    result = list(terms)
+
+    print("--> TERMS:", result)
+
+    return result
+
+# ------------------------------------------------------------
+# German split
+# ------------------------------------------------------------
+def split_german_compound(word: str) -> List[str]:
+    word = word.lower()
+    parts = []
+
+    i = 0
+    while i < len(word):
+        found = False
+        # try longest possible root first
+        for j in range(len(word), i, -1):
+            segment = word[i:j]
+            if segment in GERMAN_ROOTS:
+                parts.append(segment)
+                i = j
+                found = True
+                break
+        if not found:
+            # fallback: consume one character
+            parts.append(word[i])
+            i += 1
+
+    # filter out single letters unless necessary
+    parts = [p for p in parts if len(p) > 1]
+    return parts
+
+# ------------------------------------------------------------
+# Lexical clusters search
+# ------------------------------------------------------------
+from rapidfuzz import fuzz
+def fuzzy_match(term, text, threshold=80):
+    return fuzz.partial_ratio(term, text) >= threshold
+
+def lexical_cluster_search(query: str, max_hits: int = 5) -> List[Dict[str, Any]]:
+    q = query.lower()
+    hits = []
+
+    for cluster in ALL_CLUSTERS:
+        text = cluster["representative_text"].lower()
+        if any(fuzzy_match(term, text) for term in extract_terms(q)):
+            r = {
+                "id": cluster["id"],
+                "text": cluster["representative_text"],
+                "score": 1,
+                "metadata": cluster["raw_metadata"]
+            }
+            hits.append(r)
+            if len(hits) >= max_hits:
+                break
+
+    return hits
+
+# ------------------------------------------------------------
 # Query expansion (language-agnostic, but fed with DB-language query)
 # ------------------------------------------------------------
 
@@ -125,9 +271,31 @@ async def expand_query(base_query: str, k: int) -> List[str]:
     if k <= 1:
         return [base_query]
 
+    """
+    prompt = (
+        f"You will generate {k-1} alternative queries that are semantically close "
+        "to the original, but not simple paraphrases.\n"
+        "Create variations that:\n"
+        "• explore meaning, context, purpose, or usage of the term\n"
+        "• rephrase the question as 'what does this refer to', 'how is it used', "
+        "'what role does it play', or 'in what context does it appear'\n"
+        "• include possible synonyms, related forms, or domain-specific variants "
+        "(e.g., German compound forms, underscore variants, abbreviations)\n"
+        "• anchor the query in the context of the given text\n"
+        "• avoid dictionary-style 'What is X' phrasing\n"
+        "• aim to retrieve explanatory or descriptive passages rather than "
+        "glossary definitions\n"
+        "• prefer formulations that match how technical documentation describes "
+        "objects, master data, parameters, or workflows\n\n"
+        "Return ONLY the rewritten queries, one per line, no numbering.\n\n"
+        f"Original query:\n{base_query}"
+    )
+    """
+
     prompt = (
         f"You will generate {k-1} alternative queries "
         "that are semantically close to the original.\n"
+        "If the question is dictionary-style (i.e. 'What is X') create variations as 'what does X refer to'\n"
         "Return ONLY the queries, one per line, no numbering.\n\n"
         f"Original query:\n{base_query}"
     )
@@ -188,6 +356,134 @@ async def retrieve_for_single_query(
     return normalized
 
 
+def merge_clusters(semantic, lexical):
+
+    seen = set()
+    merged = []
+
+    for c in semantic + lexical:
+        cid = c["id"]
+        if cid not in seen:
+            merged.append(c)
+            seen.add(cid)
+
+    return merged
+
+
+
+async def hierarchical_retrieve_for_single_query(
+    query: str,
+    max_chunks: int,
+) -> List[Dict[str, Any]]:
+    """
+    Two-stage hierarchical retrieval:
+      1) Retrieve top clusters
+      2) Expand cluster_chunks ∪ leaf_chunks
+      3) Retrieve chunks restricted to those IDs
+    """
+    #print("B:", query)
+
+    # ---------------------------------------------------------
+    # 1) Embed query
+    # ---------------------------------------------------------
+    t0 = time.perf_counter()
+    embedding = embedding_backend.embed([query])[0]
+    t1 = time.perf_counter()
+    print(f"    Embedding time: {t1 - t0:.4f}s")
+
+    # ---------------------------------------------------------
+    # 2) Stage 1: Hybrid Cluster Retrieval
+    # ---------------------------------------------------------
+    t2 = time.perf_counter()
+
+    # 2a. semantic cluster retrieval
+    semantic_clusters = vdb_clusters.search(
+        embedding,
+        top_n=CLUSTER_TOP_K,
+    )
+
+    t3a = time.perf_counter()
+    print(f"    Semantic Clusters search time: {t3a - t2:.4f}s")
+    print(f"    Retrieved Semantic clusters: {len(semantic_clusters)}")
+
+    # 2b. lexical cluster retrieval (NEW)
+    lexical_clusters = lexical_cluster_search(query, max_hits=CLUSTER_TOP_K)
+
+
+    t3b = time.perf_counter()
+    print(f"    Lexical Clusters search time: {t3b - t3a:.4f}s")
+    print(f"    Retrieved Lexical clusters: {len(lexical_clusters)}")
+
+
+    # 2c. merge + dedupe
+    cluster_results = merge_clusters(semantic_clusters, lexical_clusters)
+
+    t3c = time.perf_counter()
+    print(f"    Hybrid Clusters search time: {t3c - t3b:.4f}s")
+    print(f"    Retrieved Hybrid clusters: {len(cluster_results)}")
+
+
+    """
+    t2 = time.perf_counter()
+    cluster_results = vdb_clusters.search(
+        embedding,
+        top_n=CLUSTER_TOP_K,   # your chosen constant
+    )
+    t3 = time.perf_counter()
+    print(f"    Cluster search time: {t3 - t2:.4f}s")
+    print(f"    Retrieved clusters: {len(cluster_results)}")
+    """
+
+    # ---------------------------------------------------------
+    # 3) Expand cluster_chunks ∪ leaf_chunks
+    # ---------------------------------------------------------
+    candidate_chunk_ids = set()
+
+    for c in cluster_results:
+        meta = c["metadata"]
+        data = json.loads(meta['record_json'])
+        cluster_chunks = data.get("cluster_chunks", [])
+        leaf_chunks = data.get("leaf_chunks", [])
+        candidate_chunk_ids.update(cluster_chunks)
+        candidate_chunk_ids.update(leaf_chunks)
+
+    print(f"    Candidate chunk IDs: {len(candidate_chunk_ids)}")
+
+    # ---------------------------------------------------------
+    # 4) Stage 2: Chunk retrieval (restricted search)
+    # ---------------------------------------------------------
+    t4 = time.perf_counter()
+    chunk_results = vectordb.search(
+        embedding,
+        top_n=max_chunks,
+        filter_ids=candidate_chunk_ids,   # <— the key difference
+    )
+    t5 = time.perf_counter()
+    print(f"    Chunk search time: {t5 - t4:.4f}s")
+    print(f"    Retrieved chunks: {len(chunk_results)}")
+
+    # ---------------------------------------------------------
+    # 5) Normalize output (same shape as before)
+    # ---------------------------------------------------------
+    normalized: List[Dict[str, Any]] = []
+    for r in chunk_results:
+        normalized.append(
+            {
+                "query": query,
+                "chunk_id": r["id"],
+                "text": r["text"],
+                "score": r.get("score", 0.0),
+                "metadata": r.get("metadata", {}),
+                # Optional: attach cluster info for reranking
+                # "cluster_score": ...,
+                # "cluster_depth": ...,
+            }
+        )
+
+    return normalized
+
+
+
 async def retrieve_in_parallel(
     queries: List[str],
     max_chunks: int,
@@ -204,33 +500,130 @@ async def retrieve_in_parallel(
     ]
     results_per_query = await asyncio.gather(*tasks)
 
-    all_results: List[Dict[str, Any]] = []
+    # -----------------------------
+    # DEDUPLICATE ACROSS QUERIES
+    # -----------------------------
+    seen = set()
+    all_results = []
+
     for batch in results_per_query:
-        all_results.extend(batch)
+        for item in batch:
+            cid = item["chunk_id"]
+            if cid in seen:
+                continue
+            seen.add(cid)
+            all_results.append(item)
 
     t1 = time.perf_counter()
     print(f"  Total retrieval (all queries): {t1 - t0:.4f}s")
     return all_results
 
 
+
+
+async def hierarchical_retrieve_in_parallel(
+    queries: List[str],
+    max_chunks: int,
+) -> List[Dict[str, Any]]:
+    print("  [hierarchical_retrieve_in_parallel] num_queries:", len(queries))
+    t0 = time.perf_counter()
+
+    print("A:", queries, max_chunks)
+
+    tasks = [
+        hierarchical_retrieve_for_single_query(q, max_chunks=max_chunks)
+        for q in queries
+    ]
+
+    results_per_query = await asyncio.gather(*tasks)
+
+    # ------------------------------------------------------------
+    # DEDUPLICATE ACROSS ALL QUERIES
+    # ------------------------------------------------------------
+    seen = set()
+    all_results = []
+
+    for batch in results_per_query:
+        for item in batch:
+            cid = item["chunk_id"]
+            if cid in seen:
+                continue
+            seen.add(cid)
+            all_results.append(item)
+
+    t1 = time.perf_counter()
+    print(f"  Total hierarchical retrieval (all queries): {t1 - t0:.4f}s")
+    print(f"  Total hierarchical retrieval chunks: {len(all_results)}")
+
+    return all_results
+
+
+
+
 def rerank_chunks(
     chunks: List[Dict[str, Any]],
-    top_k: int,
+    max_total_tokens: int = 2500,
+    base_threshold: float = 0.6,
+    dynamic_alpha: float = 0.2,
+    length_boost: float = 0.30,
 ) -> List[Dict[str, Any]]:
     """
-    Simple score-based re-ranking.
-    Replace with cross-encoder / LLM reranker if needed.
+    Enhanced reranking:
+      1) Keep chunks ABOVE a semantic threshold
+      2) Stop when total token count reaches max_total_tokens
+      3) Dynamic thresholding (mean + alpha * std)
+      4) Length-aware scoring (log token bonus)
     """
+
     t0 = time.perf_counter()
-    sorted_chunks = sorted(
-        chunks,
-        key=lambda c: c.get("score", 0.0),
-        reverse=True,
-    )
-    top = sorted_chunks[:top_k]
+
+    # --- Extract scores ---
+    scores = [c.get("score", 0.0) for c in chunks]
+    if not scores:
+        return []
+
+    # --- Dynamic thresholding ---
+    mean_s = statistics.mean(scores)
+    std_s = statistics.pstdev(scores) if len(scores) > 1 else 0.0
+    dynamic_threshold = mean_s + dynamic_alpha * std_s
+
+    # Final threshold = max(base_threshold, dynamic_threshold)
+    threshold = max(base_threshold, dynamic_threshold)
+
+    # --- Filter by semantic relevance ---
+    filtered = [c for c in chunks if c.get("score", 0.0) >= threshold]
+
+    if not filtered:
+        # fallback: keep top 1 if everything is below threshold
+        filtered = [max(chunks, key=lambda c: c.get("score", 0.0))]
+
+    # --- Length-aware scoring ---
+    def final_score(c):
+        sim = c.get("score", 0.0)
+        tok = max(1, c.get("token_count", 1))
+        return sim + length_boost * math.log(1 + tok)
+
+    # --- Sort by final score ---
+    sorted_chunks = sorted(filtered, key=final_score, reverse=True)
+
+    # --- Accumulate until token budget ---
+    selected = []
+    total_tokens = 0
+
+    for c in sorted_chunks:
+        tok = c.get("token_count", 0)
+        if total_tokens + tok > max_total_tokens:
+            break
+        selected.append(c)
+        total_tokens += tok
+
     t1 = time.perf_counter()
-    print(f"  Reranking time: {t1 - t0:.4f}s (chunks in: {len(chunks)}, out: {len(top)})")
-    return top
+    print(
+        f"  Reranking time: {t1 - t0:.4f}s "
+        f"(chunks in: {len(chunks)}, filtered: {len(filtered)}, out: {len(selected)})"
+    )
+
+    return selected
 
 
 # ------------------------------------------------------------
@@ -316,7 +709,7 @@ async def query_rag(request: QueryRequest) -> QueryResponse:
 
     # 4) Parallel retrieval from local Vector DB
     t4 = time.perf_counter()
-    retrieved_chunks = await retrieve_in_parallel(
+    retrieved_chunks = await hierarchical_retrieve_in_parallel(
         queries=expanded_queries,
         max_chunks=request.max_chunks,
     )
@@ -326,8 +719,7 @@ async def query_rag(request: QueryRequest) -> QueryResponse:
     # 5) Re-ranking
     t6 = time.perf_counter()
     reranked_chunks = rerank_chunks(
-        chunks=retrieved_chunks,
-        top_k=request.top_k_rerank,
+        chunks=retrieved_chunks
     )
     t7 = time.perf_counter()
     print(f"[step] Reranking: {t7 - t6:.4f}s")

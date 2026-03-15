@@ -1,0 +1,26 @@
+(ragtime) PS C:\dev\ragtime> rag "Tell me about Stammlohn" pepe.json
+I’m sorry, but I don’t have enough information on “Stammlohn” in the provided context. Could you please clarify what specific details or which aspect of “Stammlohn” you’re interested in?
+(ragtime) PS C:\dev\ragtime> rag "What is Stammlohn" pepe.json      
+I’m sorry, but “Stammlohn” isn’t defined in the provided snippets. Could you please clarify what you mean by “Stammlohn” or point me to where it’s described?
+(ragtime) PS C:\dev\ragtime> rag "What can Stamm Lohn be refferring to" pepe.json
+“Stamm Lohn” is the central payroll master‐data record for each employee.  In it you maintain:
+
+• Personal number (must match the external payroll system)  
+• Employee name  
+• “Kst‐Lohnausgleich” (the default cost center for payroll equalization)  
+• Verrechnungssatz (billing or cost rate used in the “Lohnausgleich” program)  
+• Flag whether daily time sheets (Tageszettel) may be recorded  
+• Assigned time‐accounts for weekly/monthly payroll closings  
+• Parameters for exporting the payroll data (e.g. date‐range, personnel numbers, cost centers) to external systems (CSS, Datev, Carat, SAP, etc.)
+(ragtime) PS C:\dev\ragtime> rag "What can Stammlohn be refferring to" pepe.json 
+Stammlohn in this context is not a special calculation rule at all but simply the “wage master data” — i.e. the employee’s basic payroll‐record (the Stammdaten for Lohn) maintained in the system.  Concretely it is defined in the “stamm_lohn” workshop and typically contains
+
+• Personal number  
+• Employee name  
+• Default cost centre (Kst-Lohnausgleich)  
+• Billing rate (Verrechnungssatz)  
+• Flag whether time‐sheets may be recorded (Tageszettelerfassung)  
+
+All of your Lohn-Rules and the automatic recalculation of wage types (Lohnarten) refer back to this master wage record.
+(ragtime) PS C:\dev\ragtime> rag "What is Stammlohn?" pepe.json                 
+I’m sorry, but I don’t have a definition of “Stammlohn” in the provided materials. Could you clarify what you mean by “Stammlohn” or point me to the specific section where it’s described?

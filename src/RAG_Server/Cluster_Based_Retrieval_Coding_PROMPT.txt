@@ -1,0 +1,11 @@
+The uploaded rag_server.py works fine, but the retrieval quality is still poor in some cases because it is currently done directly on the VDB original Structural_Chunks (see uploaded "Structural_Chunk_Record.json"). 
+
+I have now a second VDB collection with hierarchical cluster records (see uploaded "Cluster_VDB_Record.json" and "record_json.json") to improve the retrieval via a two stages approach:
+    1. Semantically query the "clusters" collection to get the top matching clusters
+    2. Retrieve all the cluster chunks and leaf chunks referenced in the retrieved cluster records
+    3. Perform another semantic query within those chunks.
+    4. Rerank (if necessary/advisable) and pass the top n chunks to the LLM.
+
+We should instantiate now then a second VDB object to access the clusters collection.
+
+Could you please based on the provided data structures detailed the logic to implement (No code yet. Just explain logically what fields and steps would be the ones to implement)

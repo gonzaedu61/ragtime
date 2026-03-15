@@ -32,7 +32,7 @@ vectordb = create_vectordb(
     persist_dir=VDB_PATH
 )
 
-# Initialize chunks vector DB backend (Chroma or others)
+# Initialize clusters vector DB backend (Chroma or others)
 clusters_vdb = create_vectordb(
     backend=VECTOR_DB_NAME,
     collection_name=CLUSTERS_COLLECTION_NAME,

@@ -11,8 +11,6 @@ parser.add_argument("--top", type=int, default=None,
                     help="Number of top items to dump (default: all)")
 parser.add_argument("--collection", type=str, default="Structural_Chunks",
                     help="Name of the VDB collection to dump from")
-parser.add_argument("--id", type=str, default=None,
-                    help="Record ID to dump (overrides --top)")
 args = parser.parse_args()
 
 # Config Constants
@@ -30,21 +28,7 @@ vectordb = create_vectordb(
     persist_dir=VDB_PATH
 )
 
-# --- NEW: Dump a specific record by ID ---
-if args.id:
-    print(f"🔍 Fetching record with ID: {args.id}")
-    result = vectordb.get_by_id(args.id)
-
-    if result is None:
-        print("❌ No record found with that ID.")
-    else:
-        print("\n--- Document ---")
-        print("ID:", result["id"])
-        print("Metadata:", result["metadata"])
-        print("Text:", result["document"])
-    exit(0)
-
-# --- Existing behavior: dump all or top N ---
+# Dump records
 all_docs = vectordb.get(limit=args.top)
 
 for i in range(len(all_docs["ids"])):

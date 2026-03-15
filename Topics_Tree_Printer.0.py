@@ -138,12 +138,12 @@ class Topics_Tree_Printer:
             print(f"(Root '{first}' not found)")
             return
 
-        self._print_node(self.tree[first], "", 0, True)
+        self._print_node(self.tree[first], "", 0)
 
     # ------------------------------------------------------------------
     # Recursive printing — FULL CID ALWAYS USED
     # ------------------------------------------------------------------
-    def _print_node(self, node, prefix, depth, is_last):
+    def _print_node(self, node, prefix, depth):
         data = node["_data"]
         real_cid = node["cid"]
 
@@ -153,10 +153,8 @@ class Topics_Tree_Printer:
                 node["children"].values(),
                 key=lambda n: self._cid_sort_key(n["cid"])
             )
-            last_index = len(children) - 1
-            for i, child in children:
-                is_last = (i == last_index)
-                self._print_node(child, prefix + "│   ", depth + 1, is_last)
+            for child in children:
+                self._print_node(child, prefix + "│   ", depth + 1)
             return
 
 
@@ -173,14 +171,7 @@ class Topics_Tree_Printer:
         if self.show_label and data.get("label"):
             line += f": {self.green}{data['label']}{self.reset}"
 
-
-
-        if (child_count == 0 and self.hide_documents and is_last):
-            print(prefix + "└── " + line)
-        else:
-            print(prefix + "├── " + line)
-
-
+        print(prefix + "└── " + line)
 
         # Print docs
         if self.mode == "details":
@@ -194,10 +185,8 @@ class Topics_Tree_Printer:
             key=lambda n: self._cid_sort_key(n["cid"])
         )
 
-        last_index = len(children) - 1
-        for i, child in children:
-            is_last = (i == last_index)
-            self._print_node(child, prefix + "|   ", depth + 1, is_last)
+        for child in children:
+            self._print_node(child, prefix + "    ", depth + 1)
 
     # ------------------------------------------------------------------
     # Print details
@@ -209,51 +198,21 @@ class Topics_Tree_Printer:
         docs = data["metadata"].get("source_documents", [])
         last = len(docs) - 1
 
-
-
         for i, doc in enumerate(docs):
-
             branch = "└── " if i == last else "├── "
-            sub_prefix = prefix + ("    " if is_last else "│   ")
-
-            print(
-                sub_prefix + branch +
-                f"    {doc['document_name']} ({doc['tokens_percentage']:.1f}%)"
-            )
-
-
-
-    """
-        # Document lines must align under the cluster header
-        # and keep vertical connectors alive.
-        doc_prefix = prefix.replace("└──", "").replace("├──", "")
-        doc_prefix = doc_prefix + " "
-
-
-        for i, doc in enumerate(docs):
-            # NO tree branches before document names
-            print(
-                f"{doc_prefix}    {doc['document_name']} | {doc['tokens_percentage']:.1f}%"
-            )
-    """
-
-
-
-
-
+            print(prefix + branch +
+                  f"{self.yellow}{doc['document_name']}{self.reset} | "
+                  f"{doc['tokens_percentage']:.1f}%")
 
     # ------------------------------------------------------------------
     # Print summary
     # ------------------------------------------------------------------
-    def _print_summary(self, data, doc_prefix, is_last):
+    def _print_summary(self, data, prefix, is_last):
         docs = data["metadata"].get("source_documents", [])
         last = len(docs) - 1
 
-        #doc_prefix = prefix.replace("└──", "").replace("├──", "")
-        doc_prefix = doc_prefix + "|   "
-
         for i, doc in enumerate(docs):
-            print(
-                f"{doc_prefix}{doc['document_name']} | {doc['tokens_percentage']:.1f}%"
-            )
-
+            branch = "└── " if i == last else "├── "
+            print(prefix + branch +
+                  f"{self.green}{doc['document_name']}{self.reset} | "
+                  f"{doc['tokens_percentage']:.1f}%")

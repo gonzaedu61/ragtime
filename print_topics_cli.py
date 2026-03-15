@@ -1,12 +1,32 @@
 # USE:
-# python print_topics_cli.py -ds -cl ./data/KBs/Almendro/6_Topics_Hierarchy/Labeled_Topics_Hierarchy_DE.json -o Tree.log -sort cid
+# python print_topics_cli.py -cid -cl -ds ./data/KBs/Almendro/6_Topics_Hierarchy/Labeled_Topics_Hierarchy_DE.json -o Tree.log -sort cid
 
 #!/usr/bin/env python3
 import argparse
 import json
 import sys
+import os
 from io import StringIO
+from VectorDB_Factory import create_vectordb
 from Topics_Tree_Printer import Topics_Tree_Printer
+from dotenv import load_dotenv
+load_dotenv()
+
+
+# Config Constants
+KB_NAME = os.getenv("KB_NAME")
+VECTOR_DB_NAME = "chroma"
+CHUNKS_COLLECTION_NAME="Structural_Chunks"
+CLUSTERS_COLLECTION_NAME="Clusters"
+VDB_PATH = f"./DATA/KBs/{KB_NAME}/5_Vector_DB"
+
+vdb = create_vectordb(
+    backend=VECTOR_DB_NAME,
+    collection_name=CLUSTERS_COLLECTION_NAME,
+    persist_dir=VDB_PATH
+)
+
+
 
 def main():
     parser = argparse.ArgumentParser(description="Pretty-print a cluster tree.")
@@ -70,6 +90,7 @@ def main():
 
     try:
         printer = Topics_Tree_Printer(
+            vdb,
             mode=mode,
             color=use_color,
             show_label=args.cluster_label,
@@ -78,7 +99,7 @@ def main():
             sort_order=args.sort_order,
             max_depth=args.max_depth
         )
-        printer.print_tree(tree)
+        printer.print_tree()
     finally:
         sys.stdout = original_stdout
 

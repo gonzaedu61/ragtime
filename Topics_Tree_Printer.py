@@ -1,11 +1,24 @@
-from collections import Counter
+import json
 
 class Topics_Tree_Printer:
-    def __init__(self, mode="details", color=True,
-                 show_label=False, hide_documents=False,
-                 show_full_cid=False, sort_order="cid",
-                 max_depth=None):
+    """
+    Loads clusters from VDB and reconstructs the hierarchy from cluster_id strings.
+    FULL cluster_id is preserved exactly as stored in VDB.
+    No reconstruction. No synthetic cid guessing.
+    """
 
+    def __init__(
+        self,
+        vdb,
+        mode="details",
+        color=True,
+        show_label=False,
+        hide_documents=False,
+        show_full_cid=False,
+        sort_order="cid",
+        max_depth=None,
+    ):
+        self.vdb = vdb
         self.mode = mode
         self.color = color
         self.show_label = show_label
@@ -14,130 +27,186 @@ class Topics_Tree_Printer:
         self.sort_order = sort_order
         self.max_depth = max_depth
 
+        # Colors
         if color:
             from colorama import Fore, Style, init
             init(autoreset=True)
-
             self.cyan = Fore.CYAN
             self.yellow = Fore.YELLOW
             self.green = Fore.GREEN
             self.reset = Style.RESET_ALL
         else:
-            self.cyan = ""
-            self.yellow = ""
-            self.green = ""
-            self.reset = ""
+            self.cyan = self.yellow = self.green = self.reset = ""
 
-    def _cid_sort_key(self, cid):
-        # If it's already an int, just wrap it
-        if isinstance(cid, int):
-            return (cid,)
+        # Load clusters
+        self.clusters = self._load_clusters()
 
-        # Otherwise assume something like "0.0.0.10"
-        parts = str(cid).split(".")
-        return tuple(int(p) for p in parts if p != "")
+        # Build tree
+        self.tree = self._build_tree()
 
+    # ------------------------------------------------------------------
+    # Load clusters
+    # ------------------------------------------------------------------
+    def _load_clusters(self):
+        _, _, _, metadatas = self.vdb.get_all()
+        clusters = {}
 
-    def print_tree(self, node, prefix="", cid_path="", depth=0):
-        if node is None:
-            print(prefix + "(empty)")
-            return
-
-        clusters = node["clusters"]
-
-        # Always sort the clusters we are about to print
-        if self.sort_order == "cid":
-            clusters = sorted(
-                clusters,
-                key=lambda c: self._cid_sort_key(c["cluster_id"])
-            )
-        elif self.sort_order == "size":
-            clusters = sorted(clusters, key=lambda c: c["size"], reverse=True)
-
-        last_index = len(clusters) - 1
-
-        for i, cluster in enumerate(clusters):
-            is_last = i == last_index
-
-            cid = cluster["cluster_id"]
-            full_cid = f"{cid_path}.{cid}" if cid_path else str(cid)
-            cid_to_show = full_cid if self.show_full_cid else cid
-
-            branch = "└── " if is_last else "├── "
-
-            chunks = cluster["size"]
-            child_count = (
-                len(cluster["children"]["clusters"])
-                if cluster["children"] else 0
-            )
-
-            line = (
-                f"{self.cyan}[{cid_to_show}]{self.reset} "
-                f"chunks={chunks} | childs={child_count}"
-            )
-
-            label = cluster.get("label")
-            if self.show_label and label:
-                line += f": {self.green}{label}{self.reset}"
-
-            print(prefix + branch + line)
-
-            # Print details or summary for THIS cluster
-            if self.mode == "details":
-                self._print_details(cluster, prefix, is_last)
-            else:
-                self._print_summary(cluster, prefix, is_last)
-
-            # If we've reached max depth, do NOT recurse into children
-            if self.max_depth is not None and depth >= self.max_depth:
+        for meta in metadatas:
+            rj = meta.get("record_json")
+            if not rj:
                 continue
 
-            # Recurse into children
-            if cluster["children"] is not None:
-                new_prefix = prefix + ("    " if is_last else "│   ")
-                new_cid_path = full_cid
-                self.print_tree(
-                    cluster["children"],
-                    new_prefix,
-                    new_cid_path,
-                    depth + 1
-                )
+            rec = json.loads(rj)
+            cid = rec["cluster_id"]
 
-    def _print_details(self, cluster, prefix, is_last):
-        if self.hide_documents:
+            clusters[cid] = rec
+
+        return clusters
+
+    # ------------------------------------------------------------------
+    # Build hierarchy — FULL CID ALWAYS STORED
+    # ------------------------------------------------------------------
+    def _build_tree(self):
+        root = {}
+
+        for cid, data in self.clusters.items():
+            parts = cid.split(".")
+            node = root
+            path = []
+
+            for depth, part in enumerate(parts):
+                path.append(part)
+                full_path = ".".join(path)
+
+                if part not in node:
+                    node[part] = {
+                        "cid": full_path,
+                        "_data": None,
+                        "children": {}
+                    }
+
+                if depth == len(parts) - 1:
+                    node[part]["_data"] = data
+
+                node = node[part]["children"]
+
+        return root
+
+    # ------------------------------------------------------------------
+    # Sorting
+    # ------------------------------------------------------------------
+    def _cid_sort_key(self, cid):
+        return tuple(int(p) for p in cid.split("."))
+
+    # ------------------------------------------------------------------
+    # Find real root
+    # ------------------------------------------------------------------
+    def _find_root(self):
+        all_ids = set(self.clusters.keys())
+        parents = set()
+
+        for cid in all_ids:
+            parts = cid.split(".")
+            for i in range(1, len(parts)):
+                parents.add(".".join(parts[:i]))
+
+        roots = all_ids - parents
+        return sorted(roots, key=self._cid_sort_key)[0]
+
+    # ------------------------------------------------------------------
+    # Count leaf chunks
+    # ------------------------------------------------------------------
+    def _count_leaf_chunks(self, node):
+        total = 0
+        data = node["_data"]
+        if data:
+            total += len(data.get("leaf_chunks", []))
+
+        for child in node["children"].values():
+            total += self._count_leaf_chunks(child)
+
+        return total
+
+    # ------------------------------------------------------------------
+    # Print tree
+    # ------------------------------------------------------------------
+    def print_tree(self):
+        root_cid = self._find_root()
+        first = root_cid.split(".")[0]
+
+        if first not in self.tree:
+            print(f"(Root '{first}' not found)")
             return
 
-        metadatas = cluster["metadatas"]
-        last_index = len(metadatas) - 1
+        self._print_node(self.tree[first], "", 0, True)
 
-        for i, meta in enumerate(metadatas):
-            doc = meta.get("document_name", "unknown")
-            pages = meta.get("pages", [])
-            chunk = meta.get("chunk_id", "n/a")
+    # ------------------------------------------------------------------
+    # Recursive printing — FULL CID ALWAYS USED
+    # ------------------------------------------------------------------
+    def _print_node(self, node, prefix, depth, is_last):
+        data = node["_data"]
+        real_cid = node["cid"]
 
-            branch = "└── " if i == last_index else "├── "
-            sub_prefix = prefix + ("    " if is_last else "│   ")
+        # Synthetic node → recurse only
+        if not data:
+            children = sorted(
+                node["children"].values(),
+                key=lambda n: self._cid_sort_key(n["cid"])
+            )
+            last_index = len(children) - 1
+            for i, child in enumerate(children):
+                is_last = (i == last_index)
+                self._print_node(child, prefix + "│   ", depth + 1, is_last)
+            return
 
+
+        chunks = self._count_leaf_chunks(node)
+        child_count = len(node["children"])
+
+        cid_to_show = f"[{real_cid}]" if self.show_full_cid else ""
+
+        line = (
+            f"{self.cyan}{cid_to_show}{self.reset} "
+            f"chunks={chunks} | childs={child_count}"
+        )
+
+        if self.show_label and data.get("label"):
+            line += f": {self.green}{data['label']}{self.reset}"
+
+
+
+        if (child_count == 0 and self.hide_documents and is_last):
+            print(prefix + "└── " + line)
+        else:
+            print(prefix + "├── " + line)
+
+
+
+        # Print docs
+        self._print_summary(data, prefix, True)
+
+        # Recurse
+        children = sorted(
+            node["children"].values(),
+            key=lambda n: self._cid_sort_key(n["cid"])
+        )
+
+        last_index = len(children) - 1
+        for i, child in enumerate(children):
+            is_last = (i == last_index)
+            self._print_node(child, prefix + "|   ", depth + 1, is_last)
+
+    # ------------------------------------------------------------------
+    # Print Docs summary
+    # ------------------------------------------------------------------
+    def _print_summary(self, data, doc_prefix, is_last):
+        docs = data["metadata"].get("source_documents", [])
+        last = len(docs) - 1
+
+        doc_prefix = doc_prefix + "|   "
+
+        for i, doc in enumerate(docs):
             print(
-                sub_prefix + branch +
-                f"{self.yellow}{doc}{self.reset} | pages={pages} | chunk={chunk}"
+                f"{doc_prefix}{doc['document_name']} | {doc['tokens_percentage']:.1f}%"
             )
 
-    def _print_summary(self, cluster, prefix, is_last):
-        metadatas = cluster["metadatas"]
-        total_chunks = len(metadatas)
-
-        counts = Counter(meta.get("document_name", "unknown") for meta in metadatas)
-        items = list(counts.items())
-        last_index = len(items) - 1
-
-        for i, (doc, count) in enumerate(items):
-            pct = (count / total_chunks) * 100 if total_chunks else 0
-
-            branch = "└── " if i == last_index else "├── "
-            sub_prefix = prefix + ("    " if is_last else "│   ")
-
-            print(
-                sub_prefix + branch +
-                f"{self.green}{doc}{self.reset} | chunks={count} | {pct:.1f}%"
-            )

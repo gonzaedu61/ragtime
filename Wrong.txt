@@ -1,0 +1,28 @@
+    │   │   └── [0.0.0.0] chunks=3 | childs=0: Emacs Strg-Tastenkürzel Übersicht
+    │   │   ├── auf_kpa | 23.4%
+    │   │   └── basis | 76.6%
+    │   │   └── [0.0.0.1] chunks=210 | childs=6: KPA-Modul und Auftragsmanagement
+    │   │   ├── auf_kpa | 32.2%
+    │   │   ├── auf_pos | 31.3%
+    │   │   └── auf_poskalk | 36.6%
+    │   │       └── [0.0.0.1.0] chunks=63 | childs=5: KPA: Kontrakt, Produktion, Abruf
+    │   │       ├── auf_kpa | 98.2%
+    │   │       └── auf_pos | 1.8%
+    │   │           └── [0.0.0.1.0.0] chunks=6 | childs=2: Vertragskosten- und Nachkalkulation
+    │   │           └── auf_kpa | 100.0%
+    │   │               └── [0.0.0.1.0.0.0] chunks=5 | childs=0: Nachkalkulation von Kontrakten
+    │   │               └── auf_kpa | 100.0%
+    │   │               └── [0.0.0.1.0.0.1] chunks=1 | childs=0: Zusatzkosten im Materialstamm und Kontrakt
+    │   │               └── auf_kpa | 100.0%
+
+
+
+
+
+│   │   ├── [0.0.0.0] chunks=3 | childs=0: Emacs Strg-Tastenkürzel Übersicht
+│   │   |   auf_kpa | 23.4%
+│   │   |   basis | 76.6%
+│   │   └── [0.0.0.1] chunks=210 | childs=6: KPA-Modul und Auftragsmanagement
+│   │       auf_kpa | 32.2%
+│   │       auf_pos | 31.3%
+│   │       auf_poskalk | 36.6%

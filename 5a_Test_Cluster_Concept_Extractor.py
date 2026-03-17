@@ -41,17 +41,17 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.0.4.1.0"
-INFO_TYPE = 'process_b'
+BRANCH_ID = "0.0.0.0.0.0"
+INFO_TYPE = 'concept'
 LEAF_PROMPT = """
 You are analyzing a set of text chunks that belong to the same topic.
 
 TASK:
-Identify and describe the the process covering the full input text, with the following information:
-- Proces name: A short label (max 6 words). YOU MUST ALWAYS PROVIDE A LABEL.
-- Process description: A 4-8 sentences explaining what the process is about
-- Process steps: An ordered list of the key steps composing the process. Give them a sequential numeric id (the list index), a short label and a short one-line description.
-- IMPORTANT: If the text does not seem to refer to a process, then DO NOT INFERE or CREATE FACTS. Just return all field blanks
+Identify and describe the key concepts covered by the input text, with the following information:
+- Concept name: A short label (max 6 words). YOU MUST ALWAYS PROVIDE A LABEL.
+- Concept description: A 4-8 sentences explaining what the key elements of the concept are and how they relate to each other
+- Concept structure: Extract the structural elements which make up the concept and if applicable a description of the relationships which might exist between them (i.e. X has 1 or more Y, Z is included in W, Q is part of H, etc.)
+- IMPORTANT: If the text does not seem to refer to a business concept, then DO NOT INFERE or CREATE FACTS. Just return all field blanks
 
 TEXTS:
 {text}
@@ -66,41 +66,38 @@ FORMAT RULES:
 - Return a single JSON for the process.
 - The JSON must exactly follow this structure:
 {
-  "process_name": "...",
-  "process_description": "...",
-  "process_steps": [{id, name, description}, ... ],
+  "concept_name": "...",
+  "concept_description": "...",
+  "concept_structure": [{concept_element_name, description}, ... ],
 }
 
 """
 
 
 INTERNAL_PROMPT = """
-You are analyzing a list of json items, each one of them describing a process.
+You are analyzing a list of json items, each one of them describing a concept.
 
-Each input process item in the list has this information:
-- Process name
-- Process description
-- Process steps (an ordered list of the key steps composing the process)
+Each input concept item in the list has this information:
+- Concept name
+- Concept description
+- Concept structure (a list of the key elements supporting the concept)
 - JSON item structure:
 {
-  "process_name": "...",
-  "process_description": "...",
-  "process_steps": [{id, name, description}, ... ],
+  "concept_name": "...",
+  "concept_description": "...",
+  "concept_structure": [{concept_element_name, description}, ... ],
 }
 
 AGREGATION TASK:
-- For each child process item, pick the steps and agregate them into one single step description
-- The collection of the resulting aggregated steps from each child process will become the list of steps for a new aggregated process (the parent process) encompasing them.
+- For each child concept item, pick the concept_structure and agregate them into one single concept_structure
+- The collection of the resulting aggregated concept_structure from each child concept will become the list of concept_structures for a new aggregated concept (the parent concept) encompasing them.
 
-OUTPUT TASK: Produce a json for the newly created parent process with the following information:
-- Process description: A 4-8 sentences explaining what this parent process is about, from the combination of the child process descriptions
-- Proces name: A short label (max 6 words). YOU MUST ALWAYS PROVIDE A LABEL based on the generated description.
-- Process steps: An ordered list of the key steps composing the process (the aggregated steps of each input child process). Give them a sequential numeric id (the list index), a short label and a short one-line description.
+OUTPUT TASK: Produce a json for the newly created parent concept with the following information:
+- Concept description: A 4-8 sentences explaining what this parent concept is about, from the combination of the child concept descriptions
+- Concept name: A short label (max 6 words). YOU MUST ALWAYS PROVIDE A LABEL based on the generated description.
+- Concept structure: An ordered list of the key structure elements composing the concept (the aggregated structural elements of each input child concept). Give them a sequential numeric id (the list index), a short label and a short description.
 
 OUTPUT LANGUAGE: German
-
-COVERAGE RULE:
-If the process is unclear, too small, or ambiguous, you MUST STILL provide the best possible descriptive label, warning about the quality of the given details. Never return an empty process. All input child processes should map to at least one parent process
 
 INPUT:
 {json_list}
@@ -113,9 +110,9 @@ FORMAT RULES:
 - Return a single JSON for the process.
 - The JSON must exactly follow this structure:
 {
-  "process_name": "...",
-  "process_description": "...",
-  "process_steps": [{id, name, description}, ... ],
+  "concept_name": "...",
+  "concept_description": "...",
+  "concept_structure": [{concept_element_name, description}, ... ],
 }
 
 """

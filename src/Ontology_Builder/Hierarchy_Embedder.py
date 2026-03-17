@@ -2,6 +2,7 @@ import os
 import json
 import hashlib
 from typing import List, Dict, Any, Optional
+import sys
 
 import numpy as np
 from rank_bm25 import BM25Okapi
@@ -97,7 +98,7 @@ class Hierarchy_Embedder:
         vector_db: object with:
             - all_chunks() -> list of chunks
             - search(embedding, top_n) -> list of chunks with fields:
-                { "chunk_id", "text", "metadata", "score" }
+                { "id", "text", "metadata", "score" }
             - get_embedding(chunk_id) -> np.array-like (for drift semantic shift)
             - (later, commented) delete_cluster(cluster_id), upsert_cluster(record)
         embedder: object with:
@@ -154,7 +155,7 @@ class Hierarchy_Embedder:
         tokenized = [c["text"].split() for c in self.all_chunks]
         self.bm25 = BM25Okapi(tokenized)
 
-        self.chunk_by_id = {c["chunk_id"]: c for c in self.all_chunks}
+        self.chunk_by_id = {c["id"]: c for c in self.all_chunks}
 
         self.log(f"Initialized BM25 index with {len(self.all_chunks)} chunks.")
 
@@ -271,15 +272,16 @@ class Hierarchy_Embedder:
         k = self.candidate_k
 
         dense_results = self.vector_db.search(query_embedding, top_n=k)
-        dense_map = {c["chunk_id"]: float(c.get("score", 0.0)) for c in dense_results}
+
+        dense_map = {c["id"]: float(c.get("score", 0.0)) for c in dense_results}
 
         if not getattr(self, "all_chunks", None) or not self.bm25:
             return [
                 {
                     "chunk": c,
-                    "dense_score": dense_map[c["chunk_id"]],
+                    "dense_score": dense_map[c["id"]],
                     "sparse_score": 0.0,
-                    "hybrid_score": dense_map[c["chunk_id"]],
+                    "hybrid_score": dense_map[c["id"]],
                 }
                 for c in dense_results
             ]
@@ -291,7 +293,7 @@ class Hierarchy_Embedder:
             top_sparse_idx = np.argpartition(sparse_scores, -k)[-k:]
 
         sparse_map = {
-            self.all_chunks[idx]["chunk_id"]: float(sparse_scores[idx])
+            self.all_chunks[idx]["id"]: float(sparse_scores[idx])
             for idx in top_sparse_idx
         }
 
@@ -307,7 +309,7 @@ class Hierarchy_Embedder:
             dense = dense_map.get(cid, 0.0)
             sparse = sparse_map.get(cid, 0.0) / norm
 
-            chunk = next((c for c in dense_results if c["chunk_id"] == cid), None)
+            chunk = next((c for c in dense_results if c["id"] == cid), None)
             if chunk is None:
                 chunk = self.chunk_by_id[cid]
 
@@ -596,7 +598,7 @@ class Hierarchy_Embedder:
         cluster_id: str,
         cluster_index: Dict[str, Dict[str, Any]],
         lang: str,
-        drop_levels: int = 0,
+        drop_levels: int = 2,
     ) -> List[str]:
         """
         Build semantic lineage path from ancestor labels, optionally removing
@@ -750,12 +752,12 @@ class Hierarchy_Embedder:
             final = deduped[: self.final_k]
             self.progress.update(label=f"[{cid}] Retrieval")
 
-            chunk_ids = [r["chunk"]["chunk_id"] for r in final]
+            chunk_ids = [r["chunk"]["id"] for r in final]
             retrieved_index[cid] = chunk_ids
 
             node["retrieved_chunks"] = [
                 {
-                    "chunk_id": r["chunk"]["chunk_id"],
+                    "id": r["chunk"]["id"],
                     "text": r["chunk"]["text"],
                     "metadata": r["chunk"].get("metadata", {}),
                     "final_score": r["final_score"],

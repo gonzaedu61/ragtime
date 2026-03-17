@@ -23,7 +23,9 @@ vector_db = create_vectordb(
 
 topics_builder = Topic_Hierarchy_Builder(
     vector_db=vector_db,
-    metadata_keys=["heading_path","document_name"],
+    #metadata_keys=["heading_path","document_name"],
+    #metadata_weight=0.2,
+    metadata_keys=["heading_path"],
     metadata_weight=0.2,
     postprocess_rules=None,
     verbose=False

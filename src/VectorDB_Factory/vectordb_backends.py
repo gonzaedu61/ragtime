@@ -257,7 +257,7 @@ class ChromaBackend:
         chunks = []
         for i in range(len(ids)):
             chunks.append({
-                "chunk_id": ids[i],
+                "id": ids[i],
                 "text": documents[i],
                 "metadata": metadatas[i],
             })

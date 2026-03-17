@@ -1,3 +1,6 @@
+# USAGE
+# uvicorn src.RAG_Server.rag_server:app --host 0.0.0.0 --port 8000 --reload
+
 import os
 import asyncio
 import time
@@ -185,26 +188,56 @@ async def translate_to_german(text: str) -> str:
 # ------------------------------------------------------------
 # Terms extraction
 # ------------------------------------------------------------
-def extract_terms(q: str) -> List[str]:
-    q = q.replace("_", " ")
-    tokens = q.lower().split()
+import re
 
+GERMAN_STOPWORDS = {
+    "der", "die", "das", "den", "dem", "des",
+    "ein", "eine", "einer", "einem", "eines",
+    "und", "oder", "aber", "nicht",
+    "von", "mit", "zu", "im", "in", "an", "auf",
+    "ist", "was", "wie", "wo", "wer", "warum",
+    "für", "bei", "durch", "ohne", "gegen", "zwischen",
+}
+
+REPEATITIVE_KB_WORDS = {
+    "almendro","erp", "system", "funktionen", "erp-system",
+    "module", "prozesse", "prozess"
+}
+
+
+
+def extract_terms(q: str) -> List[str]:
+    # 1. Normalize
+    q = q.lower().replace("_", " ")
+
+    # 2. Remove punctuation
+    q = re.sub(r"[^\wäöüß ]+", " ", q)
+
+    # 3. Tokenize
+    tokens = q.split()
+
+    # 4. Remove stopwords and common KB words
+    tokens = [t for t in tokens if t not in GERMAN_STOPWORDS]
+    tokens = [t for t in tokens if t not in REPEATITIVE_KB_WORDS]
+
+    # 5. Start building term set
     terms = set(tokens)
 
-    # Add concatenated forms
-    terms.add("".join(tokens))
+    # 6. Add concatenated form (useful for fuzzy matching)
+    if tokens:
+        terms.add("".join(tokens))
 
-    # Add compound splits
+    # 7. Add German compound splits
     for tok in tokens:
         if tok.isalpha():
             for part in split_german_compound(tok):
-                terms.add(part)
+                if len(part) > 2:   # avoid noise
+                    terms.add(part)
 
-    result = list(terms)
+    # 8. Remove very short tokens (noise)
+    terms = {t for t in terms if len(t) > 2}
 
-    print("--> TERMS:", result)
-
-    return result
+    return list(terms)
 
 # ------------------------------------------------------------
 # German split
@@ -246,16 +279,38 @@ def lexical_cluster_search(query: str, max_hits: int = 5) -> List[Dict[str, Any]
 
     for cluster in ALL_CLUSTERS:
         text = cluster["representative_text"].lower()
-        if any(fuzzy_match(term, text) for term in extract_terms(q)):
-            r = {
-                "id": cluster["id"],
-                "text": cluster["representative_text"],
-                "score": 1,
-                "metadata": cluster["raw_metadata"]
-            }
-            hits.append(r)
-            if len(hits) >= max_hits:
-                break
+
+
+        if "sap" in text:
+            print("--> SAP!!!:", cluster["id"])
+
+        extracted_terms = extract_terms(q)
+        print("Extracted:",extracted_terms)
+
+
+        for term in extracted_terms:
+
+            if term == "sap":
+                print("--> YES:", term, text)
+
+
+            if fuzzy_match(term, text):
+
+                print("--> YESSSSSS", term)
+
+                r = {
+                    "id": cluster["id"],
+                    "text": cluster["representative_text"],
+                    "score": 1,
+                    "metadata": cluster["raw_metadata"]
+                }
+
+                print("--> OK:", term, r["text"])
+
+
+                hits.append(r)
+                if len(hits) >= max_hits:
+                    break
 
     return hits
 
@@ -296,6 +351,8 @@ async def expand_query(base_query: str, k: int) -> List[str]:
         f"You will generate {k-1} alternative queries "
         "that are semantically close to the original.\n"
         "If the question is dictionary-style (i.e. 'What is X') create variations as 'what does X refer to'\n"
+        "If the question aks for a list create variations as '... a summary of ...'\n"
+        "If the question aks for processes or subprocesses create a varian referring to 'topic areas'\n"
         "Return ONLY the queries, one per line, no numbering.\n\n"
         f"Original query:\n{base_query}"
     )
@@ -406,8 +463,15 @@ async def hierarchical_retrieve_for_single_query(
     print(f"    Semantic Clusters search time: {t3a - t2:.4f}s")
     print(f"    Retrieved Semantic clusters: {len(semantic_clusters)}")
 
+
+    for c in semantic_clusters: print('--> A:', c['id'])
+
+
     # 2b. lexical cluster retrieval (NEW)
     lexical_clusters = lexical_cluster_search(query, max_hits=CLUSTER_TOP_K)
+
+
+    for c in lexical_clusters: print('--> B:', c['id'])
 
 
     t3b = time.perf_counter()
@@ -418,21 +482,14 @@ async def hierarchical_retrieve_for_single_query(
     # 2c. merge + dedupe
     cluster_results = merge_clusters(semantic_clusters, lexical_clusters)
 
+
+    for c in cluster_results: print('--> C:', c['id'])
+ 
+
     t3c = time.perf_counter()
     print(f"    Hybrid Clusters search time: {t3c - t3b:.4f}s")
     print(f"    Retrieved Hybrid clusters: {len(cluster_results)}")
 
-
-    """
-    t2 = time.perf_counter()
-    cluster_results = vdb_clusters.search(
-        embedding,
-        top_n=CLUSTER_TOP_K,   # your chosen constant
-    )
-    t3 = time.perf_counter()
-    print(f"    Cluster search time: {t3 - t2:.4f}s")
-    print(f"    Retrieved clusters: {len(cluster_results)}")
-    """
 
     # ---------------------------------------------------------
     # 3) Expand cluster_chunks ∪ leaf_chunks
@@ -448,6 +505,8 @@ async def hierarchical_retrieve_for_single_query(
         candidate_chunk_ids.update(leaf_chunks)
 
     print(f"    Candidate chunk IDs: {len(candidate_chunk_ids)}")
+
+    print("--> D:", candidate_chunk_ids)
 
     # ---------------------------------------------------------
     # 4) Stage 2: Chunk retrieval (restricted search)
@@ -527,9 +586,6 @@ async def hierarchical_retrieve_in_parallel(
 ) -> List[Dict[str, Any]]:
     print("  [hierarchical_retrieve_in_parallel] num_queries:", len(queries))
     t0 = time.perf_counter()
-
-    print("A:", queries, max_chunks)
-
     tasks = [
         hierarchical_retrieve_for_single_query(q, max_chunks=max_chunks)
         for q in queries
@@ -577,6 +633,10 @@ def rerank_chunks(
 
     t0 = time.perf_counter()
 
+
+    for c in chunks: print('--> E:', c["chunk_id"])
+
+
     # --- Extract scores ---
     scores = [c.get("score", 0.0) for c in chunks]
     if not scores:
@@ -622,6 +682,8 @@ def rerank_chunks(
         f"  Reranking time: {t1 - t0:.4f}s "
         f"(chunks in: {len(chunks)}, filtered: {len(filtered)}, out: {len(selected)})"
     )
+
+    for c in selected: print('--> F:', c["chunk_id"])
 
     return selected
 

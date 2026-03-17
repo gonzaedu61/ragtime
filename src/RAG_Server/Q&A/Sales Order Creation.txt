@@ -1,0 +1,17 @@
+(ragtime) PS C:\dev\ragtime> rag "How do I create a new slaes order (Auftrag)? Where do I start? What is the minimum data required?" pepe.json  
+To create a new sales order you proceed exactly as you would for a quotation, but in the sales-order module:
+
+1. Activate the sales-order function (e.g. via “Sammelauftrag” or “Containeraufträge,” if your site uses these).
+2. Choose the action Neu (New). This opens the order header for editing.
+3. In the order header you must enter the following mandatory fields (m):
+   - Datum (order date, tt.mm.yyyy)
+   - Uhrzeit (order time, hh:mm:ss)
+   - Kostenstelle (cost centre)
+   - Buchungsart (booking type)
+4. The system then assigns an order number automatically (from your defined number range) or you may enter one manually (up to 8 digits).
+5. After saving the header, add at least one order position. Here the minimum data for each line is:
+   - Materialnr (material number)
+   - Menge (quantity)
+6. Save the order.
+
+With those six fields—date, time, cost centre, booking type, material number and quantity—you have the absolute minimum to create and save a new sales order.

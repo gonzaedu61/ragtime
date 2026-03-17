@@ -1,0 +1,17 @@
+(ragtime) PS C:\dev\ragtime> rag "Is it advisable to use KPA for a brochure production in ALMENDRO?" pepe.json
+I’m not finding any reference to “KPA” in the provided ALMENDRO documentation. Could you clarify what you mean by KPA or what full term you’re referring to?
+(ragtime) PS C:\dev\ragtime> rag "Is it advisable to work with a  KPA order for a brochure production in ALMENDRO?" pepe.json           
+Could you clarify what you mean by a “KPA order”? That term doesn’t appear in the provided ALMENDRO documentation.
+(ragtime) PS C:\dev\ragtime> rag "What is KPA?" pepe.json                                                                    
+KPA steht für „Kontrakt, Produktion und Abruf“.  
+Es bezeichnet eine Verwaltungsfunktion, mit der in der Artikelpositions-Maske (P-Maske) Vertrags-, Produktions- und Abrufaufträge miteinander verknüpft und abgewickelt werden.
+(ragtime) PS C:\dev\ragtime> rag "When should I use a KPA approach for the sales order?" pepe.json
+You should only switch on the KPA (Contract–Production–Call-off) logic for a sales order when you really need to break one “big” order into legally or operationally distinct steps – customer contract, separate production order(s) and one or more delivery (call-off) orders – and still keep all of those individual documents linked together. 
+
+In practice that means:
+
+• Your order cannot (or must not) be delivered in one go  
+• You want to generate distinct manufacturing and delivery orders under a single umbrella contract  
+• You need to analyse or report “contract vs. production vs. call-off” quantities and values as one consolidated view  
+
+If none of those apply, a standard sales order without KPA is sufficient.

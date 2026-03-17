@@ -1,0 +1,41 @@
+(ragtime) PS C:\dev\ragtime> rag "What are the core processes covered by ALAMENDRO and how do they relate to each other?" pepe.json             
+Based on the available ALMENDRO documentation, the product’s “core” processes and their inter-relationships can be summarized as follows:
+
+1. Master-Data Management (Stammdaten)  
+   • All materials, text types, output layouts and booking-key definitions are maintained here.  
+   • Underpins every downstream process by defining materials, suppliers, text‐attachments, report formats, etc.
+
+2. Offer & Order Management (Angebots- und Auftragsverwaltung)  
+   • You prepare customer offers or sales orders.  
+   • From within an offer/order you can directly generate or edit supplier inquiries (GenAnfr) for any “Anfragematerial.”
+
+3. Inquiry Management (Anfragewesen)  
+   • Inquiries generated from your offers/orders are processed here – either created anew or linked to an existing inquiry number and date.  
+   • Once an inquiry exists, you can jump back and forth between order line and inquiry record.
+
+4. Purchasing (Bestellwesen)  
+   • Purchase orders are placed for the materials and may carry up to four different address lines and any number of free-form texts (by “Textarten”) per order or order line.  
+   • Standard ALMENDRO text-editor functions are available for these attachments.
+
+5. Invoice Receipt (Rechnungseingang)  
+   • Incoming invoices are matched against the purchase order price.  
+   • You post the invoice, triggering the automatic “Update booking price?” prompt.
+
+6. Value-Correction (Wertkorrektur)  
+   • If the invoice unit price does not match the order price, ALMENDRO can automatically divert you into a “Wertkorrektur” posting key.  
+   • Corrections are flagged with “*,” and both original and duplicate open bookings are adjusted.  
+   • After completing corrections, ALMENDRO asks whether to update the future-receipt booking price to the new invoice price—avoiding repeated corrections.
+
+7. Reporting & Analytics (Auswertungen)  
+   • Data from any module (master-data printouts, statistics, offers, orders, purchasing, invoicing, etc.) can be extracted via field filters or a search dialog.
+   • Outputs are defined in the Stammdaten (not hard-coded) and offered in three groups (user-created, consultant-provided, standard), plus any PrintClient layouts.
+   • With a single entry remaining, ALMENDRO will launch that report immediately; special media (Excel, Word, graphics, PC-PrintClient) are surfaced first.    
+
+8. Administration & System Operation (Administration ALMENDRO)
+   • Configuration of environment parameters (e.g. whether to separate report groups by a line, or to auto-branch into the correction key)
+   • Share-drive setup (cmx_share and cmx_share_ro)
+   • Proper program termination safeguards license release and server performance.
+   • GDPR-driven anonymization utility to purge or anonymize personal data after defined retention periods.
+
+Process Flow (high-level):
+ Master Data → Offers & Orders → Inquiries → Purchase Orders → Invoice Receipt → Value Correction (if needed) → Price-Update for Future Receipts → Reporting → (continuous) Administration & Data-Privacy Management

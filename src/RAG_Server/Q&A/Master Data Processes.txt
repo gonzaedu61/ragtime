@@ -1,0 +1,30 @@
+ragtime) PS C:\dev\ragtime> rag "What are the subprocesses within the Master-Data Management in ALMENDRO?" pepe.json              
+Could you clarify what you mean by “Master-Data Management” in ALMENDRO? In our documentation we only refer to “Stammdatenpflege” (e. g. locking of master data, text-table maintenance, vendor/seller master data, bulk import via Excel, machine management etc.). Which of these subprocesses are you asking about?
+(ragtime) PS C:\dev\ragtime> rag "What are the  Master-Data Management subprocesses in ALMENDRO? Give me a list and a brief description for each one of them" pepe.json
+Könnten Sie bitte präzisieren, was Sie genau unter den „Master-Data Management subprocesses“ verstehen? In unseren Unterlagen taucht dieser englische Begriff nicht auf. Meinen Sie damit die Stammdaten-Module (z. B. Textarten, Maschinenverwaltung, Stundensatzpflege, Fremdleistung, Artikel-„Gen“ usw.)? Wenn ja, welche davon interessieren Sie konkret?
+(ragtime) PS C:\dev\ragtime> rag "Welche Teilprozesse des Stammdatenmanagements gibt es in ALMENDRO? Bitte geben Sie mir eine Liste und eine kurze Beschreibung für jeden einzelnen." pepe.json
+Entschuldigung, hierzu finde ich in den bereitgestellten Unterlagen keine eindeutige Auflistung von Teilprozessen des Stammdatenmanagements in ALMENDRO. Können Sie bitte spezifizieren, welche Stammdaten (z. B. Artikel, Lieferanten, Maschinen usw.) oder welchen konkreten Prozessbereich Sie meinen?
+(ragtime) PS C:\dev\ragtime> rag "Welche Teilprozesse des Stammdatenpfleges gibt es in ALMENDRO? Bitte geben Sie mir eine Liste und eine kurze Beschreibung für jeden einzelnen." pepe.json    
+Ich finde in den bereitgestellten Unterlagen keine explizite Auflistung der Teilprozesse der Stammdatenpflege in ALMENDRO. Könnten Sie bitte etwas genauer spezifizieren,
+
+– in welchem Dokument oder Workshop die Teilprozesse beschrieben sein sollen  
+– oder welche konkreten Stammdatenbereiche (z. B. Artikel, Kunden, Lieferanten, Textarten o. Ä.) Sie meinen?
+(ragtime) PS C:\dev\ragtime> rag "Can you summarize the master data topic areas covered in ALMENDRO?" pepe.json                                                
+Here is an English summary of the main master-data topic areas handled in ALMENDRO (all names refer to the corresponding PDF/workshop where you find the details):
+
+1. Address master data (stamm_adr.pdf)  
+2. “Other” master data (stamm_sonst.pdf / Workshop “Stammdaten Sonstige”)  
+3. Material master data (Workshop “Stammdaten Material”)  
+4. Calculation master data (stamm_kalk.pdf / Workshop “Stammdaten Kostenstellen, Kalkulation”):  
+   - Cost centers  
+   - Operations (Arbeitsgänge)  
+   - Service/performance catalogs (Leistungskatalog)  
+5. Text tables (short & long):
+   - 1–4-digit key + 20- or 50-character description
+   - From v10.1 you can block individual entries so they no longer appear in pick lists
+6. Freight tables (“Standard” and “Lieferant” versions) for tariff calculation in costing and delivery notes
+7. Seller (mandant) payment-receipt data (in the seller’s master data)
+8. Reference quantities (Bezugsgrößen), e.g. for interpolation or operation quantities (handled by ALMENDRO support)
+9. Control parameters for the standard cost calculation result (adm_kerg.pdf)
+10. GDPR-driven anonymization settings for personal data
+11. Data-import/-export definitions (e.g. large-volume Excel upload/download of master data)

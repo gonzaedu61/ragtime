@@ -1,444 +1,535 @@
 {
-  "answer": "Based on the provided context, the Lohnarten actually referenced are:\n\n• Lohnart 251 – covers the period 14:00–15:00  \n• Lohnart 252 – covers the period 15:30–16:00  \n• Lohnart 21  – applied to the first two overtime hours  \n• Lohnart 22  – applied to the next (up to five) overtime hours",
+  "answer": "To create a new sales order you proceed exactly as you would for a quotation, but in the sales-order module:\n\n1. Activate the sales-order function (e.g. via “Sammelauftrag” or “Containeraufträge,” if your site uses these).\n2. Choose the action Neu (New). This opens the order header for editing.\n3. In the order header you must enter the following mandatory fields (m):  \n   - Datum (order date, tt.mm.yyyy)  \n   - Uhrzeit (order time, hh:mm:ss)  \n   - Kostenstelle (cost centre)  \n   - Buchungsart (booking type)  \n4. The system then assigns an order number automatically (from your defined number range) or you may enter one manually (up to 8 digits).\n5. After saving the header, add at least one order position. Here the minimum data for each line is:  \n   - Materialnr (material number)  \n   - Menge (quantity)  \n6. Save the order.\n\nWith those six fields—date, time, cost centre, booking type, material number and quantity—you have the absolute minimum to create and save a new sales order.",
   "language": "en",
   "used_queries": [
-    "Welche verschiedenen Lohnarten gibt es?",
-    "Welche Lohnformen gibt es?",
-    "Welche Arten von Lohn werden unterschieden?"
+    "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+    "Welche Themenbereiche muss ich abdecken, um einen neuen Verkaufsauftrag anzulegen, und welche Mindestdaten sind dafür notwendig?",
+    "Welche Themenbereiche sind relevant beim Erstellen eines Verkaufsauftrags, und welche minimalen Angaben werden dazu benötigt?"
   ],
   "retrieved_chunks": [
     {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "a78fc54b83937548b379480d9ec97fa4",
-      "text": "0 Lohnart wird unabhängig vom Wert übergeben. 1 Lohnart wird nicht übergeben, wenn der Wert negativ ist.",
-      "score": 0.8518679141998291,
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "cd4a325acda51a6f46c38ab0fd1055f4",
+      "text": "Funktion „Sammelauftrag“ aktivieren.",
+      "score": 0.857373833656311,
       "metadata": {
-        "token_count": 27,
-        "chunk_id": 15,
-        "mixed_combo": "paragraph",
+        "chunk_id": 427,
+        "document_name": "planung",
+        "token_count": 11,
         "heading_path": [
-          "2 Stammdaten",
-          "2.5 Lohnarten",
-          "Negativlohnarten"
+          "21 Konfiguration",
+          "21.1 Parameter",
+          "Anzahl Kostenstellen",
+          "Zeitfaktor",
+          "EDatum Uhrzeit",
+          "EDatum TS",
+          "Verknüpfen Auftrag"
         ],
-        "chunk_text_class": "Requirements specification",
-        "document_name": "lohn",
+        "mixed_combo": "paragraph",
+        "pages": [
+          214
+        ],
+        "chunk_text_class": "Usage instructions",
+        "chunk_type": "paragraph",
         "image_paths": [
-          "..\\3_Extracted_Images\\lohn\\page_13_block_18.jpg"
+          "..\\3_Extracted_Images\\planung\\page_214_block_25.jpg"
+        ]
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "767a99916f69f3d3a0523e9f2d1f1066",
+      "text": "Siehe Workshop „Angebot/Auftrag-Basis“.",
+      "score": 0.8554520010948181,
+      "metadata": {
+        "chunk_text_class": "Other",
+        "chunk_id": 210,
+        "chunk_type": "paragraph",
+        "document_name": "stamm_mat",
+        "token_count": 13,
+        "heading_path": [
+          "8 Generieren Materialstamm",
+          "8.1 Generieren Fertigungsmaterial"
         ],
         "pages": [
-          13
+          71
+        ],
+        "mixed_combo": "paragraph"
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "5d46dfa8f479df6eb6fd4a2b4d93e113",
+      "text": "Auswahl: Beleg Datum : Lagerort : Seriennummer : Paletten-Nr. : Bestellung : Lieferant : Auftrag : Kunde : Kostenstelle : Kunde : ------------------------------------------------------------------------------------------------------------------------------",
+      "score": 0.8531572222709656,
+      "metadata": {
+        "chunk_id": 13,
+        "chunk_text_class": "Other",
+        "pages": [
+          7
+        ],
+        "token_count": 35,
+        "chunk_type": "paragraph",
+        "mixed_combo": "paragraph",
+        "document_name": "mawi_analysen",
+        "heading_path": [
+          "2 Analysen",
+          "2.2 Journal"
+        ]
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "33b9a692b09f255a7e4d776af280e2bb",
+      "text": "Menge Menge aus Auftrag Menge geliefert Mengeneinh. Mengeneinheit aus Auftrag E-Preis Preis aus Auftrag Preis weitere Preiseinheit Preiseinheit aus Auftrag Gesamt Gesamtpreis aus Auftrag",
+      "score": 0.8524789810180664,
+      "metadata": {
+        "chunk_id": 23,
+        "mixed_combo": "table",
+        "document_name": "auf_rech",
+        "chunk_type": "table",
+        "heading_path": [
+          "3 Rechnung",
+          "3.2 Positionen",
+          "3.2.2 Sonderfunktionen",
+          "3.2.2.2 aus Auftrag"
+        ],
+        "token_count": 38,
+        "chunk_text_class": "Requirements specification",
+        "pages": [
+          11
+        ]
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "b852f5d7c093ebeb6dfcf7ca34ced14f",
+      "text": "Ohne KPA Verkauf KPA-Kontrakt Laut Parameter - Verkauf - über Abruf KPA-Produktion Produktion KPA-Abruf Verkauf",
+      "score": 0.8496078252792358,
+      "metadata": {
+        "document_name": "auf_pos",
+        "chunk_id": 22,
+        "pages": [
+          15
+        ],
+        "chunk_type": "paragraph",
+        "token_count": 29,
+        "mixed_combo": "paragraph",
+        "heading_path": [
+          "4 Bearbeitungsmaske Auftragspositionen",
+          "4.2 Spalten/Felder",
+          "Kz Artikelposition",
+          "Auftragsart Voreinstellung"
+        ],
+        "chunk_text_class": "Process description"
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "02493f3fdede70a4e6f631da8b22cbe2",
+      "text": "Mit der Aktion Neu gelangt wird die Bearbeitung des Angebotes begonnen. Im Programmkopf werden die Grunddaten des Angebots geführt. Die Zusatzdaten werden in Foldertabs geführt. Angebotsnummer Bei Neuanlage eines Angebotes wird eine Angebotsnummer vergeben. Dies geschieht entweder manuell über die Eingabe Angebotsnummer (maximal 8-stellig) oder durch automatische Vergabe über einen Nummernkreise, der in den Stammdaten festgelegt wurde.",
+      "score": 0.8470492959022522,
+      "metadata": {
+        "mixed_combo": "paragraph",
+        "heading_path": [
+          "4 Kopfdaten"
+        ],
+        "image_paths": [
+          "..\\3_Extracted_Images\\ang_basis\\page_10_block_8.jpg"
+        ],
+        "chunk_id": 7,
+        "pages": [
+          10
+        ],
+        "chunk_text_class": "Usage instructions",
+        "token_count": 97,
+        "chunk_type": "paragraph",
+        "document_name": "ang_basis"
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "fba1151d21d32bfe54527f47d4352122",
+      "text": "Nr Bezeichnung muss/kann 1 Datum m tt.mm.yyyy 2 Uhrzeit m hh:mm:ss 3 Kostenstelle m 4 Buchungsart m 21 5 Materialnr m 6 Menge m",
+      "score": 0.8447861671447754,
+      "metadata": {
+        "chunk_id": 39,
+        "pages": [
+          14
+        ],
+        "chunk_text_class": "Requirements specification",
+        "chunk_type": "paragraph",
+        "mixed_combo": "paragraph",
+        "heading_path": [
+          "4 Datenübernahme",
+          "4.4 ASCII-File",
+          "4.4.1 Struktur",
+          "4.4.1.7 Materialverbrauch"
+        ],
+        "token_count": 44,
+        "document_name": "leist_bde_ext"
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "73e56035afa965d206b0a56d25450b6c",
+      "text": "Wechsel zu einem anderen Angebot/Auftrag über die Funktionen „Neu“, „Ändern“, „Suchen“.",
+      "score": 0.8446216583251953,
+      "metadata": {
+        "chunk_id": 214,
+        "chunk_type": "paragraph",
+        "token_count": 24,
+        "chunk_text_class": "Usage instructions",
+        "heading_path": [
+          "11 Ringmenüfunktionen",
+          "11.8 Wechsel"
+        ],
+        "pages": [
+          130
+        ],
+        "mixed_combo": "paragraph",
+        "document_name": "ang_basis"
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "3e9b0a0ceb6930cd894a94edae023831",
+      "text": "Lieferschein Lieferschein-Nummer Belegdatum Lieferschein-Datum Adresse / Anschrift Adresse / Anschrift aus Lieferscheinkopf Belegart L Lieferschein SL Sammellieferschein Positionen Anzahl Lieferscheinpositionen Anzahl Umbuchung Anzahl Lieferscheinpositionen für Umbuchungslieferschein Auftrag Auftragsnummer und –bezeichnung Kunde / Anschrift Rechnungsanschrift aus Auftragsstamm",
+      "score": 0.8444502353668213,
+      "metadata": {
+        "chunk_text_class": "Requirements specification",
+        "chunk_type": "paragraph",
+        "document_name": "auf_rech",
+        "token_count": 84,
+        "heading_path": [
+          "7 Generieren Rechnungen",
+          "7.2 Generieren Rechnung aus Lieferscheinen",
+          "7.2.1 Programmanwahl",
+          "Spalte Beschreibung"
+        ],
+        "chunk_id": 53,
+        "mixed_combo": "paragraph",
+        "pages": [
+          30
+        ]
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "6d7a8520273f6539fca8ed73bc1ece46",
+      "text": "Zusätzlich werden Kontaktdaten des Verkäufers benötigt. Diese werden aus einem speziell dafür vorgesehenen Textbaustein gelesen.",
+      "score": 0.8431674838066101,
+      "metadata": {
+        "document_name": "auf_xrech",
+        "chunk_id": 7,
+        "heading_path": [
+          "3 Stammdaten",
+          "3.1 Mandantenstamm",
+          "3.1.2 Kontaktdaten"
+        ],
+        "chunk_text_class": "Requirements specification",
+        "token_count": 27,
+        "mixed_combo": "paragraph",
+        "pages": [
+          6
         ],
         "chunk_type": "paragraph"
       }
     },
     {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "ace62b23b351153a3e8f42034f308549",
-      "text": "14,00 – 15,00 14:00 – 15:00 Uhr Lohnart 251 15,30 – 16,00 15Uhr30Min – 16Uhr Lohnart 252",
-      "score": 0.8503931760787964,
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "bfc7f30dceff9d0aaa27f5a45ad906ad",
+      "text": "Standard ProdStart Eingeplanter Fertigungsauftrag, Datum und Uhrzeit des Produktionsstarts. Standard",
+      "score": 0.8430486917495728,
       "metadata": {
-        "mixed_combo": "paragraph",
-        "token_count": 48,
-        "chunk_id": 39,
-        "heading_path": [
-          "2 Stammdaten",
-          "2.9 Lohnartentabellen",
-          "2.9.3 Nachtzuschläge",
-          "von/bis Zeit Funktion"
-        ],
-        "pages": [
-          27
-        ],
-        "chunk_type": "paragraph",
-        "document_name": "lohn",
-        "chunk_text_class": "Other"
-      }
-    },
-    {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "37e7c1837e7bf2dca19d18e439eb8b7b",
-      "text": "Die Ermittlung der Lohnarten wird über die Lohnartentabellen und die Lohnregeln (Berechnungen) vorgenommen. Die Lohnartentabellen werden im Programm \"Tabellen Kostenstellen\" unter Punkt \"Lohnermittlung\" im System hinterlegt. Über die Kombination Kostenstelle, Tagesart und Schicht können unterschiedliche Regelwerke für die Erstellung der Lohnarten hinterlegt werden. Dabei besteht ein Regelwerk aus folgenden Tabellenarten.",
-      "score": 0.848320722579956,
-      "metadata": {
-        "heading_path": [
-          "2 Stammdaten",
-          "2.9 Lohnartentabellen"
-        ],
-        "chunk_type": "paragraph",
-        "document_name": "lohn",
-        "pages": [
-          24
-        ],
+        "chunk_id": 144,
         "chunk_text_class": "Process description",
-        "image_paths": [
-          "..\\3_Extracted_Images\\lohn\\page_24_block_10.jpg",
-          "..\\3_Extracted_Images\\lohn\\page_24_block_11.jpg",
-          "..\\3_Extracted_Images\\lohn\\page_24_block_12.jpg"
-        ],
-        "token_count": 95,
-        "chunk_id": 34,
-        "mixed_combo": "paragraph"
-      }
-    },
-    {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "e23d768f1daaedce27c762dbb0b60f85",
-      "text": "Mit diesem Programm werden die Pseudolohnarten in echte Lohnarten (Lohnartenstamm: echte Lohnart) umgesetzt. Es werden keine Zusatzverbuchungen durchgeführt. Es können maximal 450 Lohnarten bearbeitet werden, die einen Eintrag im Feld echte Lohnart (Lohnartenstamm) aufweisen. bis Datum Es werden alle vorhandenen Pseudolohnarten in echte Lohnarten getauscht, bis einschließlich diesem Datum.",
-      "score": 0.8465181589126587,
-      "metadata": {
-        "image_paths": [
-          "..\\3_Extracted_Images\\lohn\\page_40_block_9.jpg"
+        "document_name": "planung",
+        "pages": [
+          81
         ],
         "chunk_type": "paragraph",
         "mixed_combo": "paragraph",
         "heading_path": [
-          "6 Lohnaufbereitung",
-          "6.2 Pseudolohnarten"
+          "5 Bildschirm-Bereiche",
+          "5.5 Auftragsdetails (Fertigungsaufträge)",
+          "Sortierung",
+          "Spalten"
         ],
-        "chunk_id": 64,
-        "document_name": "lohn",
-        "chunk_text_class": "Application description",
-        "pages": [
-          40
-        ],
-        "token_count": 96
+        "token_count": 20
       }
     },
     {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "9106e93871bdb13c62933a7caa05b410",
-      "text": "Tagesarten werden benötigt, um unterschiedliche Lohnartentabellen in Abhängigkeit von der Tagesart im System hinterlegen zu können. → Tabellen Kostenstellen, Lohnermittlung",
-      "score": 0.8445919752120972,
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "5dae28026f3e6c66e80ea4765892a679",
+      "text": "Kundenauftrag für einen oder mehrere Artikel. In einer Position eines Kontraktes werden festgelegt: - Die Leistung, also der Artikel, der geliefert wird - Die zu liefernde Gesamtmenge des Artikels - Der Preis zu welchem der Artikel geliefert wird",
+      "score": 0.842926025390625,
+      "metadata": {
+        "token_count": 52,
+        "heading_path": [
+          "2 Allgemeines",
+          "2.2 Warum KPA",
+          "Kontrakt"
+        ],
+        "mixed_combo": "list_item + paragraph",
+        "chunk_text_class": "Process description",
+        "document_name": "auf_kpa",
+        "pages": [
+          6
+        ],
+        "chunk_id": 6,
+        "chunk_type": "mixed"
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "4e0cfa57bccf048d9d6cc4d6d0e85230",
+      "text": "Stammkalkulationen werden im Normalfall aus den Daten des Erstauftrages angelegt. Siehe Kapitel „Auftrag“ in diesem Workshop.",
+      "score": 0.8426066637039185,
       "metadata": {
         "mixed_combo": "paragraph",
-        "image_paths": [
-          "..\\3_Extracted_Images\\lohn\\page_5_block_11.jpg"
-        ],
-        "document_name": "lohn",
+        "token_count": 32,
+        "chunk_type": "paragraph",
+        "chunk_id": 51,
+        "chunk_text_class": "Process description",
         "heading_path": [
-          "2 Stammdaten",
-          "2.1 Tagesarten"
+          "5 Artikelanlage",
+          "5.1 Anlage einer Stammkalkulation aus Erstauftrag"
+        ],
+        "pages": [
+          29
+        ],
+        "document_name": "auf_poskalk"
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "ad9b2b581dc5bb566d7fb5507ef43a92",
+      "text": "Die Bestellung wird generiert und zur Bearbeitung angezeigt. Folgende Daten werden automatisch eingestellt stehen jedoch zur Bearbeitung zur Verfügung. Feld Beschreibung Beispiel Nummer Aus Nummernkreis laut Parametereinstellungen „Planung“ 10019 Lieferant Lieferant aus Stammdaten Kostenstelle/Planung 9006 Datum Heute 24.05.2009 Adressdaten Adressdaten aus Lieferantenstamm (Versandart, Währung, Konditionen, Exemplare) Material Materialdaten aus Stammdaten Kostenstelle/Plaunung x-sh Menge Aus Fertigungsauftrag „Menge“ 10.300 Termin Aus Fertigungsauftrag „ProdEnde“ 26.05.2009 Nach dem Schließen der Bestellung wird der nächste Fertigungsauftrag zur Bearbeitung angezeigt. Die Bestellnummer und das Bestelldatum werden in den Auftragsdetails angezeigt. Die Planung kann erst fortgesetzt werden, wenn ein aus der Planung aufgerufenes Bestellprogramm beendet wurde.",
+      "score": 0.8419642448425293,
+      "metadata": {
+        "mixed_combo": "paragraph",
+        "pages": [
+          147
+        ],
+        "heading_path": [
+          "9 Fremdleistung",
+          "9.3 Bestellung",
+          "9.3.1 Generieren Bestellung"
+        ],
+        "token_count": 197,
+        "document_name": "planung",
+        "chunk_text_class": "Process description",
+        "chunk_id": 282,
+        "image_paths": [
+          "..\\3_Extracted_Images\\planung\\page_147_block_24.jpg",
+          "..\\3_Extracted_Images\\planung\\page_147_block_25.jpg",
+          "..\\3_Extracted_Images\\planung\\page_147_block_26.jpg",
+          "..\\3_Extracted_Images\\planung\\page_148_block_14.jpg"
+        ],
+        "chunk_type": "paragraph"
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "099f1b52e311383090f240a45d99df23",
+      "text": "Auftrag Nicht fertiggemeldet Artikel Kz „Ohne Bestand“ = nein (0) Auftragsposition Kennzeichen „Verkauf“ Auftragsposition Datum laut Vorgabe Auftragsposition nicht bereits in einer Ladeliste ( auch wenn nur Teilmenge aus Auftragsposition in Ladelistenposition ) Auftragsposition nicht bereits in einem Lieferschein ( auch wenn nur Teilmenge aus Auftragsposition in Lieferscheinposition )",
+      "score": 0.8416063785552979,
+      "metadata": {
+        "heading_path": [
+          "7 Generieren Ladeliste",
+          "7.3 Generieren aus Auftragspositionen (Fertigware)",
+          "Prüfung Beschreibung"
+        ],
+        "image_paths": [
+          "..\\3_Extracted_Images\\auf_lade\\page_36_block_20.jpg",
+          "..\\3_Extracted_Images\\auf_lade\\page_37_block_17.jpg"
+        ],
+        "document_name": "auf_lade",
+        "chunk_text_class": "Requirements specification",
+        "token_count": 88,
+        "pages": [
+          36
+        ],
+        "chunk_id": 42,
+        "mixed_combo": "paragraph",
+        "chunk_type": "paragraph"
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "6d43a3d661c6a90b1654de6fdc235c12",
+      "text": "Nr Bezeichnung muss/kann 1 Datum m tt.mm.yyyy 2 Uhrzeit m hh:mm:ss 3 Kostenstelle m 4 Buchungsart m 11 5 Arbeitsgang m 6 Auftrag m 7 Produkt k 8 Teil k",
+      "score": 0.8402835130691528,
+      "metadata": {
+        "chunk_id": 34,
+        "document_name": "leist_bde_ext",
+        "chunk_type": "paragraph",
+        "heading_path": [
+          "4 Datenübernahme",
+          "4.4 ASCII-File",
+          "4.4.1 Struktur",
+          "4.4.1.4 Leistung-Start"
         ],
         "chunk_text_class": "Requirements specification",
-        "chunk_id": 4,
-        "chunk_type": "paragraph",
-        "pages": [
-          5
-        ],
-        "token_count": 39
-      }
-    },
-    {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "b541575865c2bf4206df6464fa4a7a35",
-      "text": "nein Lohnarten werden nicht neu ermittelt, wenn Daten des Tagszettelkopfes (Schicht, von/bis Zeit) und/oder Leistungspositionen geändert werden. ja Lohnarten werden jedesmal neu ermittelt, wenn Daten des Tagszettelkopfes (Schicht, von/bis Zeit) und/oder Leistungspositionen geändert werden.",
-      "score": 0.8432762622833252,
-      "metadata": {
         "mixed_combo": "paragraph",
-        "token_count": 72,
-        "heading_path": [
-          "3 Parameter",
-          "3.1 Tageszettelerfassung",
-          "Abgleich Leistung-Lohn",
-          "Abbruch TZ (Neu) löschen TZ und Lohndaten",
-          "Lohnermittlung bei Änderung Tageszettel"
-        ],
-        "document_name": "lohn",
-        "chunk_id": 43,
         "pages": [
-          28
+          13
         ],
-        "chunk_type": "paragraph",
-        "chunk_text_class": "Requirements specification"
+        "token_count": 52
       }
     },
     {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "10b120f4d3896d54cd7b466f36b87775",
-      "text": "Lohnarten Übername der von/bis Zeit aus dem Schichtplan, Generieren der Lohnarten auf der Basis der Lohnartentabellen und der Zusatzfunktionen laut Par-1 und Par- 2.",
-      "score": 0.8418705463409424,
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "d14805ef86095367382e18f9e39207c6",
+      "text": "Beispiel: Vorgabe: Anlage: ~ Eingabe: Angebot Ergebnis: Anlage: Angebot",
+      "score": 0.8399648666381836,
       "metadata": {
-        "heading_path": [
-          "3 Parameter",
-          "3.2 Lohnregel",
-          "3.2.2 Aufruf Lohnregeln in Programmen",
-          "3.2.2.3 Schicht in Lohnart",
-          "Ermittlung der Lohnarten über Schichtplan und Lohnartenstamm",
-          "Ermittlung der Lohnarten über Schichtplan inkl. von/bis Zeiten, Lohnartentabellen und Lohnregeln"
-        ],
-        "chunk_text_class": "Process description",
+        "token_count": 19,
+        "document_name": "basis",
         "mixed_combo": "table",
-        "chunk_id": 53,
-        "document_name": "lohn",
-        "token_count": 47,
         "pages": [
-          32
+          91
         ],
+        "heading_path": [
+          "8 Texterfassung",
+          "8.3 Kopier-, Ausschneide- und Einfügefunktionen",
+          "8.3.4 Ersetze",
+          "8.3.4.1 Linksbündiges Ersetzen mit \"~\"",
+          "Ersetzen mit einem ~-Zeichen"
+        ],
+        "chunk_id": 150,
+        "chunk_text_class": "Requirements specification",
         "chunk_type": "table"
       }
     },
     {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "443033fbc66fe81fe991582638dca467",
-      "text": "Neuermittlung der Lohnarten auf der Basis der Kopfdaten und der aktuellen Stammdaten / Parameter. Die Lohnarten werden gelöscht (auch manuell erfasste Lohnarten) und über die Lohnartentabellen (und ggf. Lohnregeln) neu ermittelt !",
-      "score": 0.8403412699699402,
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "67f91a5bf60afb633d59cbe1eb81b531",
+      "text": "Im Stammdaten des Verkäufers (=ALMENDRO-Mandant) werden folgende Daten des Verkäufers für den Zahlungseingang eingetragen.",
+      "score": 0.8394560813903809,
       "metadata": {
-        "chunk_id": 59,
+        "pages": [
+          5
+        ],
         "chunk_text_class": "Process description",
-        "pages": [
-          36
-        ],
+        "document_name": "auf_xrech",
+        "chunk_id": 5,
         "heading_path": [
-          "4 Lohnerfassung",
-          "4.2 Lohnartenbearbeitung",
-          "4.2.3 Lohnermittlung"
+          "3 Stammdaten",
+          "3.1 Mandantenstamm",
+          "3.1.1 Bankdaten"
         ],
         "mixed_combo": "paragraph",
-        "document_name": "lohn",
-        "chunk_type": "paragraph",
-        "token_count": 63,
-        "image_paths": [
-          "..\\3_Extracted_Images\\lohn\\page_36_block_12.jpg"
-        ]
-      }
-    },
-    {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "fbbdcc968a8b8b415c5074da32716f13",
-      "text": "Für die Lohnartenermittlung in Abhängigkeit von der Tagesart wird die Angabe unter „Tagesart“ verwendet.",
-      "score": 0.8399950861930847,
-      "metadata": {
-        "pages": [
-          26
-        ],
-        "chunk_type": "paragraph",
-        "chunk_id": 63,
-        "heading_path": [
-          "3 Betriebskalender",
-          "3.1 Einsatz",
-          "3.1.4 Lohn"
-        ],
-        "document_name": "stamm_sonst",
-        "token_count": 27,
-        "chunk_text_class": "Usage instructions",
-        "mixed_combo": "paragraph"
-      }
-    },
-    {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "8408712c635dadba31d53c4d8af9da59",
-      "text": "Siehe Workshop „stamm_lohn“.",
-      "score": 0.8347840309143066,
-      "metadata": {
-        "pages": [
-          94
-        ],
-        "chunk_text_class": "Other",
-        "chunk_type": "paragraph",
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_kalk\\page_94_block_21.jpg"
-        ],
-        "mixed_combo": "paragraph",
-        "heading_path": [
-          "16 Tabellen Kostenstellen",
-          "16.1 Lohnartenermittlung"
-        ],
-        "chunk_id": 151,
-        "token_count": 9,
-        "document_name": "stamm_kalk"
-      }
-    },
-    {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "e64fc5641a28d9ecfb5076a8ce335e7e",
-      "text": "Wert je Lohnart auf der Basis der Lohnartentabellen und der Zusatzfunktionen laut Par-1 und Par- 2. Achtung Im Mandantenstamm muss der Parameter \"Lohn\" im Mandantenstamm (Parametersatz 3) gesetzt sein (mindestens \"00\").",
-      "score": 0.8338120579719543,
-      "metadata": {
-        "chunk_id": 54,
-        "heading_path": [
-          "3 Parameter",
-          "3.2 Lohnregel",
-          "3.2.2 Aufruf Lohnregeln in Programmen",
-          "3.2.2.3 Schicht in Lohnart",
-          "Ermittlung der Lohnarten über Schichtplan und Lohnartenstamm",
-          "Ermittlung der Lohnarten über Schichtplan inkl. von/bis Zeiten, Lohnartentabellen und Lohnregeln"
-        ],
-        "pages": [
-          32
-        ],
-        "token_count": 64,
-        "image_paths": [
-          "..\\3_Extracted_Images\\lohn\\page_32_block_21.jpg"
-        ],
-        "chunk_text_class": "Usage instructions",
-        "mixed_combo": "paragraph",
-        "document_name": "lohn",
+        "token_count": 33,
         "chunk_type": "paragraph"
       }
     },
     {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "6a588904109233302edc687e824a9c66",
-      "text": "Anzeige und Bearbeitung der Lohnarten-Maske (weitere Informationen siehe Workshop „Lohn“).",
-      "score": 0.8335553407669067,
-      "metadata": {
-        "token_count": 22,
-        "document_name": "leist_tz",
-        "mixed_combo": "paragraph",
-        "chunk_id": 24,
-        "pages": [
-          10
-        ],
-        "heading_path": [
-          "3 Tageszettelerfassung",
-          "3.3 Tageszettelpositionen",
-          "3.3.1 Sonderfunktionen",
-          "3.3.1.2 Lohnarten"
-        ],
-        "chunk_text_class": "Process description",
-        "chunk_type": "paragraph"
-      }
-    },
-    {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "aa464ce8bc415bdbb63474927744438f",
-      "text": "Beim Aufruf eines vorhandenen Datensatzes mit der Funktion \"Ändern\" werden die Lohnarten nicht neu ermittelt . Dies ist auch nicht der Fall, wenn Daten im Kopf (Schicht oder von/bis Zeit) geändert werden. Die Lohnarten können/müssen manuell bearbeitet werden.",
-      "score": 0.8334783315658569,
-      "metadata": {
-        "chunk_text_class": "Process description",
-        "heading_path": [
-          "4 Lohnerfassung",
-          "4.2 Lohnartenbearbeitung",
-          "4.2.2 Änderung"
-        ],
-        "token_count": 64,
-        "image_paths": [
-          "..\\3_Extracted_Images\\lohn\\page_36_block_11.jpg"
-        ],
-        "pages": [
-          36
-        ],
-        "chunk_id": 58,
-        "mixed_combo": "paragraph",
-        "chunk_type": "paragraph",
-        "document_name": "lohn"
-      }
-    },
-    {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "1121a945dc3aab02f3ad8465f08f4642",
-      "text": "Änderung Im Änderungsdienst werden die Lohnarten nicht neu ermittelt, wird also Schicht, von/bis Zeit geändert hat dies keine Auswirkung auf die bereits ermittelten Lohnarten. Die Lohnarten können dann, nur manuell über den Button „Lohnart F10“ geändert werden oder über das Programm Lohnartenbearbeitung.",
-      "score": 0.832770824432373,
-      "metadata": {
-        "heading_path": [
-          "4 Lohnerfassung",
-          "4.1 Tageszettel"
-        ],
-        "mixed_combo": "paragraph",
-        "chunk_text_class": "Usage instructions",
-        "chunk_id": 56,
-        "document_name": "lohn",
-        "pages": [
-          34
-        ],
-        "token_count": 74,
-        "chunk_type": "paragraph"
-      }
-    },
-    {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "4dfa159858b2a0fba44e251aa4a7a5a4",
-      "text": "2,00 Die ersten beiden Überstunden werden mit Lohnart 21 abgestellt. 5,00 Die verbleibenden Überstunden werden mit Lohnart 22 abgestellt, jedoch nur bis Maximal 5 verbleibende Überstunden. Hinweis Weitere Überstunden (>7) werden nicht berücksichtigt und gehen bei der Lohnartenermittlung verloren. Beim Eintrag der Überstunden muss daher unbedingt darauf geachtet werden, dass ein Überschreiten der Überstundenvorgabe ausgeschlossen ist!!!",
-      "score": 0.8316683769226074,
-      "metadata": {
-        "token_count": 101,
-        "document_name": "lohn",
-        "pages": [
-          26
-        ],
-        "heading_path": [
-          "2 Stammdaten",
-          "2.9 Lohnartentabellen",
-          "2.9.2 Überstunden",
-          "Wert Funktion"
-        ],
-        "chunk_id": 37,
-        "chunk_type": "paragraph",
-        "mixed_combo": "paragraph",
-        "chunk_text_class": "Usage instructions"
-      }
-    },
-    {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "5c2a111083ac597a20a095add643864d",
-      "text": "Neuermittlung der Lohnarten für alle Erfassungen laut „Suche“ auf der Basis der jeweiligen Kopfdaten und der aktuellen Stammdaten / Parameter. Nach Eingabe und Bestätigung der „Suche“ erfolgt Sicherheitsabfrage, die bestätigt werden muss. Die Lohnarten werden gelöscht (auch manuell erfasste Lohnarten) und über die Lohnartentabellen (und ggf. Lohnregeln) neu ermittelt !",
-      "score": 0.8315616846084595,
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "00769b8d112c18674204bbb9914cbcc8",
+      "text": "Auftrag aktiviert - Darstellung Container Mischung Container und Einzelaufträge – Darstellung Einzelauftrag",
+      "score": 0.8393534421920776,
       "metadata": {
         "image_paths": [
-          "..\\3_Extracted_Images\\lohn\\page_37_block_11.jpg",
-          "..\\3_Extracted_Images\\lohn\\page_37_block_12.jpg"
+          "..\\3_Extracted_Images\\planung\\page_175_block_10.jpg",
+          "..\\3_Extracted_Images\\planung\\page_176_block_9.jpg"
         ],
-        "chunk_text_class": "Process description",
-        "mixed_combo": "paragraph",
-        "token_count": 95,
-        "document_name": "lohn",
-        "chunk_type": "paragraph",
+        "chunk_text_class": "Requirements specification",
         "heading_path": [
-          "4 Lohnerfassung",
-          "4.2 Lohnartenbearbeitung",
-          "4.2.4 Lohnermittlung über Suche"
+          "14 Container",
+          "14.3 Planen",
+          "14.3.3 Darstellung in der Grafik"
         ],
         "pages": [
-          37
+          175
         ],
-        "chunk_id": 60
-      }
-    },
-    {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "971c10a3f94fee18024fece6d6b41174",
-      "text": "von/bis Kostenstelle Es besteht die Möglichkeit die Liste über die Angabe von/bis Lohnkostenstelle (z.B. nur Aushilfen, Lohnempfänger) einzugrenzen. von/bis Personalnummer Es besteht die Möglichkeit die Liste über die Angabe von/bis Personalnummer einzugrenzen. von/bis Lohnart Es besteht die Möglichkeit die Liste über die Angabe von/bis Lohnart einzugrenzen. von/bis Datum Es besteht die Möglichkeit die Liste über die Angabe von/bis Datum einzugrenzen.",
-      "score": 0.8297178745269775,
-      "metadata": {
-        "chunk_id": 62,
-        "chunk_type": "paragraph",
-        "heading_path": [
-          "5 Auswertungen",
-          "5.1 Liste Lohnarten"
-        ],
-        "chunk_text_class": "Usage instructions",
+        "chunk_id": 339,
+        "document_name": "planung",
         "mixed_combo": "paragraph",
-        "image_paths": [
-          "..\\3_Extracted_Images\\lohn\\page_38_block_10.jpg"
-        ],
-        "pages": [
-          38
-        ],
-        "document_name": "lohn",
-        "token_count": 117
-      }
-    },
-    {
-      "query": "Welche verschiedenen Lohnarten gibt es?",
-      "chunk_id": "b6585c1b333daf0f3743b5cdada9b746",
-      "text": "Innerhalb der Lohnregeln kann auf folgende Informationen zugegriffen werden:",
-      "score": 0.8290139436721802,
-      "metadata": {
-        "chunk_type": "paragraph",
-        "document_name": "lohn",
-        "pages": [
-          30
-        ],
         "token_count": 16,
-        "chunk_id": 45,
+        "chunk_type": "paragraph"
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "b862c7f60b8f87931afb5df6bf643094",
+      "text": "Hinterlegung von Verkaufspreisen in Abhängigkeit von Preislistengruppe und Gültigkeitsdatum und Menge. Die Preislistengruppe kann nach Bedarf als Stammdaten angelegt werden. Der Zugriff auf die Preise erfolgt in der Artikelpositionen der Angebots-/Auftragsverwaltung. Die Zugriffskriterien werden dabei wie folgt zugeordnet.",
+      "score": 0.8385754227638245,
+      "metadata": {
+        "chunk_text_class": "Process description",
+        "chunk_id": 115,
+        "pages": [
+          36
+        ],
         "mixed_combo": "paragraph",
-        "chunk_text_class": "Application description",
+        "document_name": "stamm_mat",
+        "chunk_type": "paragraph",
         "heading_path": [
-          "3 Parameter",
-          "3.2 Lohnregel",
-          "3.2.1 Parameter"
-        ]
+          "2 Material / Artikel Stamm",
+          "2.11 VK-PL (Verkaufspreislisten)"
+        ],
+        "token_count": 70
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "a90b16493f225308bc75b0d7780df9b9",
+      "text": "mit Standardprüfung Material (KzBestellvorschlag, Bestand, auftragsbezogene Bestellungen) ohne Ohne Prüfung",
+      "score": 0.8375625610351562,
+      "metadata": {
+        "image_paths": [
+          "..\\3_Extracted_Images\\planung\\page_219_block_23.jpg",
+          "..\\3_Extracted_Images\\planung\\page_219_block_24.jpg"
+        ],
+        "mixed_combo": "paragraph",
+        "document_name": "planung",
+        "token_count": 25,
+        "chunk_text_class": "Process description",
+        "chunk_id": 455,
+        "pages": [
+          219
+        ],
+        "heading_path": [
+          "21 Konfiguration",
+          "21.1 Parameter",
+          "Anzahl Kostenstellen",
+          "Zeitfaktor",
+          "EDatum Uhrzeit",
+          "EDatum TS",
+          "Prüfung Material",
+          "Funktion Beschreibung"
+        ],
+        "chunk_type": "paragraph"
+      }
+    },
+    {
+      "query": "Wie erstelle ich einen neuen Verkaufsauftrag (Auftrag)? Wo fange ich an? Welche Mindestdaten werden benötigt?",
+      "chunk_id": "fd5a66de6822fb07221a103d1a92eb9e",
+      "text": "Funktion „Containeraufträge“ aktivieren.",
+      "score": 0.8371747732162476,
+      "metadata": {
+        "chunk_id": 436,
+        "chunk_text_class": "Usage instructions",
+        "image_paths": [
+          "..\\3_Extracted_Images\\planung\\page_216_block_33.jpg"
+        ],
+        "mixed_combo": "paragraph",
+        "document_name": "planung",
+        "heading_path": [
+          "21 Konfiguration",
+          "21.1 Parameter",
+          "Anzahl Kostenstellen",
+          "Zeitfaktor",
+          "EDatum Uhrzeit",
+          "EDatum TS",
+          "Containeraufträge"
+        ],
+        "pages": [
+          216
+        ],
+        "chunk_type": "paragraph",
+        "token_count": 10
       }
     }
   ]

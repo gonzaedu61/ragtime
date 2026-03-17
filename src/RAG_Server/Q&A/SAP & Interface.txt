@@ -1,0 +1,36 @@
+(ragtime) PS C:\dev\ragtime> rag "What is the touch-point of  ALMENDRO with SAP?" pepe.json           
+I’m sorry, but I don’t see any information on ALMENDRO’s touch-point with SAP in the provided context. Could you please clarify or provide the relevant excerpt?
+(ragtime) PS C:\dev\ragtime> rag "How does  ALMENDRO integrates with SAP?" pepe.json       
+I’m sorry, but I don’t see any information on “SAP” integration in the provided ALMENDRO context. Could you clarify what you mean by “SAP” here or provide additional details?
+(ragtime) PS C:\dev\ragtime> rag "How does ALMENDRO interfacess with SAP ERP?" pepe.json
+I’m sorry, but “SAP ERP” does not appear in the provided ALMENDRO context. Could you clarify what you mean by SAP ERP integration here or whether you are referring to one of the ALMENDRO modules (for example BDE, Standardkalkulation, Texteditor, etc.)?
+(ragtime) PS C:\dev\ragtime> rag "Are there integration interfaces with the SAP system in ALMENDRO?" pepe.json
+I’m sorry, but I don’t know. The provided documentation doesn’t mention any integration interfaces with SAP.
+(ragtime) PS C:\dev\ragtime> rag "What integration data interfaces does ALMENDRO provide?" pepe.json          
+ALMENDRO provides three standard interfaces for importing external data by cost centre:
+
+  • ASCII‐file  
+  • XML document  
+  • Direct table import into the ALMENDRO database
+(ragtime) PS C:\dev\ragtime> rag "Give me some conceptual description of the ASCII-file interface" pepe.json
+Here’s a high-level, conceptual overview of how the ASCII-file interface works:
+
+• File‐level ordering  
+  – Records (bookings) are processed strictly in the order they appear in the ASCII file.  
+  – Only data for one cost-centre is contained in each file.  
+
+• Record structure  
+  – Each booking is one “record” (one line) in the file.  
+  – The first four fields are always mandatory and always in the same order:  
+     1. Date (tt.mm.yyyy)  
+     2. Time (hh:mm:ss)  
+     3. Cost centre  
+     4. Booking type
+  – Any further fields depend on the booking type. Which fields are “must” versus “can” is defined in the ASCII‐interface specification.
+
+• Field and line delimiters
+  – Fields are separated by a TAB character (ASCII 9).
+  – Lines end with LF or CR+LF.
+
+• Error/older‐data handling
+  – If older data (e.g. an earlier ASCII file) arrives out of sequence, it will not be re-processed or booked once newer data for that cost centre has already been taken in.

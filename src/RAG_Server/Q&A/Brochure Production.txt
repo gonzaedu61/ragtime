@@ -1,0 +1,25 @@
+(ragtime) PS C:\dev\ragtime> rag "How is a brochure production supported by ALMENDRO?" pepe.json            
+ALMENDRO supports a brochure production end-to-end by integrating the sales order, procurement, shop‐floor planning and production tracking in one system.  In outline:
+
+1. Print list as procurement basis  
+   • From the brochure’s technical data (format, paper grades, weights, run lengths) ALMENDRO produces a “Druckliste” that shows material requirements (e.g. 250 g glossy, 80 g matt) with dates and quantities.  
+   • Purchasing can then reserve stock in‐system or convert requirements directly into purchase orders.
+
+2. Purchase‐order management  
+   • You can attach up to four different text types and addresses to each purchase‐order position (e.g. delivery instructions, special notes).  
+   • Standard ALMENDRO text‐editor functions are available.  
+   • Supplier confirmations (“Bestätigung”) can be uploaded centrally or per line, then compared automatically against the original order and differences posted.
+
+3. Material planning and reservation  
+   • A dedicated “Materialplanung (offen>0)” screen lists all open requirements by paper‐item, showing what is needed, reserved and still free.  
+   • From there purchasing triggers reservations in the order (“Reservieren im Auftrag”) or places new orders (“Bestellung”) with a single click.
+
+4. Generation of shop‐floor work plans  
+   • Based on the brochure’s technical description ALMENDRO automatically generates the entries in the production mask (“F-Maske”).  
+   • These work plans carry the cost‐center codes and operation numbers needed for scheduling, capacity planning and performance recording.
+
+5. Finished‐goods and inventory posting  
+   • When the brochures are completed, ALMENDRO can automatically post them as finished‐goods stock.  
+   • You can configure which quantities (total, delivered, already billed, internally produced, etc.) are proposed when converting order lines into stock‐posting lines.
+
+By linking sales orders, material requirements, purchasing, supplier confirmation, work‐plan generation and stock‐posting, ALMENDRO ensures that all paper and process steps for brochure production are planned, ordered and executed in a single, transparent workflow.

@@ -1,0 +1,46 @@
+(ragtime) PS C:\dev\ragtime> rag "What are the  Master-Data Management subprocesses in ALMENDRO? Give me a list and a brief description for each one of them" pepe.json
+I’m sorry, but I cannot find any information on “Master-Data Management subprocesses” in the provided excerpts. Could you please point me to the section or document name where these subprocesses are described, or provide more context?
+(ragtime) PS C:\dev\ragtime> rag "What are the  Master-Data Management subprocesses in ALMENDRO? Give me a list and a brief description for each one of them" pepe.json
+I’m sorry, but I don’t see a description of “Master-Data Management subprocesses” in the provided ALMENDRO context. Could you point me to the specific section or workshop where these subprocesses are listed? That will help me give you the accurate list and descriptions.
+(ragtime) PS C:\dev\ragtime> rag "What are the Stammdatepflege subprocesses in ALMENDRO? Give me a list and a brief description for each one of them" pepe.json
+        
+Could you clarify what you mean by “Stammdatepflege subprocesses”? The documentation I have only refers generally to “Stammdaten” (master data) and workshops on administration, but does not list specific “Stammdatepflege” subprocesses. Did you perhaps mean one of the known Stammdaten-workshops or specific master-data maintenance functions? If you point me to the exact term or section, I’ll be happy to help.
+(ragtime) PS C:\dev\ragtime> rag "Give me a summary of master data topic areas in ALMENDROm" pepe.json                                                         
+Here is a high-level overview of the main master-data topic areas in ALMENDRO, as reflected by the available PDFs and descriptions:
+
+• “Stammdaten Sonstige” (stamm_sonst.pdf)  
+  – Miscellaneous master-data settings and flags that don’t fall into other categories
+
+• “Stammdaten Adressen” (stamm_adr.pdf)  
+  – Address administration (customers, suppliers, contacts, etc.)
+
+• Nummernbereiche (© ALMENDRO GmbH – 2026 52 Kz)  
+  – Configuration of document- and number-ranges used system-wide
+
+• “Stammdaten Kalkulation” (stamm_kalk.pdf)  
+  – Cost-center definitions  
+  – Operation (“Arbeitsgang”) data  
+  – Service-catalogue entries  
+  – Special calculation functions enabled by master-data flags
+
+• “Stammdaten Material” (stamm_mat.pdf)
+  – Material master (raw materials, semi-finished goods)
+  – Article master
+  – Tool definitions
+
+• Seller (ALMENDRO-mandant) payment-receipt data
+  – Bank and payment-processing parameters maintained in the seller’s master data
+
+• Betriebsdatenerfassung (leist_bde.pdf)
+  – Shop-floor and time-capture configuration
+
+• Text-type configuration
+  – Definition and assignment of free-text fields in various masters (see Workshop “Basis”)
+
+• Positionskalkulation master data
+  – Data structures used in per-item costing (see Workshop “Positionskalkulation”)
+
+• Reference-variable (“Bezugsgröße”) definitions
+  – Quantities, paper-weight, tiered runs, interpolation keys, etc., which must be set up before being used in calculation or costing
+
+Each of these topic areas is covered in one or more “stamm_*.pdf” documents or associated workshops, and together they form the backbone of ALMENDRO’s configurable master-data framework.

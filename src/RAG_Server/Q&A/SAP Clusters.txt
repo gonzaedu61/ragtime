@@ -1,0 +1,150 @@
+[0.0.0.2.10.0.0] chunks=7 | childs=0: SAP Inventurprozess und Parameter
+mawi_inv | 100.0%
+"label": "SAP Inventurprozess und Parameter"
+"summary": "Der Text beschreibt drei Parameter für das mobile Erfassen von Inventurbeständen im SAP. Param-1 legt fest, ob die Erfassung über Materialnummer, Charge und Palette oder über eine NVE-Nummer erfolgt. Param-2 definiert, ob und wie ein Mengenvorschlag in der Buchungsmaske angezeigt wird. Param-3 regelt das Vorgehen beim Buchen von Materialien an abweichenden Lagerorten, einschließlich Umbuchung und Inventurkorrektur. Außerdem wird erläutert, wie Einzelpaletten per Barcode-Scan (Materialdaten versus NVE) erfasst und die Buchung durch Ortsbarcode abgeschlossen werden."
+"keywords": ["Barcode","Buchungsart","Inventur","Inventurmenge","Lagerort","Materialnummer","Mengenvorschlag","NVE","Palettenetikett","Umbuchen Lagerort"]
+"semantic_lineage_path": ["ALMENDRO ERP-System Funktionen","ALMENDRO ERP Module und Prozesse","SAP Lagerinventur und Buchung","SAP-Inventurprozesse steuern","SAP Inventurprozess und Parameter"]
+"semantic_heading_path": ["7 BDE III > 7.7 Verbrauch / Verbrauch-2 > 7.7.4 Abgang NVE","2 BDE-Terminalstamm > 2.2 Funktionen > 2.2.6 Materialerfassung (I, III) (für Verbrauch-1 und Verbrauch-2) > 2.2.6.2 BDE III","2 Stammdaten > 2.3 Lagerorte > 2.3.2 Speziallager > 2.3.2.1 Wareneingang","3 Tageszettelerfassung > 3.3 Tageszettelpositionen > 3.3.3 Material","5 Abläufe > 5.4 Inventur Standard > 5.4.3 Buchung der Korrekturen > 5.4.3.1 Buchung manuell"]
+CLUSTER_CHUNKS:
+    "8f6a0c040b44139ddcce62d1474dbdc5"
+    "1ed5355c1d313cc3ea442756e58d320c"
+    "a46b741f05bf2f259004fd01c1d8bdf7"
+    "af66bdf709a57708ecf35c5f336fc12f"
+    "bac5b0b65b1f7fa87629d9876e266259"
+    "92b179f9c44040f8132c3c4248a575e1"
+    "0f39531f14ae3869cbc1df83065317e5"
+    "3b2f797c3e0d2f314422e29b36374a64"
+    "4be0f8dbffc7bc2df55879d567ec8067"
+    "89c59f9a90d0f0eb2659ceff94f04a2f"
+LEAF_CHUNKS:
+    "a1d11da600c3214e28a3aaabafabc7de"
+    "7c5a4aec98b6f46820f572d475d1c02a"
+    "3409cf61bbf4e2e57ce430131f87b8a7"
+    "4a43b0e7a1e2529f498b9beaa17b8911"
+    "07754f9274ce83434cce8ed9d954c875"
+    "bc3f17e11a9787994c6608a9916f4797"
+    "10d0e4221b2554524ef94801afbf12bd"
+
+
+[0.0.0.2.6.1.1] chunks=6 | childs=0: SAP Wertkorrektur Prozesse
+mawi_lager | 100.0%
+"label": "SAP Wertkorrektur Prozesse"
+"summary": "Wird ohne Bestellung gebucht, müssen Materialnummer, Buchungspreis und tatsächlicher Preis manuell eingegeben werden. Aus diesen Angaben ermittelt das System Preiskorrektur, Gesamtkorrektur und den neuen Durchschnittspreis. Der vorgeschlagene Buchungsschlüssel und der Durchschnittspreis können manuell überschrieben werden, was jedoch Korrekturwerte nicht ändert und zu nicht nachvollziehbaren Preisabweichungen führen kann. Ohne Bestellbezug kann der Zugangspreis nicht richtiggestellt werden, und eine Wertkorrektur mit Bestellbezug lässt sich nicht mehrfach ausführen. Die Stornofunktion hebt nur den Wertkorrekturbeleg, nicht jedoch die ursprüngliche Zugangskorrektur oder den Durchschnittspreis auf."
+"keywords": ["Bestellbezug","Buchungspreis","Buchungsschlüssel","Durchschnittspreis","Gesamtkorrektur","Preiskorrektur","Rechnungseingang","Stornofunktion","Wertkorrektur","Zugangspreis"]
+"semantic_lineage_path": ["ALMENDRO ERP-System Funktionen","ALMENDRO ERP Module und Prozesse","ALMENDRO Inventur- und Buchungssystem","ALMENDRO Buchungsschlüssel und Bewertungssystem","SAP Wertkorrektur Prozesse"]
+"semantic_heading_path": ["2 Buchungsschlüssel allgemein > 2.1 Belegdatum","2 Buchungsschlüssel allgemein > 2.7 Preise","2 Rechnungseingang > 2.2 Positionen","3 Buchungsschlüssel > 3.1 Zugang extern","3 Buchungsschlüssel > 3.11 Wertkorrektur Material „Alt“"]
+CLUSTER_CHUNKS:
+    "db9075ffce6db9a45b21365094152ec7",
+    "83d02a1cce0be611a6f0a404923308cf",
+    "047b442105732a3834610d391eb5ac4e",
+    "c39ce196536703cfb723c6f72861f47d",
+    "7b3c9efaac2c93fed3a8c5a70d05d35d",
+    "a6ec25fd300cc432a6cabb21cc4ea18f",
+    "bf086aa18f8e16f1a4b979ddbf9cd783",
+    "1c0d80da23d0a3861ca913fba3a56599",
+    "f68ca02a11f2a9698573e605ae7f6bd3",
+    "eb7f3d0869f0e5aeb4066fc5ef866a7b"
+LEAF_CHUNKS:
+    "5087b22c900fb977c36dc4465335843f",
+    "eced4c79cfc79fb22ab3f74f8cfbc46a",
+    "94a4c0ae452fa18eb4491f42eb758a37",
+    "8dfd683db26067f8212d2ec6ea3acd5e",
+    "b948cc3af769da30dc35e2c6597289ed",
+    "1c0d80da23d0a3861ca913fba3a56599"
+
+
+[0.0.0.6.1.1.0] chunks=5 | childs=0: Anzeige beschreibender Texte im SAP
+ang_basis | 100.0%
+"label": "Standort- und Lagerortlogik in SAP WM"
+"summary": "Im SAP-Lagersystem kann für den Buchungsschlüssel 'Zugang extern' ein spezifischer Standort hinterlegt werden, sodass als Vorschlag nicht der Stammlagerort, sondern der erste Lagerort mit dem Kennzeichen Wareneingang dieses Standorts gewählt wird. Bei Transportaufträgen vom Typ Standortwechsel wird die Ware zunächst intern auf einen Schnittstellen-Lagerort umgebucht und anschließend in einen Lagerort mit Kennzeichen 'auf dem Weg zum Ziellagerort', um Bestände standortübergreifend zu buchen und Lieferscheinbelege korrekt abzustecken. Beim Generieren von Transportaufträgen aus Ladelisten erfolgt eine Prüfung, ob die Lieferadresse an einen bestimmten Standort gebunden ist und der entsprechende Warenausgangslagerort vorgeschlagen wird. Für Transportaufträge zur Produktionsbereitstellung wird gezielt ein Lagerort mit dem Kennzeichen Produktion genutzt."
+"keywords": ["BDE","Kennzeichen","Ladeliste","Lagerort","Produktion","Standort","Standortwechsel","Transportauftrag","Warenausgang","Wareneingang"]
+"semantic_lineage_path": ["ALMENDRO ERP-System Funktionen","SAP Lager- und Transportmanagement","SAP Lagerstruktur und Transportoptimierung","Standort- und Lagerortlogik in SAP WM"]
+"semantic_heading_path": ["2 BDE-Terminalstamm > 2.2 Funktionen > 2.2.30 Zugang intern (I, III)","2 Stammdaten > 2.3 Lagerorte > 2.3.2 Speziallager > 2.3.2.1 Wareneingang","2 Stammdaten > 2.3 Lagerorte > 2.3.2 Speziallager > 2.3.2.2 nach Standort - kommt per LKW","3 Auftragstypen > 3.4 BDE Fertigware","3 Auftragstypen > 3.5 BDE Fertigware mit Standortwechsel"]
+CLUSTER_CHUNKS:
+    "773ed6b71342b61e8afb43e614e7dc88",
+    "4aefe3b84fcf0f3b7104425251d6fd6c",
+    "f7c361eee7418ef6c578f0325e8a76c8",
+    "201efcf11b9dfc5fccaae1171d5c5f58",
+    "0a5a5a54714dd8fc0bd69227da932157",
+    "0ff162d7afdbbe4d3d0c4008c84e5e99",
+    "b70471bf549a3b2ba2182d7d39f7b1f5",
+    "cdd1e27c57eae3748975dd1a858aef84",
+    "c7139b86212858b5bbe2db55d7c9f2f5",
+    "778db2313dcc303a666a4e020753e830"
+LEAF_CHUNKS:
+    "41defd85df05c0b1f3b68fadd7643f52",
+    "a5245770e3c2ec91028f29525cf8e1fe",
+    "1366dfeb13fde967742dffcb7254fc73",
+    "1ab1ce3a8afc0f20f931c18139971f0c",
+    "36e482d947c2e0c02e96d94e0d7d620f"
+
+
+[0.0.0.12.1.2] chunks=4 | childs=0: Standort- und Lagerortlogik in SAP WM
+mawi_tpa | 100.0%
+"label": "Standort- und Lagerortlogik in SAP WM"
+"summary": "Im SAP-Lagersystem kann für den Buchungsschlüssel 'Zugang extern' ein spezifischer Standort hinterlegt werden, sodass als Vorschlag nicht der Stammlagerort, sondern der erste Lagerort mit dem Kennzeichen Wareneingang dieses Standorts gewählt wird. Bei Transportaufträgen vom Typ Standortwechsel wird die Ware zunächst intern auf einen Schnittstellen-Lagerort umgebucht und anschließend in einen Lagerort mit Kennzeichen 'auf dem Weg zum Ziellagerort', um Bestände standortübergreifend zu buchen und Lieferscheinbelege korrekt abzustecken. Beim Generieren von Transportaufträgen aus Ladelisten erfolgt eine Prüfung, ob die Lieferadresse an einen bestimmten Standort gebunden ist und der entsprechende Warenausgangslagerort vorgeschlagen wird. Für Transportaufträge zur Produktionsbereitstellung wird gezielt ein Lagerort mit dem Kennzeichen Produktion genutzt."
+"keywords": ["BDE","Kennzeichen","Ladeliste","Lagerort","Produktion","Standort","Standortwechsel","Transportauftrag","Warenausgang","Wareneingang"]
+"semantic_lineage_path": ["ALMENDRO ERP-System Funktionen","SAP Lager- und Transportmanagement","SAP Lagerstruktur und Transportoptimierung","Standort- und Lagerortlogik in SAP WM"]
+"semantic_heading_path": ["2 BDE-Terminalstamm > 2.2 Funktionen > 2.2.30 Zugang intern (I, III)","2 Stammdaten > 2.3 Lagerorte > 2.3.2 Speziallager > 2.3.2.1 Wareneingang","2 Stammdaten > 2.3 Lagerorte > 2.3.2 Speziallager > 2.3.2.2 nach Standort - kommt per LKW","3 Auftragstypen > 3.4 BDE Fertigware","3 Auftragstypen > 3.5 BDE Fertigware mit Standortwechsel"]
+CLUSTER_CHUNKS:
+    "f38e55a4569b3b42b330cdb83898d9fb",
+    "fdb542ae815a553878da9db45a24f62a",
+    "7beca36c55b0413e84a2173cc9f2f725",
+    "4be0f8dbffc7bc2df55879d567ec8067",
+    "7cb3644c76c148d1b44984ae466ea90c",
+    "80de5dcfe1db1760b85b2805cf1d2b09",
+    "af790f1d44678b7841fa8baf3830f302",
+    "3b1c4d1e5cb0529c7b1c1601f54612ef",
+    "cb7b816fce19577c15b9ea3729de08f9",
+    "5fa1e8e34fd8d242dd32aeac518220cc"
+LEAF_CHUNKS:
+    "4be0f8dbffc7bc2df55879d567ec8067",
+    "fdb542ae815a553878da9db45a24f62a",
+    "71afcdee5be1ead824c689145f952d97",
+    "c32f8d1b474b8186eb50d609c732965e"
+
+
+[0.0.0.13.0.0] chunks=23 | childs=6: SAP Lohnarten- und Zeiterfassungskonfiguration
+lohn | 100.0%
+"label": "SAP Lohnarten- und Zeiterfassungskonfiguration"
+"summary": "Der Text beschreibt die Konfiguration der Lohnartenermittlung und Zeit­erfassung in SAP. Er erklärt die Definition von Tagesarten und Schichten mit Start-/Endzeiten, Pausen und automatischem Zeit-Runden sowie die Pflege von Lohnartentabellen je Kostenstelle, Tagesart und Schicht. Es werden Personal­stammdaten (Personalnummern, Kostenstellen, BDE-Arbeitsgänge) und Zusatzeinstellungen wie Verrechnungs­sätze und Zusatzfelder erläutert. Zudem wird die Hinterlegung von Textinformationen, die Auswahl von Zeitkonten für Wochen- und Monatsabschlüsse und deren Anzeige beschrieben. Abschließend wird die Erstellung und Verteilung von Schichtplänen erläutert sowie ein Demo für die Buchung von Überstunden und zeitraumabhängigen Lohnarten gezeigt."
+"keywords": ["BDE","Kostenstellen","Lohnartenermittlung","Personalstammdaten","Rundungsregeln","Schichtplan","Tagesarten","Zeiterfassung","Zeitkonten","Überstunden"]
+"semantic_lineage_path": ["ALMENDRO ERP-System Funktionen","Lohn- und Zeiterfassung SAP","Konfiguration Lohnarten und Zeiterfassung","SAP Lohnarten- und Zeiterfassungskonfiguration"]
+"semantic_heading_path": ["2 Stammdaten > 2.3 Schichtstamm","2 Stammdaten > 2.5 Lohnarten > Negativlohnarten > Zeit","2 Stammdaten > 2.7 Personal > 2.7.1 Stamm > BDE-System","2 Stammdaten > 2.8 Schichtplan > 2.8.1 Erfassungmaske","2 Stammdaten > 2.9 Lohnartentabellen"]
+CLUSTER_CHUNKS:
+    "d14265bec9dceb896d42a5255ed03d17",
+    "37e7c1837e7bf2dca19d18e439eb8b7b",
+    "108339309a26538665bcc51121d8e7db",
+    "7252e097bc20ad7a32ac163f9c1c2d10",
+    "7ac8c72e8a2b59ae7af7a2ff212ee0b3",
+    "fe572cab6d4aef6155078a64d26e04e7",
+    "be67cd0e9e6f600ed1ca9207736fdfd6",
+    "3ab8d0725edd2af819cfdbea81521de0",
+    "b53e32ed952adb477b44b7ef6d5732f7",
+    "79c3559c16d97cfd28d129cefb34d3da"
+
+
+[0.0.0.13.0.0.3] chunks=2 | childs=0: "Überstunden- und Lohnartenbuchung"
+lohn | 100.0%
+"label": "Konfiguration von Kostenstellen für Lohnarten"
+"summary": "Die Konfiguration der Lohnartenermittlung in SAP erfolgt über zugeordnete Kostenstellen, um eine differenzierte Abrechnung sicherzustellen. Hierzu werden eigene Nummernkreise (z.B. 9900–9100) verwendet, statt Produktions-Kostenstellen. Anhand von Beispielen (Maschinenführer, Hilfen, Abteilungen) wird der Aufbau erklärt. In der Maske sind Mindestfelder wie Kostenstellennummer und Bezeichnung sowie ein Mussfeld TZ-Erfassung („Arbeitsgang“) zu pflegen. Alle übrigen Felder bleiben auf Null, da sie für die Lohnermittlung nicht relevant sind."
+"keywords": ["Arbeitsgang","Auswertungen","Kostenstelle","Kostenstellenbezeichnung","Lohnabrechnung","Lohnartenermittlung","Mussfeld","Nummernkreis","TZ-Erfassung"]
+"semantic_lineage_path": ["ALMENDRO ERP-System Funktionen","Lohn- und Zeiterfassung SAP","Konfiguration Lohnarten und Zeiterfassung","SAP Lohnarten- und Zeiterfassungskonfiguration","Konfiguration von Kostenstellen für Lohnarten"]
+"semantic_heading_path": ["10 Zuschlagstabellen","2 Parameter > 2.1 Stamm Tageszettelerfassung > Version > Format Stunden","2 Stammdaten > 2.6 Kostenstellen","2 Stammdaten > 2.6 Kostenstellen > Kostenstellen Beschreibung","2 Stammdaten > 2.7 Personal > 2.7.1 Stamm"]
+CLUSTER_CHUNKS:
+    "e392b835eb2cfe811b1695c3361f2e3b",
+    "ca5c976376eae2b9458e8dafbc3a8814",
+    "19c2c344b506bc0b54f5e087f0efd462",
+    "cf26370e06ddb907274448f24bc29170",
+    "841317b0a7940855cbb090381e0d1795",
+    "22949d24416731b3195ceb5f604ab07c",
+    "3ab8d0725edd2af819cfdbea81521de0",
+    "3345b6bdbbb1bc6433b36fdbadcaca37",
+    "b16659b4b011b77d9c49e7f80acc9680",
+    "fe572cab6d4aef6155078a64d26e04e7"
+LEAF_CHUNKS:
+    "3345b6bdbbb1bc6433b36fdbadcaca37",
+    "e392b835eb2cfe811b1695c3361f2e3b"
+
+
+

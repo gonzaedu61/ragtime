@@ -50,7 +50,7 @@ TASK:
 Identify and describe the key concepts covered by the input text, with the following information:
 - Concept name: A short label (max 6 words). YOU MUST ALWAYS PROVIDE A LABEL.
 - Concept description: A 4-8 sentences explaining what the key elements of the concept are and how they relate to each other
-- Concept structure: Extract the structural elements which make up the concept and if applicable a description of the relationships which might exist between them (i.e. X has 1 or more Y, Z is included in W, Q is part of H, etc.)
+- Concept structure: Extract the structural elements which make up the concept and a 3-6 sentences description of what they are and the relationships which might exist between them (i.e. X has 1 or more Y, Z is included in W, Q is part of H, etc.)
 - IMPORTANT: If the text does not seem to refer to a business concept, then DO NOT INFERE or CREATE FACTS. Just return all field blanks
 
 TEXTS:
@@ -95,7 +95,7 @@ AGREGATION TASK:
 OUTPUT TASK: Produce a json for the newly created parent concept with the following information:
 - Concept description: A 4-8 sentences explaining what this parent concept is about, from the combination of the child concept descriptions
 - Concept name: A short label (max 6 words). YOU MUST ALWAYS PROVIDE A LABEL based on the generated description.
-- Concept structure: An ordered list of the key structure elements composing the concept (the aggregated structural elements of each input child concept). Give them a sequential numeric id (the list index), a short label and a short description.
+- Concept structure: An ordered list of the key structure elements composing the concept (the aggregated structural elements of each input child concept). Give them a sequential numeric id (the list index), a label and a 3-6 sentences description.
 
 OUTPUT LANGUAGE: German
 

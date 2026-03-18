@@ -3,6 +3,47 @@ from pathlib import Path
 from Utilities import Simple_Progress_Bar
 from docxtpl import DocxTemplate
 
+import re
+
+INVALID_XML_CHARS = r"[\x00-\x08\x0B\x0C\x0E-\x1F]"
+
+def sanitize(text):
+    if not isinstance(text, str):
+        return ""
+
+    # Remove illegal XML chars
+    text = re.sub(INVALID_XML_CHARS, "", text)
+
+    # Remove soft hyphens (invisible but break Word)
+    text = text.replace("\u00AD", "")
+
+    # Replace non-breaking spaces with normal spaces
+    text = text.replace("\u00A0", " ")
+
+    # Remove zero-width characters
+    text = text.replace("\u200B", "")
+    text = text.replace("\u200C", "")
+    text = text.replace("\u200D", "")
+
+    # Normalize line/paragraph separators
+    text = text.replace("\u2028", "\n")
+    text = text.replace("\u2029", "\n")
+
+    # Replace smart quotes with ASCII equivalents
+    replacements = {
+        "„": "\"", "“": "\"", "”": "\"",
+        "’": "'", "‘": "'",
+        "–": "-", "—": "-"
+    }
+    for bad, good in replacements.items():
+        text = text.replace(bad, good)
+
+    # Escape XML-breaking characters
+    text = text.replace("<", "&lt;")
+    text = text.replace(">", "&gt;")        
+
+    return text
+
 
 class WordDocBuilder:
     def __init__(
@@ -14,7 +55,8 @@ class WordDocBuilder:
         show_progress_bar: bool = False,
         log_json: bool = False,
         enable_word_generation: bool = False,
-        word_template_path: str = None
+        word_template_path: str = None,
+        use_existing_json: bool = False
     ):
         self.working_folder = Path(working_folder)
         self.tree_pathname = Path(tree_pathname)
@@ -27,6 +69,7 @@ class WordDocBuilder:
         self.log_json = log_json
         self.enable_word_generation = enable_word_generation
         self.word_template_path = Path(word_template_path) if word_template_path else None
+        self.use_existing_json = use_existing_json
 
         self.tree = self._load_json(self.tree_pathname)
 
@@ -46,6 +89,12 @@ class WordDocBuilder:
     def _log(self, msg: str):
         if self.verbose:
             print(msg)
+
+    def _load_existing_json(self, cluster_id: str):
+        json_path = self.working_folder / cluster_id / f"{cluster_id}_word_doc.json"
+        if not json_path.exists():
+            raise FileNotFoundError(f"Existing JSON not found at {json_path}")
+        return self._load_json(json_path)
 
     # ---------------------------------------------------------
     # Tree traversal helpers
@@ -100,18 +149,26 @@ class WordDocBuilder:
     def _build_word_json(self, parent_node):
         parent_id = parent_node["cluster_id"]
 
+        # Load B_Context for parent or leaf
         b_context = self._load_info_file(parent_id, "B_Context")
 
         result = {
-            "internal_process_name": b_context.get("process_name") if b_context else "",
-            "internal_B_Context": b_context.get("business_context") if b_context else "",
+            "internal_process_name": sanitize(b_context.get("process_name", "")) if b_context else "",
+            "internal_B_Context": sanitize(b_context.get("business_context", "")) if b_context else "",
             "data_elements": {
+                "BOs_title": "Business Objects",   # optional, avoids missing key
                 "BOs": []
             },
             "leaf_processes": []
         }
 
-        for leaf in self._extract_children(parent_node):
+        children = self._extract_children(parent_node)
+
+        # ---------------------------------------------------------
+        # CASE 1: parent_node is a LEAF → treat it as its own leaf process
+        # ---------------------------------------------------------
+        if not children:
+            leaf = parent_node
             leaf_id = leaf["cluster_id"]
 
             bo_file = self._load_info_file(leaf_id, "BO")
@@ -124,20 +181,16 @@ class WordDocBuilder:
             if bo_file:
                 for bo in bo_file.get("business_objects", []):
                     result["data_elements"]["BOs"].append({
-                        "bo_name": bo.get("bo_name", ""),
-                        "bo_description": bo.get("bo_description", "")
+                        "bo_name": sanitize(bo.get("bo_name", "")),
+                        "bo_description": sanitize(bo.get("bo_description", ""))
                     })
 
-            # Leaf process entry
+            # Leaf entry
             leaf_entry = {
-                "leaf_process_name": process_b.get("process_name") if process_b else "",
-                "leaf_process_description": process_b.get("process_description") if process_b else "",
-                "tasks": {
-                    "task": []
-                },
-                "qa": {
-                    "elements": []
-                }
+                "leaf_process_name": sanitize(process_b.get("process_name", "")) if process_b else "",
+                "leaf_process_description": sanitize(process_b.get("process_description", "")) if process_b else "",
+                "tasks": {"task": []},
+                "qa": {"elements": []}
             }
 
             # Steps
@@ -145,14 +198,14 @@ class WordDocBuilder:
                 for step in steps.get("process_steps", []):
                     d = step.get("details", {})
                     leaf_entry["tasks"]["task"].append({
-                        "step_name": step.get("name", ""),
-                        "step_context": d.get("context", ""),
-                        "step_objective": d.get("objective", ""),
-                        "step_explanation": d.get("explanation", ""),
-                        "step_precondition": d.get("pre-condition", ""),
-                        "step_postcondition": d.get("post-condition", ""),
-                        "step_exceptions": d.get("exceptions", ""),
-                        "step_warnings": d.get("warnings", "")
+                        "step_name": sanitize(step.get("name", "")),
+                        "step_context": sanitize(d.get("context", "")),
+                        "step_objective": sanitize(d.get("objective", "")),
+                        "step_explanation": sanitize(d.get("explanation", "")),
+                        "step_precondition": sanitize(d.get("pre-condition", "")),
+                        "step_postcondition": sanitize(d.get("post-condition", "")),
+                        "step_exceptions": sanitize(d.get("exceptions", "")),
+                        "step_warnings": sanitize(d.get("warnings", ""))
                     })
 
             # Q&A
@@ -164,8 +217,67 @@ class WordDocBuilder:
 
             for qa in qa_list:
                 leaf_entry["qa"]["elements"].append({
-                    "question": qa.get("question", ""),
-                    "answer": qa.get("answer", "")
+                    "question": sanitize(qa.get("question", "")),
+                    "answer": sanitize(qa.get("answer", ""))
+                })
+
+            result["leaf_processes"].append(leaf_entry)
+            return result
+
+        # ---------------------------------------------------------
+        # CASE 2: parent_node has children → original behavior
+        # ---------------------------------------------------------
+        for leaf in children:
+            leaf_id = leaf["cluster_id"]
+
+            bo_file = self._load_info_file(leaf_id, "BO")
+            process_b = self._load_info_file(leaf_id, "process_b")
+            steps = self._load_info_file(leaf_id, "steps")
+            what = self._load_info_file(leaf_id, "WHAT")
+            why = self._load_info_file(leaf_id, "WHY")
+
+            # BOs
+            if bo_file:
+                for bo in bo_file.get("business_objects", []):
+                    result["data_elements"]["BOs"].append({
+                        "bo_name": sanitize(bo.get("bo_name", "")),
+                        "bo_description": sanitize(bo.get("bo_description", ""))
+                    })
+
+            # Leaf entry
+            leaf_entry = {
+                "leaf_process_name": sanitize(process_b.get("process_name", "")) if process_b else "",
+                "leaf_process_description": sanitize(process_b.get("process_description", "")) if process_b else "",
+                "tasks": {"task": []},
+                "qa": {"elements": []}
+            }
+
+            # Steps
+            if steps:
+                for step in steps.get("process_steps", []):
+                    d = step.get("details", {})
+                    leaf_entry["tasks"]["task"].append({
+                        "step_name": sanitize(step.get("name", "")),
+                        "step_context": sanitize(d.get("context", "")),
+                        "step_objective": sanitize(d.get("objective", "")),
+                        "step_explanation": sanitize(d.get("explanation", "")),
+                        "step_precondition": sanitize(d.get("pre-condition", "")),
+                        "step_postcondition": sanitize(d.get("post-condition", "")),
+                        "step_exceptions": sanitize(d.get("exceptions", "")),
+                        "step_warnings": sanitize(d.get("warnings", ""))
+                    })
+
+            # Q&A
+            qa_list = []
+            if what:
+                qa_list.extend(what.get("WHAT_Answers", []))
+            if why:
+                qa_list.extend(why.get("WHY_Answers", []))
+
+            for qa in qa_list:
+                leaf_entry["qa"]["elements"].append({
+                    "question": sanitize(qa.get("question", "")),
+                    "answer": sanitize(qa.get("answer", ""))
                 })
 
             result["leaf_processes"].append(leaf_entry)
@@ -207,27 +319,32 @@ class WordDocBuilder:
             raise ValueError(f"Cluster {self.branch_id} not found in tree.")
 
         parent_clusters = self._collect_parent_clusters(start_node)
-        outputs = {}
 
+        # FIX: only treat start_node as a leaf if it is actually a leaf
+        if not parent_clusters and self._is_leaf(start_node):
+            parent_clusters = [start_node]
+
+        outputs = {}
         bar = Simple_Progress_Bar(total=len(parent_clusters), enabled=True) if self.show_progress_bar else None
 
         for parent in parent_clusters:
             parent_id = parent["cluster_id"]
             self._log(f"Processing parent cluster {parent_id}")
 
-            word_json = self._build_word_json(parent)
-            outputs[parent_id] = word_json
+            if self.use_existing_json:
+                self._log(f"Loading existing JSON for cluster {parent_id}")
+                word_json = self._load_existing_json(parent_id)
+            else:
+                word_json = self._build_word_json(parent)
+                outputs[parent_id] = word_json
 
-            # Store JSON inside the parent cluster folder
-            if self.log_json:
-                parent_folder = self.working_folder / parent_id
-                parent_folder.mkdir(parents=True, exist_ok=True)
+                if self.log_json:
+                    parent_folder = self.working_folder / parent_id
+                    parent_folder.mkdir(parents=True, exist_ok=True)
+                    out_path = parent_folder / f"{parent_id}_word_doc.json"
+                    with open(out_path, "w", encoding="utf-8") as f:
+                        json.dump(word_json, f, indent=2, ensure_ascii=False)
 
-                out_path = parent_folder / f"{parent_id}_word_doc.json"
-                with open(out_path, "w", encoding="utf-8") as f:
-                    json.dump(word_json, f, indent=2, ensure_ascii=False)
-
-            # Word generation (still disabled)
             self._render_word_document(parent_id, word_json)
 
             if bar:

@@ -1,1202 +1,551 @@
 {
-  "answer": "I’m sorry, but I can’t find any references to SAP in the provided context. Could you please clarify what you mean by “touch-points with SAP” or provide more information?",
-  "language": "en",
+  "answer": "Die korrekte Abfolge ist:\n\n1. Kundenauftrag  \n2. Abrufauftrag  \n3. Produktionsauftrag  \n4. Fertigungsauftrag",
+  "language": "de",
   "used_queries": [
-    "Was sind die Berührungspunkte von ALMENDRO mit SAP?",
-    "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-    "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP."
+    "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+    "What is the correct order of the topic areas Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+    "In what sequence are the topic areas Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag arranged?"
   ],
   "retrieved_chunks": [
     {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "e9603cad9b67642f580bdba58f598744",
-      "text": "Von / bis Terminschlüssel Rücklauf Planung (hier 20) Von Datum Anfangsdatum ALMENDRO (=Init-Wert) Von Datum Heute (=Init-Wert)",
-      "score": 0.8467174768447876,
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "b6ecf876d6b7c1725f0c1aec4de4a662",
+      "text": "Die Nummern der Falzbogenreihenfolge im Auftrag sind aufsteigend angeordnet.",
+      "score": 0.8415188789367676,
       "metadata": {
-        "image_paths": [
-          "..\\3_Extracted_Images\\planung\\page_201_block_14.jpg",
-          "..\\3_Extracted_Images\\planung\\page_201_block_15.jpg"
-        ],
+        "document_name": "auf_ausschiessen",
+        "chunk_id": 34,
         "pages": [
-          201
+          18
         ],
-        "chunk_id": 391,
-        "token_count": 37,
-        "document_name": "planung",
-        "chunk_type": "paragraph",
         "heading_path": [
-          "18 Auswertungen",
-          "18.2 Ausgabe aus Terminschlüsseln",
-          "18.2.2 Rücklauf aus Planung",
-          "Anwahl Beschreibung"
+          "4 Auftragsbearbeitung",
+          "4.3 Funktionen",
+          "4.3.2 Ändern Falzbogenreihenfolge im Auftrag"
         ],
         "mixed_combo": "paragraph",
-        "chunk_text_class": "Requirements specification"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "6e572d9a3006ce797b02a823c9476507",
-      "text": "Für die direkte Übergabe der Telefonnummern an das Telefon kann ALMENDRO die Telefonnummer via DDE-Schnittstelle weitergeben. Hier stehen derzeit folgende Möglichkeiten zur Verfügung: - Smartset Professional - TapiDDE - CTI Nach der Installation dieser Lösungen und der Installation der von ALMENDRO notwendigen Schnittstelle kann die entsprechende Telefonnummer übergeben werden:",
-      "score": 0.8453603982925415,
-      "metadata": {
-        "chunk_id": 52,
-        "token_count": 71,
-        "pages": [
-          44
-        ],
-        "document_name": "dienste",
-        "chunk_text_class": "Usage instructions",
-        "heading_path": [
-          "16 Telefonverzeichnis",
-          "16.2 Telefonanwahl"
-        ],
+        "chunk_text_class": "Process description",
         "chunk_type": "paragraph",
-        "mixed_combo": "paragraph"
+        "token_count": 19
       }
     },
     {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "cc4274166101694d9afaa8c7b68f2a1f",
-      "text": "Übergabe der Daten an das Almendro-Planungsmodul. Die Funktion ist in Vorbereitung.",
-      "score": 0.8436849117279053,
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "936dc326af3e31930136e616d75a05de",
+      "text": "Fertigung (nur Auftrag) Information, ob Ist-Buchungen im Bereich Fertigung für das aktuelle Produkteil vorhanden sind (Tageszettel, BDE, MDE)",
+      "score": 0.8411916494369507,
       "metadata": {
-        "image_paths": [
-          "..\\3_Extracted_Images\\ang_basis\\page_121_block_22.jpg"
-        ],
-        "heading_path": [
-          "11 Ringmenüfunktionen",
-          "11.3 Reservierung",
-          "11.3.4 Planung"
-        ],
-        "pages": [
-          121
-        ],
         "document_name": "ang_basis",
-        "chunk_text_class": "Process description",
-        "token_count": 22,
-        "chunk_type": "paragraph",
-        "chunk_id": 203,
-        "mixed_combo": "paragraph"
-      }
-    },
-    {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "4621280a15940108b3640809e55e4fee",
-      "text": "Tageszettel- erfassung Vorschlag der Schicht und der Start-/Endezeiten Lohnarten- erfassung Vorschlag der Schicht und der Start-/Endezeiten ALMENDRO-BDE Vorschlag der Schicht und der Start-/Endezeiten",
-      "score": 0.8427883386611938,
-      "metadata": {
-        "mixed_combo": "paragraph",
-        "chunk_type": "paragraph",
-        "chunk_id": 31,
-        "document_name": "lohn",
-        "pages": [
-          22
+        "heading_path": [
+          "7 Spezifikation",
+          "Bereich Beschreibung"
         ],
-        "token_count": 55,
+        "mixed_combo": "paragraph",
+        "pages": [
+          28
+        ],
+        "chunk_id": 39,
         "chunk_text_class": "Requirements specification",
-        "image_paths": [
-          "..\\3_Extracted_Images\\lohn\\page_22_block_16.jpg"
-        ],
-        "heading_path": [
-          "2 Stammdaten",
-          "2.8 Schichtplan",
-          "Funktion Beschreibung"
-        ]
-      }
-    },
-    {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "fa6049d9c37f0c5254f76b63d3221ba4",
-      "text": "Hinweis zur Installation, Einrichtung und Systemvoraussetzungen im Workshop unter adm_Almendro .",
-      "score": 0.8401790857315063,
-      "metadata": {
-        "chunk_type": "paragraph",
-        "pages": [
-          65
-        ],
-        "heading_path": [
-          "20 Mail übernehmen",
-          "20.1 Installation und Systemvoraussetzung"
-        ],
-        "chunk_id": 91,
-        "chunk_text_class": "Usage instructions",
-        "document_name": "dienste",
-        "mixed_combo": "paragraph",
-        "token_count": 21
-      }
-    },
-    {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "917163eac5b651312baf527964fc6bb9",
-      "text": "Zusatzangaben für das ALMENDRO-Modul „Ausschiessen“.",
-      "score": 0.8391487002372742,
-      "metadata": {
-        "token_count": 18,
-        "chunk_type": "paragraph",
-        "heading_path": [
-          "3 Kostenstellen",
-          "3.9 Ausschiessen"
-        ],
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_kalk\\page_22_block_16.jpg",
-          "..\\3_Extracted_Images\\stamm_kalk\\page_22_block_17.jpg"
-        ],
-        "chunk_text_class": "Product description",
-        "document_name": "stamm_kalk",
-        "mixed_combo": "paragraph",
-        "pages": [
-          22
-        ],
-        "chunk_id": 25
-      }
-    },
-    {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "7b2bb0788545395bb31a511f67a383e7",
-      "text": "Die Daten werden von ALMENDRO zunächst auf Korrektheit geprüft, protokolliert und sofort gebucht. Nach der Übernahme der Buchungssätze werden die Sätze in dieser Tabelle sofort gelöscht.",
-      "score": 0.839146614074707,
-      "metadata": {
-        "document_name": "leist_bde_ext",
-        "token_count": 44,
-        "mixed_combo": "paragraph",
-        "chunk_text_class": "Process description",
-        "heading_path": [
-          "4 Datenübernahme",
-          "4.6 Tabelle in ALMENDRO-Datenbank",
-          "4.6.2 Übernahmeprozedur"
-        ],
-        "chunk_id": 61,
-        "pages": [
-          22
-        ],
+        "token_count": 37,
         "chunk_type": "paragraph"
       }
     },
     {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "fa2ee6d7f7392252f625740b6ebc6507",
-      "text": "Beim Beenden einer Tätigkeit wird von Almendro nur die produzierte Menge abgefragt.",
-      "score": 0.8385508060455322,
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "cd7461be931d03a11bd41f367a62b994",
+      "text": "„über Abruf“ Wenn die Auslieferung oder Produktion+Auslieferung nicht über die angelegte Artikelposition, sondern über an die Position angehängte Abrufaufträge und Produktionsaufträge. Zur Verwendung der Positionskennzeichen und das Handling von Kunden-, Produktions- und Abrufaufträgen siehe Workshop „Auftrag -Positionen“ („auf_pos.doc“). Menge Eintrag der Bestellmenge. In Abhängigkeit von der Parametereinstellung erfolgt beim Ändern der Bestellmenge eine Abfrage.",
+      "score": 0.8340203166007996,
       "metadata": {
-        "token_count": 18,
-        "document_name": "leist_bde",
         "heading_path": [
-          "6 BDE II (Schnellerfassung)",
-          "6.3 Beenden"
+          "6 Auftrag",
+          "6.3 Artikelposition Nachproduktion",
+          "6.3.1 Eintrag Artikel"
         ],
+        "chunk_text_class": "User manual",
+        "token_count": 109,
+        "chunk_id": 67,
         "mixed_combo": "paragraph",
+        "pages": [
+          41
+        ],
+        "document_name": "auf_poskalk",
+        "chunk_type": "paragraph"
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "7cae66015f27af2f12b66913d37b9246",
+      "text": "BDE-Buchungen → Aktive Fertigungsaufträge → Fertiggemeldete Fertigungsaufträge → Rückmeldung von BDE-Zeiten und -Mengen",
+      "score": 0.8337687849998474,
+      "metadata": {
+        "chunk_type": "paragraph",
+        "chunk_id": 96,
+        "mixed_combo": "paragraph",
+        "token_count": 35,
+        "chunk_text_class": "Usage instructions",
+        "heading_path": [
+          "4 Aktualisierung der Daten",
+          "4.2 CRON-gesteuerte Aktualisierung",
+          "Aktion Auswirkung"
+        ],
+        "document_name": "planung",
+        "pages": [
+          57
+        ]
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "129bb062c4e9f37285fd12c0c4debee0",
+      "text": "Nein Keine Bestellung vorhanden Auftrag Bestellposition mit Angabe Auftrag aktuell vorhanden Produkt Bestellposition mit Angabe Auftrag-Produkt aktuell vorhanden Teil Bestellposition mit Angabe Auftrag-Produkt-Teil aktuell vorhanden",
+      "score": 0.8313556909561157,
+      "metadata": {
+        "document_name": "ang_basis",
+        "chunk_id": 43,
+        "chunk_type": "paragraph",
         "chunk_text_class": "Requirements specification",
+        "mixed_combo": "paragraph",
         "pages": [
-          36
+          28
         ],
-        "chunk_type": "paragraph",
-        "chunk_id": 60,
-        "image_paths": [
-          "..\\3_Extracted_Images\\leist_bde\\page_36_block_6.jpg"
+        "token_count": 40,
+        "heading_path": [
+          "7 Spezifikation",
+          "Bereich Beschreibung",
+          "Optionen Beschreibung",
+          "Optionen Beschreibung",
+          "Optionen Beschreibung",
+          "Optionen Beschreibung"
         ]
       }
     },
     {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "79d3099f84132211ff5a93630942eaf5",
-      "text": "Beim Einsatz der Almendro-BDE muss hier die Option „Almendro“ eingetragen werden.",
-      "score": 0.8375338315963745,
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "a85e747058fdca250844ba52876c0e67",
+      "text": "Kunde : Lieferant : Prodgruppe : Termin :",
+      "score": 0.8304481506347656,
       "metadata": {
-        "token_count": 22,
-        "chunk_id": 21,
+        "token_count": 11,
         "mixed_combo": "paragraph",
-        "chunk_text_class": "Usage instructions",
-        "chunk_type": "paragraph",
-        "heading_path": [
-          "4 Stammdaten",
-          "4.1 Stammdaten Kostenstelle",
-          "4.1.1 BDE-System"
-        ],
         "pages": [
-          11
-        ],
-        "document_name": "leist_bde"
-      }
-    },
-    {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "51fd70550c308956423d8dccb3799a5d",
-      "text": "© ALMENDRO GmbH – 2026 67 Mit ok werden die Daten in die Datenbank eingelesen.",
-      "score": 0.8360117673873901,
-      "metadata": {
-        "token_count": 26,
-        "pages": [
-          67
-        ],
-        "mixed_combo": "paragraph",
-        "chunk_id": 201,
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_mat\\page_67_block_7.jpg"
-        ],
-        "document_name": "stamm_mat",
-        "chunk_text_class": "Usage instructions",
-        "chunk_type": "paragraph",
-        "heading_path": [
-          "6 Aktualisierung aus Excel-File",
-          "6.4 Verkaufspreisliste",
-          "6.4.2 Programmfunktion"
-        ]
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "d60aacd28a598dfa9d71bc4b71aeff20",
-      "text": "© ALMENDRO GmbH – 2026 23",
-      "score": 0.8355233669281006,
-      "metadata": {
-        "token_count": 13,
-        "chunk_text_class": "Legal terms",
-        "mixed_combo": "paragraph",
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.4 Verkauf",
-          "KZ Rechpos 1 (1. Kennzeichen für Rechnungspositionen)",
-          "Option Beschreibung"
-        ],
-        "chunk_id": 72,
-        "chunk_type": "paragraph",
-        "document_name": "stamm_mat",
-        "pages": [
-          23
-        ]
-      }
-    },
-    {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "7b4f71740d2dd41cbbbbb6a194f016ab",
-      "text": "Hier sind die Funktionen beschrieben, die es dem Anwender ermöglichen Datenbereiche mit großen Datenbeständen z.B. über Excel zu pflegen und danach wieder in ALMENDRO einzulagern, oder auch Datenbestände von externen Quellen zu übernehmen.",
-      "score": 0.8350483179092407,
-      "metadata": {
-        "image_paths": [
-          "..\\3_Extracted_Images\\dienste\\page_45_block_26.jpg"
+          7
         ],
         "heading_path": [
-          "17 Übernehmen"
+          "2 Analysen",
+          "2.2 Journal"
         ],
-        "chunk_id": 55,
-        "chunk_type": "paragraph",
-        "token_count": 51,
-        "pages": [
-          45
-        ],
-        "document_name": "dienste",
-        "mixed_combo": "paragraph",
-        "chunk_text_class": "Application description"
-      }
-    },
-    {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "96db7d543634da48d7cd45a64f1b01d0",
-      "text": "Dateiname leist_bde.pdf Beschreibung Betriebsdatenerfassung - ALMENDRO",
-      "score": 0.8348903059959412,
-      "metadata": {
-        "chunk_type": "paragraph",
-        "chunk_id": 33,
         "chunk_text_class": "Other",
-        "pages": [
-          11
-        ],
-        "heading_path": [
-          "6 Leistung",
-          "6.2 Betriebsdatenerfassung - ALMENDRO"
-        ],
-        "document_name": "ws_info",
-        "mixed_combo": "paragraph",
-        "token_count": 17
+        "chunk_type": "paragraph",
+        "chunk_id": 11,
+        "document_name": "mawi_analysen"
       }
     },
     {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "d2f54c9f7ce36e77e0a668483a568920",
-      "text": "In einem dieser Felder kann z.B. auch der Bildname für den entsprechenden Artikel hinterlegt werden, zu dem zum Artikel gehörenden Bild, das entweder direkt von ALMENDRO angezeigt",
-      "score": 0.8348169326782227,
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "bfc7f30dceff9d0aaa27f5a45ad906ad",
+      "text": "Standard ProdStart Eingeplanter Fertigungsauftrag, Datum und Uhrzeit des Produktionsstarts. Standard",
+      "score": 0.8294202089309692,
       "metadata": {
+        "document_name": "planung",
+        "token_count": 20,
+        "chunk_text_class": "Process description",
+        "heading_path": [
+          "5 Bildschirm-Bereiche",
+          "5.5 Auftragsdetails (Fertigungsaufträge)",
+          "Sortierung",
+          "Spalten"
+        ],
         "mixed_combo": "paragraph",
         "pages": [
-          31
+          81
         ],
-        "document_name": "stamm_mat",
+        "chunk_type": "paragraph",
+        "chunk_id": 144
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "33b9a692b09f255a7e4d776af280e2bb",
+      "text": "Menge Menge aus Auftrag Menge geliefert Mengeneinh. Mengeneinheit aus Auftrag E-Preis Preis aus Auftrag Preis weitere Preiseinheit Preiseinheit aus Auftrag Gesamt Gesamtpreis aus Auftrag",
+      "score": 0.8294076919555664,
+      "metadata": {
+        "chunk_type": "table",
+        "chunk_text_class": "Requirements specification",
+        "token_count": 38,
+        "pages": [
+          11
+        ],
+        "mixed_combo": "table",
+        "document_name": "auf_rech",
+        "chunk_id": 23,
+        "heading_path": [
+          "3 Rechnung",
+          "3.2 Positionen",
+          "3.2.2 Sonderfunktionen",
+          "3.2.2.2 aus Auftrag"
+        ]
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "36d34b43fc85c920ef1b78bacd51d41f",
+      "text": "51 Kunde kommt Teil 1 Nein 53 Drucken Teil 1 Nein 61 Falzen Teil 1 Nein 71 Endverarbeitung Teil 1 Nein 89 Endedatum Änderung Auftrag 1 Nein 90 Endedatum Planung Auftrag 1 Nein 91 1.Teillieferung Ohne Planung 0 Nein … 0",
+      "score": 0.8289085626602173,
+      "metadata": {
+        "chunk_text_class": "Process description",
+        "chunk_id": 509,
+        "mixed_combo": "paragraph",
+        "heading_path": [
+          "21 Konfiguration",
+          "21.2 Masken",
+          "Lfd. Nr Maske"
+        ],
+        "pages": [
+          238
+        ],
+        "document_name": "planung",
+        "chunk_type": "paragraph",
+        "token_count": 68
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "8d837b3d8da569e31a0110404386e560",
+      "text": "Nein Keine Ist-Buchungen vorhanden Ja Ist-Buchungen vorhanden Bestellung (nur Auftrag) Information, ob Bestellungen vorhanden sind.",
+      "score": 0.8272120356559753,
+      "metadata": {
+        "document_name": "ang_basis",
+        "pages": [
+          28
+        ],
+        "mixed_combo": "paragraph",
         "chunk_type": "paragraph",
         "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.6 2-kalk (Kalkulationsdaten 2)",
-          "Schlüssel",
-          "Text 1-5"
+          "7 Spezifikation",
+          "Bereich Beschreibung",
+          "Optionen Beschreibung",
+          "Optionen Beschreibung",
+          "Optionen Beschreibung"
         ],
-        "token_count": 38,
-        "chunk_id": 104,
+        "chunk_id": 42,
+        "chunk_text_class": "Requirements specification",
+        "token_count": 26
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "eca0480606ec02094be3fe5d2ed43276",
+      "text": "• Anwahl eines Auftrags • Anzeige der einzelnen Fertigungsaufträge dieses Auftrags",
+      "score": 0.8269025087356567,
+      "metadata": {
+        "heading_path": [
+          "21 Konfiguration",
+          "21.1 Parameter",
+          "21.1.7 FM Planung – Fertigungsaufträge nach Aufträge",
+          "Programm"
+        ],
+        "pages": [
+          229
+        ],
+        "chunk_id": 486,
+        "chunk_text_class": "Usage instructions",
+        "mixed_combo": "list_item",
+        "token_count": 17,
+        "document_name": "planung",
+        "chunk_type": "list_item"
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "5d46dfa8f479df6eb6fd4a2b4d93e113",
+      "text": "Auswahl: Beleg Datum : Lagerort : Seriennummer : Paletten-Nr. : Bestellung : Lieferant : Auftrag : Kunde : Kostenstelle : Kunde : ------------------------------------------------------------------------------------------------------------------------------",
+      "score": 0.8261356353759766,
+      "metadata": {
+        "pages": [
+          7
+        ],
+        "document_name": "mawi_analysen",
+        "mixed_combo": "paragraph",
+        "chunk_id": 13,
+        "token_count": 35,
+        "heading_path": [
+          "2 Analysen",
+          "2.2 Journal"
+        ],
+        "chunk_text_class": "Other",
+        "chunk_type": "paragraph"
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "f4fafcb9ce7404a1f73c40dddd618b5e",
+      "text": "Die Reihenfolge der Fertigungsaufträge wird nach folgender Regel vertauscht. ProdStart-AktuellerFA = ProdStart-VorFA ProdStart-VorFA = ProdStart-AktuellerFA(vor Tausch)",
+      "score": 0.824998140335083,
+      "metadata": {
+        "mixed_combo": "paragraph",
+        "chunk_type": "paragraph",
+        "heading_path": [
+          "8 Planen",
+          "8.6 Auftrag einzeln",
+          "8.6.7 Links",
+          "8.6.7.2 Anderer Fertigungsauftrag voraus"
+        ],
+        "token_count": 46,
+        "chunk_id": 216,
+        "image_paths": [
+          "..\\3_Extracted_Images\\planung\\page_111_block_18.jpg",
+          "..\\3_Extracted_Images\\planung\\page_111_block_19.jpg",
+          "..\\3_Extracted_Images\\planung\\page_111_block_20.jpg"
+        ],
+        "pages": [
+          111
+        ],
+        "chunk_text_class": "Process description",
+        "document_name": "planung"
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "10605de8bf606c67fe85f61d051f8488",
+      "text": "Der „ProdStart“ des Fertigungsauftrags wird nach folgender Regel nach links vorschoben. Wenn „früheste freie Kapazität am gleichen Tag wie ProdStart-Alt“ > „FS-Start“ ProdStart-Neu = früheste freie Kapazität am gleichen Tag wie ProdStart-Alt sonst ProdStart-Neu = FS-Start",
+      "score": 0.8239778280258179,
+      "metadata": {
+        "document_name": "planung",
+        "chunk_text_class": "Process description",
+        "image_paths": [
+          "..\\3_Extracted_Images\\planung\\page_110_block_25.jpg",
+          "..\\3_Extracted_Images\\planung\\page_110_block_26.jpg",
+          "..\\3_Extracted_Images\\planung\\page_110_block_27.jpg"
+        ],
+        "mixed_combo": "paragraph",
+        "pages": [
+          110
+        ],
+        "heading_path": [
+          "8 Planen",
+          "8.6 Auftrag einzeln",
+          "8.6.7 Links",
+          "8.6.7.1 Freie Kapazität voraus"
+        ],
+        "token_count": 73,
+        "chunk_id": 214,
+        "chunk_type": "paragraph"
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "6d43a3d661c6a90b1654de6fdc235c12",
+      "text": "Nr Bezeichnung muss/kann 1 Datum m tt.mm.yyyy 2 Uhrzeit m hh:mm:ss 3 Kostenstelle m 4 Buchungsart m 11 5 Arbeitsgang m 6 Auftrag m 7 Produkt k 8 Teil k",
+      "score": 0.823332667350769,
+      "metadata": {
+        "mixed_combo": "paragraph",
+        "heading_path": [
+          "4 Datenübernahme",
+          "4.4 ASCII-File",
+          "4.4.1 Struktur",
+          "4.4.1.4 Leistung-Start"
+        ],
+        "document_name": "leist_bde_ext",
+        "chunk_id": 34,
+        "chunk_text_class": "Requirements specification",
+        "token_count": 52,
+        "chunk_type": "paragraph",
+        "pages": [
+          13
+        ]
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "3e9b0a0ceb6930cd894a94edae023831",
+      "text": "Lieferschein Lieferschein-Nummer Belegdatum Lieferschein-Datum Adresse / Anschrift Adresse / Anschrift aus Lieferscheinkopf Belegart L Lieferschein SL Sammellieferschein Positionen Anzahl Lieferscheinpositionen Anzahl Umbuchung Anzahl Lieferscheinpositionen für Umbuchungslieferschein Auftrag Auftragsnummer und –bezeichnung Kunde / Anschrift Rechnungsanschrift aus Auftragsstamm",
+      "score": 0.8232071995735168,
+      "metadata": {
+        "heading_path": [
+          "7 Generieren Rechnungen",
+          "7.2 Generieren Rechnung aus Lieferscheinen",
+          "7.2.1 Programmanwahl",
+          "Spalte Beschreibung"
+        ],
+        "document_name": "auf_rech",
+        "pages": [
+          30
+        ],
+        "mixed_combo": "paragraph",
+        "chunk_id": 53,
+        "token_count": 84,
+        "chunk_text_class": "Requirements specification",
+        "chunk_type": "paragraph"
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "099376ea6497e2cad11367b0e98ba294",
+      "text": "Der Kontrakt zwischen dem Anwender und dem Kunde besteht nun aus einer Artikelposition mit dem Kennzeichen „über Abruf“, einer Menge von 250.000 und einem Preis von 110,00 EUR per 1000 Einheiten. Das heißt, dass der Kunde einen Artikel über diese Menge zu diesem Preis in Auftrag gegeben hat. Geliefert und berechnet wird die Menge bzw. ein Teil der Menge jedoch erst, wenn der Kunde Abrufaufträge über bestimmte Mengen erteilt. Der Kontrakt muss nicht auf einmal erfüllt werden, sondern schrittweise, je nachdem wie viel der Kunde benötigt. Die Fertigung steuert der Anwenderbetrieb über die Produktionsaufträge.",
+      "score": 0.8231234550476074,
+      "metadata": {
+        "chunk_text_class": "Process description",
+        "chunk_id": 15,
+        "token_count": 139,
+        "pages": [
+          10
+        ],
+        "chunk_type": "paragraph",
+        "mixed_combo": "paragraph",
+        "document_name": "auf_kpa",
+        "heading_path": [
+          "4 Kontrakt",
+          "4.1 Anlegen von Kontrakt",
+          "4.1.1 Kontrakt an einem Beispiel"
+        ]
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "2bfb2fe798441f7f505eaf601ce39518",
+      "text": "<blank> → Material verfügbar Best → Bestellung nicht angelegt oder Lieferung zu spät Menge → Bestellmenge < Bedarf Best+Menge → Lieferung zu spät und Bestellmenge < Bedarf",
+      "score": 0.8229020833969116,
+      "metadata": {
+        "heading_path": [
+          "5 Bildschirm-Bereiche",
+          "5.5 Auftragsdetails (Fertigungsaufträge)",
+          "Sortierung",
+          "Spalten"
+        ],
+        "document_name": "planung",
+        "chunk_text_class": "Process description",
+        "token_count": 39,
+        "chunk_id": 146,
+        "mixed_combo": "table",
+        "pages": [
+          82
+        ],
+        "chunk_type": "table"
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "3c4f4c3db26671d650045f65d1f9e2f5",
+      "text": "Die Fertigungsaufträge werden in absteigender Reihenfolge der Detailliste unter Berücksichtigung der Eckdaten SE (spätestes Ende) des einzelnen Fertigungsauftrags und der freien Kapazitäten der Kostenstelle rückwärts eingeplant. Beim Einplanen wird mit dem SE-Ende des letzten Fertigungsauftrags aufgesetzt.",
+      "score": 0.821943998336792,
+      "metadata": {
+        "chunk_id": 196,
+        "mixed_combo": "paragraph",
+        "chunk_text_class": "Process description",
+        "image_paths": [
+          "..\\3_Extracted_Images\\planung\\page_101_block_16.jpg",
+          "..\\3_Extracted_Images\\planung\\page_101_block_17.jpg",
+          "..\\3_Extracted_Images\\planung\\page_101_block_18.jpg"
+        ],
+        "token_count": 72,
+        "chunk_type": "paragraph",
+        "heading_path": [
+          "8 Planen",
+          "8.5 Auftrag komplett",
+          "8.5.2 Rückwärts einplanen"
+        ],
+        "pages": [
+          101
+        ],
+        "document_name": "planung"
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "b852f5d7c093ebeb6dfcf7ca34ced14f",
+      "text": "Ohne KPA Verkauf KPA-Kontrakt Laut Parameter - Verkauf - über Abruf KPA-Produktion Produktion KPA-Abruf Verkauf",
+      "score": 0.821818470954895,
+      "metadata": {
+        "document_name": "auf_pos",
+        "mixed_combo": "paragraph",
+        "token_count": 29,
+        "chunk_type": "paragraph",
+        "heading_path": [
+          "4 Bearbeitungsmaske Auftragspositionen",
+          "4.2 Spalten/Felder",
+          "Kz Artikelposition",
+          "Auftragsart Voreinstellung"
+        ],
+        "chunk_id": 22,
+        "pages": [
+          15
+        ],
+        "chunk_text_class": "Process description"
+      }
+    },
+    {
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "7af9461e67baf6bdd82f838eb22ffe6e",
+      "text": "Durch das Anklicken des Auftrags und Bestätigen mit \"Ja\", wird der Fertigungscontainer generiert: Der nun gebildete Fertigungscontainer besteht aus dem ersten markierten Startauftrag (Beginn des Fertigungscontainers), aus dem zweiten markierten Endeauftrag (Ende des Fertigungscontainers) und den Fertigungsaufträgen, die dazwischen eingeplant sind. Nach dem Markieren des Startauftrags kann ein Fertigungscontainer nur von links nach rechts und nicht rückwärts gebildet werden. Der zuerst markierte Startauftrag ist immer der zeitlich erste Auftrag des Fertigungscontainers. Beispiel-2: Wenn sich ungeplante Kapazitäten zwischen den Fertigungsaufträgen befinden, aus denen ein Fertigungscontainer gebildet werden soll, werden die Aufträge zusammengezogen. Bildung eines Fertigungscontainers mit den Aufträgen von 11.10. bis 17.10.: Fertigungsaufträge werden zusammengezogen, die Lücken mit ungeplanter Kapazität dazwischen verschwinden: Containeransicht Einzelansicht",
+      "score": 0.8213757872581482,
+      "metadata": {
+        "document_name": "planung",
+        "mixed_combo": "paragraph",
+        "heading_path": [
+          "15 Fertigungscontainer",
+          "15.2 Bilden von Fertigungscontainern",
+          "15.2.2 Bilden des Fertigungscontainers durch Markieren des Endauftrags"
+        ],
+        "chunk_id": 347,
+        "chunk_type": "paragraph",
+        "token_count": 213,
+        "pages": [
+          180
+        ],
+        "image_paths": [
+          "..\\3_Extracted_Images\\planung\\page_180_block_25.jpg",
+          "..\\3_Extracted_Images\\planung\\page_180_block_26.jpg",
+          "..\\3_Extracted_Images\\planung\\page_180_block_27.jpg",
+          "..\\3_Extracted_Images\\planung\\page_180_block_28.jpg"
+        ],
         "chunk_text_class": "Usage instructions"
       }
     },
     {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "be8d355511faa5021a7bb8777f7e26e1",
-      "text": "© ALMENDRO GmbH – 2026 24",
-      "score": 0.8347523212432861,
-      "metadata": {
-        "pages": [
-          24
-        ],
-        "chunk_id": 75,
-        "chunk_type": "paragraph",
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.4 Verkauf",
-          "KZ Rechpos 1 (1. Kennzeichen für Rechnungspositionen)",
-          "Prodgruppe"
-        ],
-        "token_count": 13,
-        "chunk_text_class": "Other",
-        "document_name": "stamm_mat",
-        "mixed_combo": "paragraph"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "caa7942688cfaaa335d5987c7971ac0f",
-      "text": "© ALMENDRO GmbH – 2026 22",
-      "score": 0.834598958492279,
-      "metadata": {
-        "chunk_id": 68,
-        "pages": [
-          22
-        ],
-        "mixed_combo": "paragraph",
-        "document_name": "stamm_mat",
-        "token_count": 13,
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.3 Einkauf",
-          "Bearbeiter",
-          "Intrastat Herkunft"
-        ],
-        "chunk_type": "paragraph",
-        "chunk_text_class": "Legal terms"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "54c8ed522a1048c6c0fa47b87da688bd",
-      "text": "© ALMENDRO GmbH – 2026 66",
-      "score": 0.8345198631286621,
-      "metadata": {
-        "chunk_text_class": "Legal terms",
-        "pages": [
-          66
-        ],
-        "chunk_type": "paragraph",
-        "document_name": "stamm_mat",
-        "chunk_id": 198,
-        "token_count": 13,
-        "heading_path": [
-          "6 Aktualisierung aus Excel-File",
-          "6.3 Verrechnungspreis-2",
-          "6.3.2 Programmfunktion"
-        ],
-        "mixed_combo": "paragraph"
-      }
-    },
-    {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "bbfb07c60fc704954a172697b150719e",
-      "text": "© ALMENDRO GmbH – 2026 69 Mit ok werden die Daten in die Datenbank eingelesen.",
-      "score": 0.8341557383537292,
-      "metadata": {
-        "heading_path": [
-          "6 Aktualisierung aus Excel-File",
-          "6.5 Kalkulationspreisliste / Einkaufspreisliste",
-          "6.5.2 Programmfunktion"
-        ],
-        "pages": [
-          69
-        ],
-        "document_name": "stamm_mat",
-        "token_count": 26,
-        "chunk_type": "paragraph",
-        "mixed_combo": "paragraph",
-        "chunk_text_class": "Usage instructions",
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_mat\\page_69_block_11.jpg"
-        ],
-        "chunk_id": 205
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "606f779d6acad5a9870ba72760c8bbb6",
-      "text": "Die Daten sind für die Angabe von Alternativ-Kostenstellen für das Planungsmodul „ALMENDRO“ vorgesehen. Dieses Modul steht (noch) nicht zur Verfügung.",
-      "score": 0.833846926689148,
-      "metadata": {
-        "document_name": "stamm_kalk",
-        "chunk_type": "paragraph",
-        "chunk_text_class": "Application description",
-        "chunk_id": 24,
-        "heading_path": [
-          "3 Kostenstellen",
-          "3.8 Plan"
-        ],
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_kalk\\page_22_block_14.jpg",
-          "..\\3_Extracted_Images\\stamm_kalk\\page_22_block_15.jpg"
-        ],
-        "pages": [
-          22
-        ],
-        "mixed_combo": "paragraph",
-        "token_count": 37
-      }
-    },
-    {
-      "query": "Was sind die Berührungspunkte von ALMENDRO mit SAP?",
-      "chunk_id": "f234a0c75db914c7b06b50b87209b65a",
-      "text": "© ALMENDRO GmbH – 2026 60",
-      "score": 0.8337079882621765,
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "66d1164ed866a879d59476ea2c424e62",
+      "text": "11 Angebot-Abgabe Ohne Planung 0 Nein 12 Angebot Nachfassen Ohne Planung 0 Nein 13 Angebot Status Ohne Planung 0 Nein 20 Rücklauf Planung Auftrag 1 Nein 21 Auftragsunterlagen Auftrag 1 Nein",
+      "score": 0.8213351368904114,
       "metadata": {
         "mixed_combo": "paragraph",
+        "chunk_id": 507,
+        "heading_path": [
+          "21 Konfiguration",
+          "21.2 Masken",
+          "Lfd. Nr Maske"
+        ],
+        "chunk_text_class": "Requirements specification",
+        "document_name": "planung",
+        "token_count": 48,
         "chunk_type": "paragraph",
-        "heading_path": [
-          "4 Fremdleistungen (X-Kosten / externe Kosten)",
-          "Bezeichnung",
-          "Preiseinheit",
-          "E-Preis"
-        ],
-        "chunk_id": 184,
-        "document_name": "stamm_mat",
         "pages": [
-          60
-        ],
-        "token_count": 13,
-        "chunk_text_class": "Other"
-      }
-    },
-    {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "ab131e87dd910ec6218753fdba90e271",
-      "text": "Die Angabe steht nur bei Einsatz der ALMENDRO-Planung zur Verfügung. Angabe eines Beschaffungspuffers für Versorgung von Statusterminen für die Material- und Werkzeugbereitstellung.",
-      "score": 0.8336461782455444,
-      "metadata": {
-        "token_count": 42,
-        "document_name": "stamm_mat",
-        "mixed_combo": "paragraph",
-        "pages": [
-          29
-        ],
-        "chunk_text_class": "User manual",
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.5 1-Kalk (Kalkulationsdaten 1)",
-          "Preiskennzeichen (für Kalkulation)",
-          "Planung MaterialTage"
-        ],
-        "chunk_id": 98,
-        "chunk_type": "paragraph"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "705c146c765f8af5eccdb861bb7a6157",
-      "text": "© ALMENDRO GmbH – 2026 70",
-      "score": 0.833527684211731,
-      "metadata": {
-        "pages": [
-          70
-        ],
-        "chunk_type": "paragraph",
-        "token_count": 13,
-        "heading_path": [
-          "6 Aktualisierung aus Excel-File",
-          "6.5 Kalkulationspreisliste / Einkaufspreisliste",
-          "6.5.3 Programmfunktion + Anlage Preislistenkopf"
-        ],
-        "mixed_combo": "paragraph",
-        "chunk_id": 207,
-        "chunk_text_class": "Legal terms",
-        "document_name": "stamm_mat"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "55488b2d9e469d9133771bc5a89cb488",
-      "text": "© ALMENDRO GmbH – 2026 43",
-      "score": 0.8334284424781799,
-      "metadata": {
-        "mixed_combo": "paragraph",
-        "pages": [
-          43
-        ],
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.17 Buch"
-        ],
-        "document_name": "stamm_mat",
-        "chunk_id": 129,
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_mat\\page_43_block_21.jpg"
-        ],
-        "chunk_type": "paragraph",
-        "chunk_text_class": "Other",
-        "token_count": 13
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "fb68971faee7c5f087b1fcfcf4b36e7d",
-      "text": "© ALMENDRO GmbH – 2026 10",
-      "score": 0.8333116769790649,
-      "metadata": {
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.1 Stamm",
-          "Materialnummer",
-          "Kz Bewertung"
-        ],
-        "mixed_combo": "paragraph",
-        "chunk_id": 24,
-        "token_count": 13,
-        "chunk_type": "paragraph",
-        "document_name": "stamm_mat",
-        "chunk_text_class": "Legal terms",
-        "pages": [
-          10
+          238
         ]
       }
     },
     {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "efe195d92735e456d35f30c5d639808a",
-      "text": "© ALMENDRO GmbH – 2026 7",
-      "score": 0.8332650661468506,
+      "query": "What is the right sequence order of Produktionsauftrag, Kundenauftrag, Abrufauftrag and Fertigungsauftrag?",
+      "chunk_id": "d13038f412e1c6f462c33fcf74303d61",
+      "text": "- Spaltenübersicht Auftragspositionen - Gesamtwert - Infofunktionen Fertigung, Lieferschein, Rechnung, Bestellung - Info Z-Files und Positionstexte - KPA-Funktionen - Funktion „Stamm“ zum Generieren Artikel aus Dummy-Artikel",
+      "score": 0.8210155963897705,
       "metadata": {
-        "chunk_type": "paragraph",
-        "mixed_combo": "paragraph",
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.1 Stamm",
-          "Materialnummer",
-          "Lagerort"
-        ],
-        "chunk_text_class": "Other",
-        "token_count": 13,
-        "chunk_id": 13,
-        "pages": [
-          7
-        ],
-        "document_name": "stamm_mat"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "9f5bb4828e699f7ec396ff5ec1f60fc8",
-      "text": "© ALMENDRO GmbH – 2026 6",
-      "score": 0.833161473274231,
-      "metadata": {
-        "chunk_id": 8,
-        "mixed_combo": "paragraph",
-        "document_name": "stamm_mat",
-        "chunk_type": "paragraph",
-        "chunk_text_class": "Legal terms",
-        "token_count": 13,
+        "document_name": "auf_pos",
         "pages": [
           6
         ],
+        "mixed_combo": "list_item",
+        "chunk_id": 6,
+        "chunk_type": "list_item",
         "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.1 Stamm",
-          "Materialnummer"
-        ]
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "db467f6a0a08bd829e2c2b5ef5ad2711",
-      "text": "© ALMENDRO GmbH – 2026 46",
-      "score": 0.8326894044876099,
-      "metadata": {
-        "pages": [
-          46
-        ],
-        "mixed_combo": "paragraph",
-        "chunk_id": 142,
-        "document_name": "stamm_mat",
-        "chunk_type": "paragraph",
-        "token_count": 13,
-        "heading_path": [
-          "3 Zusatzstammdaten für Material",
-          "3.1 Stammdaten Lagertyp"
-        ],
-        "chunk_text_class": "Other"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "fbc8034ee7f71d7c577b7376e21c5897",
-      "text": "© ALMENDRO GmbH – 2026 44",
-      "score": 0.832594633102417,
-      "metadata": {
-        "document_name": "stamm_mat",
-        "chunk_type": "paragraph",
-        "pages": [
-          44
-        ],
-        "chunk_id": 136,
-        "mixed_combo": "paragraph",
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.18 PosKalk (Positionskalkulation)",
-          "Positionskalkulation Art",
-          "Kostenstelle/Arbeitsgang"
-        ],
-        "token_count": 13,
-        "chunk_text_class": "Legal terms"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "21cb289e873e4f0c229a5c53aafb05e2",
-      "text": "© ALMENDRO GmbH – 2026 45",
-      "score": 0.8324167728424072,
-      "metadata": {
-        "chunk_type": "paragraph",
-        "chunk_id": 139,
-        "document_name": "stamm_mat",
-        "mixed_combo": "paragraph",
-        "token_count": 13,
-        "chunk_text_class": "Other",
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.19 Z-Files"
-        ],
-        "pages": [
-          45
-        ]
-      }
-    },
-    {
-      "query": "Was sind die Berührungspunkte von ALMENDRO mit SAP?",
-      "chunk_id": "6086616852f71c67703c14a94764eea3",
-      "text": "Dateiname support.pdf Beschreibung ALMENDRO-Support Programm",
-      "score": 0.8323474526405334,
-      "metadata": {
-        "document_name": "ws_info",
-        "token_count": 12,
-        "chunk_id": 1,
-        "chunk_text_class": "Other",
-        "pages": [
-          5
-        ],
-        "heading_path": [
-          "1 Support"
-        ],
-        "mixed_combo": "paragraph",
-        "chunk_type": "paragraph"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "612a0f3672fbea83c11e04e132e1a5ed",
-      "text": "© ALMENDRO GmbH – 2026 12",
-      "score": 0.8320978879928589,
-      "metadata": {
-        "pages": [
-          12
-        ],
-        "document_name": "stamm_mat",
-        "chunk_type": "paragraph",
-        "token_count": 13,
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.1 Stamm",
-          "Materialnummer",
-          "Tipp"
-        ],
-        "mixed_combo": "paragraph",
-        "chunk_id": 33,
-        "chunk_text_class": "Legal terms"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "83f52f9d201465cefff0cdd42b9df7a3",
-      "text": "© ALMENDRO GmbH – 2026 42",
-      "score": 0.8320441842079163,
-      "metadata": {
-        "document_name": "stamm_mat",
-        "chunk_id": 127,
-        "token_count": 13,
-        "chunk_type": "paragraph",
-        "mixed_combo": "paragraph",
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.16 Verpackung"
-        ],
-        "pages": [
-          42
-        ],
-        "chunk_text_class": "Other"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "9069ca12efc2da1334fc23366d32d37d",
-      "text": "© ALMENDRO GmbH – 2026 63",
-      "score": 0.8319529891014099,
-      "metadata": {
-        "chunk_id": 190,
-        "chunk_text_class": "Other",
-        "document_name": "stamm_mat",
-        "pages": [
-          63
-        ],
-        "chunk_type": "paragraph",
-        "token_count": 13,
-        "heading_path": [
-          "5 Preislisten ändern",
-          "5.3 Kalk-Preislisten bearbeiten"
-        ],
-        "mixed_combo": "paragraph"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "92bd13f622b17e76626e6090e0d5de80",
-      "text": "© ALMENDRO GmbH – 2026 11",
-      "score": 0.8318800330162048,
-      "metadata": {
-        "pages": [
-          11
-        ],
-        "chunk_type": "paragraph",
-        "token_count": 13,
-        "mixed_combo": "paragraph",
-        "document_name": "stamm_mat",
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.1 Stamm",
-          "Materialnummer",
-          "Alternativ- einheit"
-        ],
-        "chunk_text_class": "Legal terms",
-        "chunk_id": 31
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "160f664c02eef0f733d6c14839ba70e1",
-      "text": "© ALMENDRO GmbH – 2026 33",
-      "score": 0.8317888379096985,
-      "metadata": {
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.6 2-kalk (Kalkulationsdaten 2)",
-          "Schlüssel",
-          "Text 1-5"
-        ],
-        "document_name": "stamm_mat",
-        "token_count": 13,
-        "pages": [
-          33
-        ],
-        "chunk_text_class": "Other",
-        "mixed_combo": "paragraph",
-        "chunk_type": "paragraph",
-        "chunk_id": 106,
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_mat\\page_33_block_16.jpg"
-        ]
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "016db025c68f97adf0f3cafcb79fce87",
-      "text": "Diese Option steht nur für ALMENDRO-Administratoren zur Verfügung. Siehe dazu Infos im Workshop „ALMENDRO-Administration“.",
-      "score": 0.831712007522583,
-      "metadata": {
-        "mixed_combo": "paragraph",
-        "document_name": "basis",
-        "heading_path": [
-          "2 Start",
-          "2.2 Menü",
-          "2.2.3 Serviceprogramme",
-          "2.2.3.10 Systemkommandos"
-        ],
-        "chunk_id": 17,
-        "token_count": 29,
-        "chunk_type": "paragraph",
-        "chunk_text_class": "Usage instructions",
-        "pages": [
-          18
-        ]
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "182600004b6797c685a4f9bacc1c37c5",
-      "text": "© ALMENDRO GmbH – 2026 71",
-      "score": 0.8317034244537354,
-      "metadata": {
-        "heading_path": [
-          "7 Löschen Stammdaten"
-        ],
-        "chunk_text_class": "Legal terms",
-        "chunk_type": "paragraph",
-        "mixed_combo": "paragraph",
-        "document_name": "stamm_mat",
-        "token_count": 13,
-        "pages": [
-          71
-        ],
-        "chunk_id": 209
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "6a9ec2c963d8c0bcf3950476247a6b98",
-      "text": "© ALMENDRO GmbH – 2026 64",
-      "score": 0.8316379189491272,
-      "metadata": {
-        "chunk_text_class": "Legal terms",
-        "pages": [
-          64
-        ],
-        "mixed_combo": "paragraph",
-        "document_name": "stamm_mat",
-        "chunk_type": "paragraph",
-        "chunk_id": 192,
-        "token_count": 13,
-        "heading_path": [
-          "6 Aktualisierung aus Excel-File",
-          "6.1 Allgemeines"
-        ]
-      }
-    },
-    {
-      "query": "Geben Sie eine Zusammenfassung der Berührungspunkte von ALMENDRO mit SAP.",
-      "chunk_id": "d65682cac0951741ec95e6f31c1495cb",
-      "text": "Die Umstellung der Maskenparameter zur Steuerung der Funktion wird von Almendro vorgenommen.",
-      "score": 0.8314926624298096,
-      "metadata": {
-        "mixed_combo": "paragraph",
-        "pages": [
-          35
-        ],
-        "token_count": 19,
-        "document_name": "auf_ausschiessen",
-        "chunk_id": 51,
-        "chunk_text_class": "Process description",
-        "heading_path": [
-          "6 Umstellung der Altdaten",
-          "6.2 Rollendruck",
-          "6.2.1 Steuerung"
-        ],
-        "chunk_type": "paragraph"
-      }
-    },
-    {
-      "query": "Was sind die Berührungspunkte von ALMENDRO mit SAP?",
-      "chunk_id": "2ec77d7e81230e2167c8849ce9f157b3",
-      "text": "© ALMENDRO GmbH – 2026 18",
-      "score": 0.8312335014343262,
-      "metadata": {
-        "mixed_combo": "paragraph",
-        "document_name": "stamm_mat",
-        "chunk_id": 59,
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.3 Einkauf",
-          "Bearbeiter",
-          "Option Benötigte Zusatzfelder"
-        ],
-        "pages": [
-          18
-        ],
-        "chunk_text_class": "Other",
-        "chunk_type": "paragraph",
-        "token_count": 13
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "fca167a68f7527aea9c1b110bc539f7d",
-      "text": "Die Buchungsschlüssel können nur über das Menüsystem gewechselt werden. Als Alternative kann ein Buchungsschlüssel auch über die Hotkey-Funktion aufgerufen werden. Wird in den Buchungsschlüsseln “Zugang extern“ oder “Fremdleistung“ die Suchfunktion auf dem Feld Bestellposition aufgerufen und dann eine Position des anderen Buchungsschlüssel angewählt, schaltet ALMENDRO innerhalb der Buchung automatisch um.",
-      "score": 0.8312214612960815,
-      "metadata": {
-        "heading_path": [
-          "2 Buchungsschlüssel allgemein",
-          "2.14 Wechsel Buchungsschlüssel"
-        ],
-        "chunk_type": "paragraph",
-        "token_count": 91,
-        "pages": [
-          15
-        ],
-        "mixed_combo": "paragraph",
-        "document_name": "mawi_lager",
-        "chunk_text_class": "Usage instructions",
-        "chunk_id": 20
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "542dcd455687b4001ae228db18ae1ed3",
-      "text": "© ALMENDRO GmbH – 2026 62",
-      "score": 0.8311813473701477,
-      "metadata": {
-        "heading_path": [
-          "5 Preislisten ändern",
-          "5.2 EK-Preislisten bearbeiten"
-        ],
-        "mixed_combo": "paragraph",
-        "chunk_id": 188,
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_mat\\page_62_block_8.jpg"
-        ],
-        "chunk_text_class": "Other",
-        "token_count": 13,
-        "pages": [
-          62
-        ],
-        "document_name": "stamm_mat",
-        "chunk_type": "paragraph"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "0c630f1670814dc862430c5b39a9a1b5",
-      "text": "© ALMENDRO GmbH – 2026 61",
-      "score": 0.8311675786972046,
-      "metadata": {
-        "heading_path": [
-          "5 Preislisten ändern",
-          "5.1 Standard"
-        ],
-        "pages": [
-          61
+          "3 Übersicht Auftragspositionen",
+          "3.1 Übersichtsmaske",
+          "Inhalt und Funktionen in der Übersichtsmaske:"
         ],
         "image_paths": [
-          "..\\3_Extracted_Images\\stamm_mat\\page_61_block_11.jpg"
+          "..\\3_Extracted_Images\\auf_pos\\page_6_block_17.jpg"
         ],
-        "chunk_type": "paragraph",
-        "document_name": "stamm_mat",
-        "token_count": 13,
-        "chunk_id": 186,
-        "chunk_text_class": "Other",
-        "mixed_combo": "paragraph"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "f88e232f664082379a465db9067eb283",
-      "text": "© ALMENDRO GmbH – 2026 25",
-      "score": 0.8311381340026855,
-      "metadata": {
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.4 Verkauf",
-          "KZ Rechpos 1 (1. Kennzeichen für Rechnungspositionen)",
-          "Verweis VK-Pl"
-        ],
-        "mixed_combo": "paragraph",
-        "chunk_type": "paragraph",
-        "chunk_text_class": "Legal terms",
-        "chunk_id": 79,
-        "pages": [
-          25
-        ],
-        "document_name": "stamm_mat",
-        "token_count": 13
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "8cbf0d572f8d6ab2b397e255fd45b370",
-      "text": "© ALMENDRO GmbH – 2026 14",
-      "score": 0.8309746980667114,
-      "metadata": {
-        "document_name": "stamm_mat",
-        "pages": [
-          14
-        ],
-        "chunk_id": 40,
-        "chunk_type": "paragraph",
-        "mixed_combo": "paragraph",
-        "chunk_text_class": "Other",
-        "token_count": 13,
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.2 Bestand",
-          "KZ Seriennummern",
-          "Konsignationslager"
-        ]
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "20b2f03d04a9c3011de08df0b28aa28b",
-      "text": "© ALMENDRO GmbH – 2026 65",
-      "score": 0.8308923244476318,
-      "metadata": {
-        "token_count": 13,
-        "mixed_combo": "paragraph",
-        "chunk_type": "paragraph",
-        "chunk_id": 195,
-        "heading_path": [
-          "6 Aktualisierung aus Excel-File",
-          "6.2 Verrechnungspreis-1",
-          "6.2.2 Programmfunktion"
-        ],
-        "document_name": "stamm_mat",
-        "pages": [
-          65
-        ],
-        "chunk_text_class": "Other"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "b39735ec92cf8e24c20954527a664a9f",
-      "text": "© ALMENDRO GmbH – 2026 55",
-      "score": 0.8308858275413513,
-      "metadata": {
-        "heading_path": [
-          "3 Zusatzstammdaten für Material",
-          "3.6 EAN für bestehende Artikel",
-          "3.6.1 EAN-Nummer einzeln"
-        ],
-        "chunk_text_class": "Other",
-        "mixed_combo": "paragraph",
-        "token_count": 13,
-        "chunk_id": 164,
-        "chunk_type": "paragraph",
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_mat\\page_55_block_17.jpg",
-          "..\\3_Extracted_Images\\stamm_mat\\page_55_block_18.jpg"
-        ],
-        "document_name": "stamm_mat",
-        "pages": [
-          55
-        ]
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "c613026ff27eabd7c788406313899a5e",
-      "text": "© ALMENDRO GmbH – 2026 17",
-      "score": 0.8308771848678589,
-      "metadata": {
-        "chunk_type": "paragraph",
-        "mixed_combo": "paragraph",
-        "chunk_text_class": "Other",
-        "document_name": "stamm_mat",
-        "pages": [
-          17
-        ],
-        "chunk_id": 53,
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.2 Bestand",
-          "KZ Seriennummern",
-          "RoHS Material"
-        ],
-        "token_count": 13
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "d21ca94f3caa2f7ee853468ee929285b",
-      "text": "© ALMENDRO GmbH – 2026 5",
-      "score": 0.8307183980941772,
-      "metadata": {
-        "chunk_type": "paragraph",
-        "document_name": "stamm_mat",
-        "pages": [
-          5
-        ],
-        "token_count": 13,
-        "heading_path": [
-          "1 Vorwort"
-        ],
-        "chunk_id": 5,
-        "chunk_text_class": "Other",
-        "mixed_combo": "paragraph"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "d4f40b93c44cd1d5f1350db97ddd4597",
-      "text": "© ALMENDRO GmbH – 2026 37",
-      "score": 0.8305764198303223,
-      "metadata": {
-        "chunk_type": "paragraph",
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.11 VK-PL (Verkaufspreislisten)",
-          "Kriterium Zugriff"
-        ],
-        "pages": [
-          37
-        ],
-        "chunk_text_class": "Other",
-        "chunk_id": 117,
-        "token_count": 13,
-        "mixed_combo": "paragraph",
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_mat\\page_37_block_20.jpg"
-        ],
-        "document_name": "stamm_mat"
-      }
-    },
-    {
-      "query": "Welche Schnittstellen bestehen zwischen ALMENDRO und SAP?",
-      "chunk_id": "63dc3a3bcd2eeed5b8f416e7208e3206",
-      "text": "© ALMENDRO GmbH – 2026 47",
-      "score": 0.8304290771484375,
-      "metadata": {
-        "document_name": "stamm_mat",
-        "chunk_text_class": "Other",
-        "heading_path": [
-          "3 Zusatzstammdaten für Material",
-          "3.2 Stammdaten Lagerstruktur"
-        ],
-        "image_paths": [
-          "..\\3_Extracted_Images\\stamm_mat\\page_47_block_17.jpg",
-          "..\\3_Extracted_Images\\stamm_mat\\page_47_block_18.jpg"
-        ],
-        "pages": [
-          47
-        ],
-        "chunk_type": "paragraph",
-        "chunk_id": 144,
-        "mixed_combo": "paragraph",
-        "token_count": 13
-      }
-    },
-    {
-      "query": "Was sind die Berührungspunkte von ALMENDRO mit SAP?",
-      "chunk_id": "196cc7b44a0598dba92a5a45727b68af",
-      "text": "© ALMENDRO GmbH – 2026 30",
-      "score": 0.830314576625824,
-      "metadata": {
-        "chunk_id": 99,
-        "pages": [
-          30
-        ],
-        "heading_path": [
-          "2 Material / Artikel Stamm",
-          "2.5 1-Kalk (Kalkulationsdaten 1)",
-          "Preiskennzeichen (für Kalkulation)",
-          "Planung MaterialTage"
-        ],
-        "mixed_combo": "paragraph",
-        "token_count": 13,
-        "chunk_type": "paragraph",
-        "chunk_text_class": "Legal terms",
-        "document_name": "stamm_mat"
+        "chunk_text_class": "Requirements specification",
+        "token_count": 55
       }
     }
   ]

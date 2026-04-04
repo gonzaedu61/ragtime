@@ -233,12 +233,6 @@ class Hierarchy_CSV_Generator:
     # WRITE CLUSTERS CSV
     # ------------------------------------------------------------
     def _write_clusters_csv(self):
-
-        def pad_cluster_id(cid):
-            parts = str(cid).split(".")
-            padded = ["{:02d}".format(int(p)) for p in parts]
-            return ".".join(padded)
-
         path = os.path.join(self.output_dir, self.clusters_csv_filename)
 
         with open(path, "w", newline="", encoding="utf-8-sig") as f:
@@ -255,10 +249,6 @@ class Hierarchy_CSV_Generator:
                 "isLeaf",
                 "allChildLeaf",
                 "allChildInternal",
-                "hasLeafSibling",
-                "hasInternalSibling", 
-                "parent",
-                "level",
                 "Source_Documents",
                 "text_class"
             ])
@@ -272,41 +262,6 @@ class Hierarchy_CSV_Generator:
                 is_leaf = (len(children_list) == 0)
                 all_child_leaf = all(len(self.cluster_children_map[ch]) == 0 for ch in children_list)
                 all_child_internal = all(len(self.cluster_children_map[ch]) > 0 for ch in children_list)
-
-                # Has leaf sibling
-                parent = self.cluster_parent_map.get(cid)
-                if parent is None:
-                    has_leaf_sibling = False
-                else:
-                    siblings = self.cluster_children_map[parent]
-                    has_leaf_sibling = any(
-                        len(self.cluster_children_map[sib]) == 0
-                        for sib in siblings
-                        if sib != cid
-                    )
-
-                # Has internal sibling
-                if parent is None:
-                    has_internal_sibling = False
-                else:
-                    siblings = self.cluster_children_map[parent]
-                    has_internal_sibling = any(
-                        len(self.cluster_children_map[sib]) > 0
-                        for sib in siblings
-                        if sib != cid
-                    )
-
-
-                def compute_level(x):
-                    lvl = 0
-                    while x in self.cluster_parent_map:
-                        x = self.cluster_parent_map[x]
-                        lvl += 1
-                    return lvl
-                level = compute_level(cid)
-
-
-
 
 
                 summary = cluster.get("summary", "")
@@ -333,7 +288,7 @@ class Hierarchy_CSV_Generator:
                 text_class_str = "\n".join(classes)
 
                 writer.writerow([
-                    pad_cluster_id(cid),
+                    cid,
                     size,
                     children,
                     summary,
@@ -343,10 +298,6 @@ class Hierarchy_CSV_Generator:
                     is_leaf,
                     all_child_leaf,
                     all_child_internal,
-                    has_leaf_sibling,
-                    has_internal_sibling,
-                    pad_cluster_id(parent) if parent != None else "",
-                    level,
                     source_docs,
                     text_class_str
                 ])

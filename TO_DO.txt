@@ -1,12 +1,4 @@
-- Assign a "content_type" to each chunk:
-   * Product description
-   * Process description
-   * Usage Instructions
-   * Application description
-   * Legal terms
-   * Tale
-   * Person description
-   * Other
-- Eliminate all Vorwort chunks and reprocess the tree
-- Indicate in process_b to not hallucinate with the steps. Do not create steps if not clearly described in the text
-- If one process is empty do not use in further expansions
+- Put Business Context before Process Description oin final Word document (general and per topic)
+- Automate the hierarchy parameters finding: Find baselines / Refine Baselines (see chat)
+- Hierarchy Embedder: If it beaks it has to resatrt from the beginning. Change to process clusters one-by-one in full
+- Make all points 5 generate and Hierarchy Embedder read from the "clusters" folder

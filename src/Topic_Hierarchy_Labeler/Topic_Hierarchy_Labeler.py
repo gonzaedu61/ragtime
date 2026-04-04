@@ -51,7 +51,7 @@ class Topic_Hierarchy_Labeler:
         show_progress_bar: bool = False,
         retry_attempts: int = 3,
         repair_mode: bool = False,
-        max_concurrent_llm_calls: int = 10,
+        max_concurrent_llm_calls: int = 1,
     ):
         self.llm = llm
         self.vectordb = vectordb

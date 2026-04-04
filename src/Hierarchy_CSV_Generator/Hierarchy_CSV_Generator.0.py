@@ -57,6 +57,7 @@ class Hierarchy_CSV_Generator:
         self._walk_tree(tree, parent_id=None)
 
         self._detect_document_clusters_pass1()
+        self._detect_document_clusters_pass2()
 
         self._write_chunks_csv()
 
@@ -117,9 +118,31 @@ class Hierarchy_CSV_Generator:
             if not children:
                 continue
 
-            has_leaf_child = any(len(self.cluster_children_map[ch]) == 0 for ch in children)
-            if has_leaf_child:
+            all_leaf = all(len(self.cluster_children_map[ch]) == 0 for ch in children)
+
+            if all_leaf:
                 self.document_cluster[cid] = True
+
+
+    # ------------------------------------------------------------
+    # DOCUMENT CLUSTER DETECTION — PASS 2
+    # ------------------------------------------------------------
+    def _detect_document_clusters_pass2(self):
+        for cluster in self.all_clusters:
+            cid = cluster["cluster_id"]
+            children = self.cluster_children_map.get(cid, [])
+
+            if children:
+                continue
+
+            parent = self.cluster_parent_map.get(cid)
+            if parent is None:
+                continue
+
+            siblings = self.cluster_children_map[parent]
+            if any(self.document_cluster[sib] for sib in siblings):
+                self.document_cluster[cid] = True
+
 
     # ------------------------------------------------------------
     # AGGREGATE TOKEN_COUNT + DOCUMENT NAMES + TEXT CLASS UPWARD
@@ -233,12 +256,6 @@ class Hierarchy_CSV_Generator:
     # WRITE CLUSTERS CSV
     # ------------------------------------------------------------
     def _write_clusters_csv(self):
-
-        def pad_cluster_id(cid):
-            parts = str(cid).split(".")
-            padded = ["{:02d}".format(int(p)) for p in parts]
-            return ".".join(padded)
-
         path = os.path.join(self.output_dir, self.clusters_csv_filename)
 
         with open(path, "w", newline="", encoding="utf-8-sig") as f:
@@ -252,13 +269,6 @@ class Hierarchy_CSV_Generator:
                 "label",
                 "token_count",
                 "document_cluster",
-                "isLeaf",
-                "allChildLeaf",
-                "allChildInternal",
-                "hasLeafSibling",
-                "hasInternalSibling", 
-                "parent",
-                "level",
                 "Source_Documents",
                 "text_class"
             ])
@@ -267,48 +277,6 @@ class Hierarchy_CSV_Generator:
                 cid = cluster["cluster_id"]
                 size = cluster.get("size", 0)
                 children = len(self.cluster_children_map.get(cid, []))
-
-                children_list = self.cluster_children_map.get(cid, [])
-                is_leaf = (len(children_list) == 0)
-                all_child_leaf = all(len(self.cluster_children_map[ch]) == 0 for ch in children_list)
-                all_child_internal = all(len(self.cluster_children_map[ch]) > 0 for ch in children_list)
-
-                # Has leaf sibling
-                parent = self.cluster_parent_map.get(cid)
-                if parent is None:
-                    has_leaf_sibling = False
-                else:
-                    siblings = self.cluster_children_map[parent]
-                    has_leaf_sibling = any(
-                        len(self.cluster_children_map[sib]) == 0
-                        for sib in siblings
-                        if sib != cid
-                    )
-
-                # Has internal sibling
-                if parent is None:
-                    has_internal_sibling = False
-                else:
-                    siblings = self.cluster_children_map[parent]
-                    has_internal_sibling = any(
-                        len(self.cluster_children_map[sib]) > 0
-                        for sib in siblings
-                        if sib != cid
-                    )
-
-
-                def compute_level(x):
-                    lvl = 0
-                    while x in self.cluster_parent_map:
-                        x = self.cluster_parent_map[x]
-                        lvl += 1
-                    return lvl
-                level = compute_level(cid)
-
-
-
-
-
                 summary = cluster.get("summary", "")
                 label = cluster.get("label", "")
                 token_sum = self.cluster_token_sums.get(cid, 0)
@@ -333,20 +301,13 @@ class Hierarchy_CSV_Generator:
                 text_class_str = "\n".join(classes)
 
                 writer.writerow([
-                    pad_cluster_id(cid),
+                    cid,
                     size,
                     children,
                     summary,
                     label,
                     token_sum,
                     doc_cluster_flag,
-                    is_leaf,
-                    all_child_leaf,
-                    all_child_internal,
-                    has_leaf_sibling,
-                    has_internal_sibling,
-                    pad_cluster_id(parent) if parent != None else "",
-                    level,
                     source_docs,
                     text_class_str
                 ])

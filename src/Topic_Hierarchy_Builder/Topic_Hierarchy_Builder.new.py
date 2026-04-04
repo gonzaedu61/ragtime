@@ -2,8 +2,6 @@ import numpy as np
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics.pairwise import cosine_similarity
 import json
-import os
-
 
 
 class Topic_Hierarchy_Builder:
@@ -14,11 +12,10 @@ class Topic_Hierarchy_Builder:
     def __init__(
         self,
         vector_db,
-        output_dir,
         initial_cutoff=0.5,
         min_cluster_size=5,
         cutoff_decay=0.85,
-        min_cutoff=0.05,
+        min_cutoff=0.15,
         max_depth=6,
         metadata_keys=None,
         metadata_weight=0.1,
@@ -38,12 +35,6 @@ class Topic_Hierarchy_Builder:
 
         self.postprocess_rules = postprocess_rules or []
         self.verbose = verbose
-        self.output_dir = output_dir
-
-        os.makedirs(self.output_dir, exist_ok=True)
-
-
-
 
     # ---------------------------------------------------------
     # Metadata → vector encoding
@@ -113,64 +104,6 @@ class Topic_Hierarchy_Builder:
                 count += self._count_clusters(c["children"])
         return count
 
-
-    # ---------------------------------------------------------
-    # Summarize levels
-    # ---------------------------------------------------------
-    def summarize_levels(self, tree):
-        """
-        Returns a dict:
-            {
-                level_number: {
-                    "child_clusters": N,
-                    "unique_chunks": M
-                },
-                ...
-            }
-        """
-
-        summary = {}
-
-        def walk(node, level):
-            # Ensure level entry exists
-            if level not in summary:
-                summary[level] = {
-                    "child_clusters": 0,
-                    "chunk_ids": []
-                }
-
-            # Count clusters at this level
-            summary[level]["child_clusters"] += len(node["clusters"])
-
-            # Collect chunk IDs
-            for c in node["clusters"]:
-                if c["children"] is None:
-                    summary[level]["chunk_ids"].extend(c["ids"])
-                else:
-                    walk(c["children"], level + 1)
-
-        walk(tree, 0)
-
-        # Convert chunk_ids → unique count
-        for lvl in summary:
-            summary[lvl]["unique_chunks"] = len(set(summary[lvl]["chunk_ids"]))
-            del summary[lvl]["chunk_ids"]
-
-        return summary
-
-
-    # ---------------------------------------------------------
-    # Collect Lead IDs
-    # ---------------------------------------------------------
-    def _collect_leaf_ids(self, node):
-        ids = []
-        for c in node["clusters"]:
-            if c["children"] is None:
-                ids.extend(c["ids"])
-            else:
-                ids.extend(self._collect_leaf_ids(c["children"]))
-        return ids
-
     # ---------------------------------------------------------
     # Recursive clustering (single unified path)
     # ---------------------------------------------------------
@@ -183,20 +116,40 @@ class Topic_Hierarchy_Builder:
         depth=0,
         path=""
     ):
-        
-        if len(embeddings) < self.min_cluster_size or cutoff < self.min_cutoff or depth > self.max_depth:
+        """
+        Lossless, deterministic recursive clustering.
+
+        - Never drops chunks: all `ids` appear exactly once in the returned tree.
+        - min_cluster_size controls *whether we recurse*, not whether we keep a cluster.
+        - Stopping conditions (depth / cutoff / no split) produce a leaf cluster.
+        """
+
+        def make_leaf(current_ids, current_metadatas, current_path):
             return {
-                "cutoff": cutoff,
-                "depth": depth,
-                "clusters": [{
-                    "cluster_id": path or "root",
-                    "size": len(ids),
-                    "ids": ids,
-                    "metadatas": metadatas,
-                    "children": None
-                }],
-                "children_count": 1
+                "cluster_id": current_path or "root",
+                "size": len(current_ids),
+                "ids": list(current_ids),
+                "metadatas": current_metadatas,
+                "children": None
             }
+
+        # Node container for this level
+        node = {
+            "cutoff": cutoff,
+            "depth": depth,
+            "clusters": []
+        }
+
+        # Global stopping conditions → single leaf cluster, but keep ALL chunks
+        if (
+            depth >= self.max_depth
+            or cutoff <= self.min_cutoff
+            or len(embeddings) <= self.min_cluster_size
+        ):
+            leaf = make_leaf(ids, metadatas, path)
+            node["clusters"].append(leaf)
+            node["children_count"] = 1
+            return node
 
         # Build augmented vectors
         metadata_vectors = self.encode_metadata(metadatas)
@@ -211,45 +164,48 @@ class Topic_Hierarchy_Builder:
         )
         labels = clustering.fit_predict(combined_vectors)
 
-        # Group items
-        clusters = {}
-        for idx, label in enumerate(labels):
-            clusters.setdefault(label, {
-                "embeddings": [],
-                "ids": [],
-                "metadatas": []
-            })
-            clusters[label]["embeddings"].append(embeddings[idx])
-            clusters[label]["ids"].append(ids[idx])
-            clusters[label]["metadatas"].append(metadatas[idx])
+        unique_labels = sorted(set(labels))
 
-        # Build node
-        node = {
-            "cutoff": cutoff,
-            "depth": depth,
-            "clusters": []
-        }
+        # If no real split happened → treat as leaf, keep everything
+        if len(unique_labels) == 1:
+            leaf = make_leaf(ids, metadatas, path)
+            node["clusters"].append(leaf)
+            node["children_count"] = 1
+            return node
 
-        # Process clusters
-        for label, group in clusters.items():
-            group_embeddings = np.array(group["embeddings"])
+        # Group items by label (deterministic order via sorted labels)
+        for label in unique_labels:
+            indices = np.where(labels == label)[0]
+
+            group_embeddings = embeddings[indices]
+            group_ids = [ids[i] for i in indices]
+            group_metadatas = [metadatas[i] for i in indices]
+
             child_path = f"{path}.{label}" if path else str(label)
 
             child_node = {
                 "cluster_id": child_path,
-                "size": len(group["ids"]),
-                "ids": list(group["ids"]),
-                "metadatas": group["metadatas"],
+                "size": len(group_ids),
+                "ids": group_ids,
+                "metadatas": group_metadatas,
                 "children": None
             }
 
-            # Recurse
-            if len(group["ids"]) >= self.min_cluster_size:
+            # Decide whether to recurse further into this group
+            next_cutoff = cutoff * self.cutoff_decay
+            can_recurse = (
+                len(group_ids) > self.min_cluster_size
+                and depth + 1 <= self.max_depth
+                and next_cutoff > self.min_cutoff
+                and len(group_ids) > 1
+            )
+
+            if can_recurse:
                 child_node["children"] = self.recursive_cluster(
                     embeddings=group_embeddings,
-                    ids=child_node["ids"],
-                    metadatas=child_node["metadatas"],
-                    cutoff=cutoff * self.cutoff_decay,
+                    ids=group_ids,
+                    metadatas=group_metadatas,
+                    cutoff=next_cutoff,
                     depth=depth + 1,
                     path=child_path
                 )
@@ -258,35 +214,6 @@ class Topic_Hierarchy_Builder:
 
         node["children_count"] = len(node["clusters"])
         return node
-
-    # ---------------------------------------------------------
-    # Write summary to file
-    # ---------------------------------------------------------
-    def write_summary_to_file(self, filename, params, level_summary, sanity):
-
-        with open(self.output_dir + "/" + filename, "w", encoding="utf-8") as f:
-            f.write("=== Topic Hierarchy Summary ===\n\n")
-
-            # Write parameters
-            f.write("Algorithm Parameters:\n")
-            for k, v in params.items():
-                f.write(f"  {k}: {v}\n")
-            f.write("\n")
-
-            # Write sanity check
-            f.write("Lossless Invariant Check:\n")
-            for k, v in sanity.items():
-                f.write(f"  {k}: {v}\n")
-            f.write("\n")
-
-            # Write level summary
-            f.write("Hierarchy Levels:\n")
-            for lvl in sorted(level_summary.keys()):
-                s = level_summary[lvl]
-                f.write(f"  Level {lvl}:  childs={s['child_clusters']}  |  chunks={s['unique_chunks']}\n")
-
-            f.write("\n===============================\n")
-
 
     # ---------------------------------------------------------
     # Redundant-level merging (full mode)
@@ -329,32 +256,6 @@ class Topic_Hierarchy_Builder:
 
         node["clusters"] = merged
         node["children_count"] = len(merged)
-
-
-    # ---------------------------------------------------------
-    # Renumber cluster IDs
-    # ---------------------------------------------------------
-    def renumber_cluster_ids(self, tree):
-        """
-        Reassigns cluster_id values to remove gaps after merging.
-        Produces deterministic, gap-free hierarchical IDs like:
-            0
-            0.0
-            0.1
-            1
-            1.0
-            ...
-        """
-
-        def walk(node, prefix):
-            for i, cluster in enumerate(node["clusters"]):
-                new_id = f"{prefix}.{i}" if prefix else str(i)
-                cluster["cluster_id"] = new_id
-
-                if cluster["children"] is not None:
-                    walk(cluster["children"], new_id)
-
-        walk(tree, "")
 
     # ---------------------------------------------------------
     # Minimal tree transformation
@@ -400,53 +301,8 @@ class Topic_Hierarchy_Builder:
             cutoff=self.initial_cutoff
         )
 
-        # Sanity check: lossless invariant
-        leaf_ids = self._collect_leaf_ids(tree)
-        unique_leaf_ids = set(leaf_ids)
-        sanity = {
-            "db_ids": len(ids),
-            "leaf_ids_raw": len(leaf_ids),
-            "leaf_ids_unique": len(unique_leaf_ids),
-            "missing_from_tree": list(set(ids) - unique_leaf_ids),
-            "extra_in_tree": list(unique_leaf_ids - set(ids))
-        }
-        #print("DB ids:", len(ids))
-        #print("Leaf ids (raw):", len(leaf_ids))
-        #print("Leaf ids (unique):", len(unique_leaf_ids))
-        #print("Missing from tree:", set(ids) - unique_leaf_ids)
-        #print("Extra in tree:", unique_leaf_ids - set(ids))
-
-
         # Merge redundant levels
         self.merge_redundant_levels(tree)
-        self.renumber_cluster_ids(tree)
-
-        # Collect parameters for logging
-        params = {
-            "initial_cutoff": self.initial_cutoff,
-            "min_cluster_size": self.min_cluster_size,
-            "cutoff_decay": self.cutoff_decay,
-            "min_cutoff": self.min_cutoff,
-            "max_depth": self.max_depth,
-            "metadata_keys": self.metadata_keys,
-            "metadata_weight": self.metadata_weight,
-            "total_chunks_in_db": len(ids)
-        }
-
-        # Print levels summary
-        level_summary = self.summarize_levels(tree)
-        self.write_summary_to_file(
-            filename="hierarchy_summary.txt",
-            params=params,
-            level_summary=level_summary,
-            sanity=sanity
-        )
-        #print("\n=== Hierarchy Summary ===")
-        #for lvl in sorted(level_summary.keys()):
-        #    s = level_summary[lvl]
-        #    print(f"Level {lvl}:  childs={s['child_clusters']}  |  chunks={s['unique_chunks']}")
-        #print("==========================\n")
-
 
         # Add total cluster count at top level
         tree["total_clusters"] = self._count_clusters(tree)
@@ -465,4 +321,3 @@ class Topic_Hierarchy_Builder:
     def save(self, hierarchy, filename="topic_hierarchy.json"):
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(hierarchy, f, indent=2, ensure_ascii=False)
-

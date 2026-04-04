@@ -10,7 +10,9 @@ VECTOR_DB_NAME = "chroma"
 COLLECTION_NAME="Structural_Chunks"
 VDB_PATH = f"./DATA/KBs/{KB_NAME}/5_Vector_DB"
 
-TOPICS_PATH = f"./DATA/KBs/{KB_NAME}/6_Topics_Hierarchy/Clusters"
+
+HIERARCHY_PATH = f"./DATA/KBs/{KB_NAME}/6_Topics_Hierarchy"
+CLUSTERS_PATH = f"{HIERARCHY_PATH}/Clusters"
 LABELED_TOPICS_FILE = "Labeled_Topics_Hierarchy_DE.json"
 CHUNKS_CSV = "PDF_Chunks.csv"
 CLUSTERS_CSV = "KB_Clusters.csv"
@@ -22,12 +24,12 @@ vectordb = create_vectordb(
     persist_dir=VDB_PATH
 )
 
+os.makedirs(CLUSTERS_PATH, exist_ok=True)
 
-
-generator = Hierarchy_CSV_Generator(TOPICS_PATH + '/' + LABELED_TOPICS_FILE,
+generator = Hierarchy_CSV_Generator(HIERARCHY_PATH + '/' + LABELED_TOPICS_FILE,
+                                    CLUSTERS_PATH,
                                     vectordb,
                                     CHUNKS_CSV,
                                     CLUSTERS_CSV)
-
 generator.generate()
 

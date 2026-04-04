@@ -1,0 +1,32 @@
+=== Topic Hierarchy Summary ===
+
+Algorithm Parameters:
+  initial_cutoff: 0.5
+  min_cluster_size: 5
+  cutoff_decay: 0.85
+  min_cutoff: 0.05
+  max_depth: 12
+  metadata_keys: ['heading_path']
+  metadata_weight: 0.2
+  total_chunks_in_db: 2818
+
+Lossless Invariant Check:
+  db_ids: 2818
+  leaf_ids_raw: 2818
+  leaf_ids_unique: 2818
+  missing_from_tree: []
+  extra_in_tree: []
+
+Hierarchy Levels:
+  Level 0:  childs=1  |  chunks=0
+  Level 1:  childs=16  |  chunks=13
+  Level 2:  childs=115  |  chunks=41
+  Level 3:  childs=375  |  chunks=407
+  Level 4:  childs=648  |  chunks=1129
+  Level 5:  childs=434  |  chunks=785
+  Level 6:  childs=148  |  chunks=281
+  Level 7:  childs=46  |  chunks=105
+  Level 8:  childs=18  |  chunks=40
+  Level 9:  childs=6  |  chunks=17
+
+===============================

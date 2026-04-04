@@ -15,11 +15,11 @@ class Topic_Hierarchy_Builder:
         self,
         vector_db,
         output_dir,
-        initial_cutoff=0.5,
+        initial_cutoff=(0.5 * 0.85) * 0.85,
         min_cluster_size=5,
         cutoff_decay=0.85,
         min_cutoff=0.05,
-        max_depth=6,
+        max_depth=11,
         metadata_keys=None,
         metadata_weight=0.1,
         postprocess_rules=None,
@@ -330,32 +330,6 @@ class Topic_Hierarchy_Builder:
         node["clusters"] = merged
         node["children_count"] = len(merged)
 
-
-    # ---------------------------------------------------------
-    # Renumber cluster IDs
-    # ---------------------------------------------------------
-    def renumber_cluster_ids(self, tree):
-        """
-        Reassigns cluster_id values to remove gaps after merging.
-        Produces deterministic, gap-free hierarchical IDs like:
-            0
-            0.0
-            0.1
-            1
-            1.0
-            ...
-        """
-
-        def walk(node, prefix):
-            for i, cluster in enumerate(node["clusters"]):
-                new_id = f"{prefix}.{i}" if prefix else str(i)
-                cluster["cluster_id"] = new_id
-
-                if cluster["children"] is not None:
-                    walk(cluster["children"], new_id)
-
-        walk(tree, "")
-
     # ---------------------------------------------------------
     # Minimal tree transformation
     # ---------------------------------------------------------
@@ -419,7 +393,6 @@ class Topic_Hierarchy_Builder:
 
         # Merge redundant levels
         self.merge_redundant_levels(tree)
-        self.renumber_cluster_ids(tree)
 
         # Collect parameters for logging
         params = {

@@ -598,7 +598,7 @@ class Hierarchy_Embedder:
         cluster_id: str,
         cluster_index: Dict[str, Dict[str, Any]],
         lang: str,
-        drop_levels: int = 2,
+        drop_levels: int = 3,
     ) -> List[str]:
         """
         Build semantic lineage path from ancestor labels, optionally removing

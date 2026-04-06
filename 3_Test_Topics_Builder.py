@@ -26,10 +26,13 @@ topics_builder = Topic_Hierarchy_Builder(
     output_dir=TOPICS_PATH,
     #metadata_keys=["heading_path","document_name"],
     #metadata_weight=0.2,
-    metadata_keys=["heading_path"],
-    metadata_weight=0.2,
-    postprocess_rules=None,
-    verbose=False
+    #metadata_keys=["heading_path"],
+    metadata_keys = [],
+    metadata_weight = 0.2,
+    cutoff_decay = 0.83,
+    max_depth = 8,
+    postprocess_rules = None,
+    verbose = False
 )
 
 hierarchy = topics_builder.build(minimal=True)

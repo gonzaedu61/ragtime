@@ -369,6 +369,9 @@ class Hierarchy_CSV_Generator:
             data = {
                 "cluster_id": cid,
                 "is_document_cluster": self.document_cluster[cid],
+                "label": cluster.get("label", ""),
+                "summary": cluster.get("summary", ""),
+                "keywords": cluster.get("keywords", []),
                 "source_documents": [],
                 "text_class": []
             }

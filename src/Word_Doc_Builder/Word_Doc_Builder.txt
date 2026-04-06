@@ -149,17 +149,19 @@ class WordDocBuilder:
     def _build_word_json(self, parent_node):
         parent_id = parent_node["cluster_id"]
 
-        # Load B_Context for parent or leaf
+        # Load parent or leaf header files
         b_context = self._load_info_file(parent_id, "B_Context")
+        enrichment = self._load_info_file(parent_id, "enrichment")
 
         result = {
-            "internal_process_name": sanitize(b_context.get("process_name", "")) if b_context else "",
+            "internal_topic_name": sanitize(enrichment.get("label", "")) if enrichment else "",
+            "internal_topic_summary": sanitize(enrichment.get("summary", "")) if enrichment else "",
             "internal_B_Context": sanitize(b_context.get("business_context", "")) if b_context else "",
             "data_elements": {
                 "BOs_title": "Business Objects",   # optional, avoids missing key
                 "BOs": []
             },
-            "leaf_processes": []
+            "leaf_entries": []
         }
 
         children = self._extract_children(parent_node)
@@ -221,7 +223,7 @@ class WordDocBuilder:
                     "answer": sanitize(qa.get("answer", ""))
                 })
 
-            result["leaf_processes"].append(leaf_entry)
+            result["leaf_entries"].append(leaf_entry)
             return result
 
         # ---------------------------------------------------------
@@ -230,7 +232,10 @@ class WordDocBuilder:
         for leaf in children:
             leaf_id = leaf["cluster_id"]
 
+            leaf_b_context = self._load_info_file(leaf_id, "B_Context")
+            leaf_enrichment = self._load_info_file(leaf_id, "enrichment")
             bo_file = self._load_info_file(leaf_id, "BO")
+            concept = self._load_info_file(leaf_id, "concept")
             process_b = self._load_info_file(leaf_id, "process_b")
             steps = self._load_info_file(leaf_id, "steps")
             what = self._load_info_file(leaf_id, "WHAT")
@@ -246,11 +251,25 @@ class WordDocBuilder:
 
             # Leaf entry
             leaf_entry = {
+                "leaf_topic_name": sanitize(leaf_enrichment.get("label", "")) if leaf_enrichment else "",
+                "leaf_topic_summary": sanitize(leaf_enrichment.get("summary", "")) if leaf_enrichment else "",
+                "leaf_B_Context": sanitize(leaf_b_context.get("business_context", "")) if leaf_b_context else "",
+                "leaf_concept": sanitize(concept.get("concept_description", "")) if concept else "",
                 "leaf_process_name": sanitize(process_b.get("process_name", "")) if process_b else "",
                 "leaf_process_description": sanitize(process_b.get("process_description", "")) if process_b else "",
+                "concept_elements": [],
                 "tasks": {"task": []},
                 "qa": {"elements": []}
             }
+
+
+            # Concept Elements
+            if concept:
+                for e in concept.get("concept_structure", []):
+                    leaf_entry["concept_elements"].append({
+                        "element_name": sanitize(e.get("concept_element_name", "")),
+                        "element_description": sanitize(e.get("description", "")),
+                    })
 
             # Steps
             if steps:
@@ -280,7 +299,7 @@ class WordDocBuilder:
                     "answer": sanitize(qa.get("answer", ""))
                 })
 
-            result["leaf_processes"].append(leaf_entry)
+            result["leaf_entries"].append(leaf_entry)
 
         return result
 

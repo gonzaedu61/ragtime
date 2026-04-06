@@ -43,7 +43,7 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.1.7.8"
+BRANCH_ID = "0.0.0.15"
 INFO_TYPE = 'steps'
 INFO_TYPE_INPUT = "process_b"
 LEAF_PROMPT = """
@@ -104,7 +104,7 @@ extractor = Cluster_Info_Extender( llm,
                                     INTERNAL_PROMPT,
                                     info_type = INFO_TYPE,
                                     info_type_input = INFO_TYPE_INPUT,
-                                    output_folder = TOPICS_PATH,
+                                    output_folder = TOPICS_PATH + "/Clusters",
                                     retrieve_semantic_chunks = False,
                                     top_number_of_chunks = 10,
                                     verbose=False,

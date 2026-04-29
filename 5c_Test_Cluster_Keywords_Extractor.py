@@ -41,7 +41,7 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.0.15"
+BRANCH_ID = "0.0.0.32"
 INFO_TYPE = 'keywords'
 LEAF_PROMPT = """
 You are analyzing a set of text chunks that belong to the same topic.

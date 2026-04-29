@@ -25,7 +25,6 @@ topics_builder = Topic_Hierarchy_Builder(
     vector_db=vector_db,
     output_dir=TOPICS_PATH,
     #metadata_keys=["heading_path","document_name"],
-    #metadata_weight=0.2,
     #metadata_keys=["heading_path"],
     metadata_keys = [],
     metadata_weight = 0.2,

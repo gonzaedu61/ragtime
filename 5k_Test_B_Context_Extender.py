@@ -48,7 +48,7 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.0.15"
+BRANCH_ID = "0.0.0.32"
 INFO_TYPE = 'B_Context'
 INFO_TYPE_INPUT = "process_b"
 INTERNAL_PROMPT = """

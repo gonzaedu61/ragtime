@@ -43,7 +43,7 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.0.15"
+BRANCH_ID = "0.0.0.32"
 INFO_TYPE = 'steps'
 INFO_TYPE_INPUT = "process_b"
 LEAF_PROMPT = """
@@ -51,7 +51,7 @@ You are analyzing a set of text chunks and an input json structure all belonging
 
 TASK:
 - For each step and based on the explanations in the given texts, generate a detailed explanation of the step, writing what needs to be done by the process actors and any other details available.
-- Add also an explanation of what the objective of the process step is. What it exists and what the aim to achive is.
+- Add also an explanation of what the objective of the process step is. What it exists for and what the aim to achive is.
 - The process actors are mainly the system user and the system itself. But include others actors if they exist and play a role in the process step.
 - Focus specially (when the information is available), on the detailed interaction between the user and the system (i.e. what system modeule to use, what menu items or buttons to select or click, how to provide input and how to see the results, ...)
 - Include a little narrative about the step context (the context in which this step is executed)

@@ -49,7 +49,7 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.0.15"
+BRANCH_ID = "0.0.0.32"
 INFO_TYPE = 'WHAT'
 INFO_TYPE_INPUT = "questions"
 LEAF_PROMPT = """
@@ -58,7 +58,7 @@ You are analyzing a set of text chunks and an input json structure all belonging
 TASK:
 - For each question in the "WHAT" field list generate a 4-8 statements answer using the provided texts as the knowledge source.
 - Add also a little business context introduction taking the knowledge from the same set of texts and from other internet sources related to the Industrial Printing Industry.
-- Do not create or infere facts. Use as knoeldge sources only the given texts and relevant and trustable internet sources.
+- Do not create or infere facts. Use as knoweldge sources only the given texts and relevant and trustable internet sources.
 
 Return a JSON object with the list of step details.   
 

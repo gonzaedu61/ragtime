@@ -49,7 +49,7 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.0.32"
+BRANCH_ID = "0.0.1.1"
 INFO_TYPE = 'WHY'
 INFO_TYPE_INPUT = "questions"
 LEAF_PROMPT = """

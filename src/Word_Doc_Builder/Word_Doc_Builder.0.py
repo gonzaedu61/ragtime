@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 from Utilities import Simple_Progress_Bar
 from docxtpl import DocxTemplate
-import sys
 
 import re
 
@@ -57,8 +56,7 @@ class WordDocBuilder:
         log_json: bool = False,
         enable_word_generation: bool = False,
         word_template_path: str = None,
-        use_existing_json: bool = False,
-        include_QA: bool = False
+        use_existing_json: bool = False
     ):
         self.working_folder = Path(working_folder)
         self.tree_pathname = Path(tree_pathname)
@@ -72,7 +70,6 @@ class WordDocBuilder:
         self.enable_word_generation = enable_word_generation
         self.word_template_path = Path(word_template_path) if word_template_path else None
         self.use_existing_json = use_existing_json
-        self.include_QA = include_QA
 
         self.tree = self._load_json(self.tree_pathname)
 
@@ -128,113 +125,23 @@ class WordDocBuilder:
     def _is_leaf(self, node):
         return len(self._extract_children(node)) == 0
 
+    def _collect_parent_clusters(self, start_node):
+        parents = []
 
-    def isInvalidDocumentCluster(self, parent):
-        """
-        Returns True if ANY leaf under `parent` is deeper than 2 levels below it.
-        Depth rules:
-            parent = depth 0
-            children = depth 1
-            grandchildren = depth 2
-            great‑grandchildren = depth 3  → INVALID
-        """
+        def recurse(n):
+            children = self._extract_children(n)
+            if not children:
+                return
 
-        def dfs(node, depth):
-            # If this node is a leaf, check depth
-            if self._is_leaf(node):
-                return depth > 2   # invalid if deeper than 2
+            all_leaf = all(self._is_leaf(c) for c in children)
+            if all_leaf:
+                parents.append(n)
+            else:
+                for c in children:
+                    recurse(c)
 
-            # Otherwise, recurse into children
-            for child in self._extract_children(node):
-                if dfs(child, depth + 1):
-                    return True
-
-            return False
-
-        # Start DFS at depth 0
-        return dfs(parent, 0)
-    
-
-
-
-    # ---------------------------------------------------------
-    # Leaf JSON part building
-    # ---------------------------------------------------------
-    def leafJSON_Part(self, result, leaf):
-
-        leaf_id = leaf["cluster_id"]
-
-        leaf_b_context = self._load_info_file(leaf_id, "B_Context")
-        leaf_enrichment = self._load_info_file(leaf_id, "category")
-        bo_file = self._load_info_file(leaf_id, "BO")
-        concept = self._load_info_file(leaf_id, "concept")
-        process_b = self._load_info_file(leaf_id, "process_b")
-        steps = self._load_info_file(leaf_id, "steps")
-        what = self._load_info_file(leaf_id, "WHAT")
-        why = self._load_info_file(leaf_id, "WHY")
-
-        # BOs
-        if bo_file:
-            for bo in bo_file.get("business_objects", []):
-                result["data_elements"]["BOs"].append({
-                    "bo_name": sanitize(bo.get("bo_name", "")),
-                    "bo_description": sanitize(bo.get("bo_description", ""))
-                })
-
-        # Leaf entry
-        leaf_entry = {
-            "leaf_topic_name": sanitize(leaf_enrichment.get("label", "")) if leaf_enrichment else "",
-            "leaf_topic_summary": sanitize(leaf_enrichment.get("summary", "")) if leaf_enrichment else "",
-            "leaf_B_Context": sanitize(leaf_b_context.get("business_context", "")) if leaf_b_context else "",
-            "leaf_concept": sanitize(concept.get("concept_description", "")) if concept else "",
-            "leaf_process_name": sanitize(process_b.get("process_name", "")) if process_b else "",
-            "leaf_process_description": sanitize(process_b.get("process_description", "")) if process_b else "",
-            "concept_elements": [],
-            "tasks": {"task": []},
-            "qa": {"elements": []}
-        }
-
-
-        # Concept Elements
-        if concept:
-            for e in concept.get("concept_structure", []):
-                leaf_entry["concept_elements"].append({
-                    "element_name": sanitize(e.get("concept_element_name", "")),
-                    "element_description": sanitize(e.get("description", "")),
-                })
-
-        # Steps
-        if steps:
-            for step in steps.get("process_steps", []):
-                d = step.get("details", {})
-                leaf_entry["tasks"]["task"].append({
-                    "step_name": sanitize(step.get("name", "")),
-                    "step_context": sanitize(d.get("context", "")),
-                    "step_objective": sanitize(d.get("objective", "")),
-                    "step_explanation": sanitize(d.get("explanation", "")),
-                    "step_precondition": sanitize(d.get("pre-condition", "")),
-                    "step_postcondition": sanitize(d.get("post-condition", "")),
-                    "step_exceptions": sanitize(d.get("exceptions", "")),
-                    "step_warnings": sanitize(d.get("warnings", ""))
-                })
-
-        # Q&A
-        qa_list = []
-        if self.include_QA:     # ← ONLY LOAD IF ENABLED
-            if what:
-                qa_list.extend(what.get("WHAT_Answers", []))
-            if why:
-                qa_list.extend(why.get("WHY_Answers", []))
-
-        for qa in qa_list:
-            leaf_entry["qa"]["elements"].append({
-                "question": sanitize(qa.get("question", "")),
-                "answer": sanitize(qa.get("answer", ""))
-            })
-
-
-        return leaf_entry
-
+        recurse(start_node)
+        return parents
 
     # ---------------------------------------------------------
     # JSON building
@@ -244,7 +151,7 @@ class WordDocBuilder:
 
         # Load parent or leaf header files
         b_context = self._load_info_file(parent_id, "B_Context")
-        enrichment = self._load_info_file(parent_id, "category")
+        enrichment = self._load_info_file(parent_id, "enrichment")
 
         result = {
             "internal_topic_name": sanitize(enrichment.get("label", "")) if enrichment else "",
@@ -264,7 +171,58 @@ class WordDocBuilder:
         # ---------------------------------------------------------
         if not children:
             leaf = parent_node
-            leaf_entry = self.leafJSON_Part(result, leaf)
+            leaf_id = leaf["cluster_id"]
+
+            bo_file = self._load_info_file(leaf_id, "BO")
+            process_b = self._load_info_file(leaf_id, "process_b")
+            steps = self._load_info_file(leaf_id, "steps")
+            what = self._load_info_file(leaf_id, "WHAT")
+            why = self._load_info_file(leaf_id, "WHY")
+
+            # BOs
+            if bo_file:
+                for bo in bo_file.get("business_objects", []):
+                    result["data_elements"]["BOs"].append({
+                        "bo_name": sanitize(bo.get("bo_name", "")),
+                        "bo_description": sanitize(bo.get("bo_description", ""))
+                    })
+
+            # Leaf entry
+            leaf_entry = {
+                "leaf_process_name": sanitize(process_b.get("process_name", "")) if process_b else "",
+                "leaf_process_description": sanitize(process_b.get("process_description", "")) if process_b else "",
+                "tasks": {"task": []},
+                "qa": {"elements": []}
+            }
+
+            # Steps
+            if steps:
+                for step in steps.get("process_steps", []):
+                    d = step.get("details", {})
+                    leaf_entry["tasks"]["task"].append({
+                        "step_name": sanitize(step.get("name", "")),
+                        "step_context": sanitize(d.get("context", "")),
+                        "step_objective": sanitize(d.get("objective", "")),
+                        "step_explanation": sanitize(d.get("explanation", "")),
+                        "step_precondition": sanitize(d.get("pre-condition", "")),
+                        "step_postcondition": sanitize(d.get("post-condition", "")),
+                        "step_exceptions": sanitize(d.get("exceptions", "")),
+                        "step_warnings": sanitize(d.get("warnings", ""))
+                    })
+
+            # Q&A
+            qa_list = []
+            if what:
+                qa_list.extend(what.get("WHAT_Answers", []))
+            if why:
+                qa_list.extend(why.get("WHY_Answers", []))
+
+            for qa in qa_list:
+                leaf_entry["qa"]["elements"].append({
+                    "question": sanitize(qa.get("question", "")),
+                    "answer": sanitize(qa.get("answer", ""))
+                })
+
             result["leaf_entries"].append(leaf_entry)
             return result
 
@@ -272,8 +230,77 @@ class WordDocBuilder:
         # CASE 2: parent_node has children → original behavior
         # ---------------------------------------------------------
         for leaf in children:
-            leaf_entry = self.leafJSON_Part(result, leaf)
+            leaf_id = leaf["cluster_id"]
+
+            leaf_b_context = self._load_info_file(leaf_id, "B_Context")
+            leaf_enrichment = self._load_info_file(leaf_id, "enrichment")
+            bo_file = self._load_info_file(leaf_id, "BO")
+            concept = self._load_info_file(leaf_id, "concept")
+            process_b = self._load_info_file(leaf_id, "process_b")
+            steps = self._load_info_file(leaf_id, "steps")
+            what = self._load_info_file(leaf_id, "WHAT")
+            why = self._load_info_file(leaf_id, "WHY")
+
+            # BOs
+            if bo_file:
+                for bo in bo_file.get("business_objects", []):
+                    result["data_elements"]["BOs"].append({
+                        "bo_name": sanitize(bo.get("bo_name", "")),
+                        "bo_description": sanitize(bo.get("bo_description", ""))
+                    })
+
+            # Leaf entry
+            leaf_entry = {
+                "leaf_topic_name": sanitize(leaf_enrichment.get("label", "")) if leaf_enrichment else "",
+                "leaf_topic_summary": sanitize(leaf_enrichment.get("summary", "")) if leaf_enrichment else "",
+                "leaf_B_Context": sanitize(leaf_b_context.get("business_context", "")) if leaf_b_context else "",
+                "leaf_concept": sanitize(concept.get("concept_description", "")) if concept else "",
+                "leaf_process_name": sanitize(process_b.get("process_name", "")) if process_b else "",
+                "leaf_process_description": sanitize(process_b.get("process_description", "")) if process_b else "",
+                "concept_elements": [],
+                "tasks": {"task": []},
+                "qa": {"elements": []}
+            }
+
+
+            # Concept Elements
+            if concept:
+                for e in concept.get("concept_structure", []):
+                    leaf_entry["concept_elements"].append({
+                        "element_name": sanitize(e.get("concept_element_name", "")),
+                        "element_description": sanitize(e.get("description", "")),
+                    })
+
+            # Steps
+            if steps:
+                for step in steps.get("process_steps", []):
+                    d = step.get("details", {})
+                    leaf_entry["tasks"]["task"].append({
+                        "step_name": sanitize(step.get("name", "")),
+                        "step_context": sanitize(d.get("context", "")),
+                        "step_objective": sanitize(d.get("objective", "")),
+                        "step_explanation": sanitize(d.get("explanation", "")),
+                        "step_precondition": sanitize(d.get("pre-condition", "")),
+                        "step_postcondition": sanitize(d.get("post-condition", "")),
+                        "step_exceptions": sanitize(d.get("exceptions", "")),
+                        "step_warnings": sanitize(d.get("warnings", ""))
+                    })
+
+            # Q&A
+            qa_list = []
+            if what:
+                qa_list.extend(what.get("WHAT_Answers", []))
+            if why:
+                qa_list.extend(why.get("WHY_Answers", []))
+
+            for qa in qa_list:
+                leaf_entry["qa"]["elements"].append({
+                    "question": sanitize(qa.get("question", "")),
+                    "answer": sanitize(qa.get("answer", ""))
+                })
+
             result["leaf_entries"].append(leaf_entry)
+
         return result
 
     # ---------------------------------------------------------
@@ -307,21 +334,19 @@ class WordDocBuilder:
     def generate_word(self):
         root = self.tree
         start_node = self._find_node(root, self.branch_id)
-
         if not start_node:
             raise ValueError(f"Cluster {self.branch_id} not found in tree.")
 
-        parent_clusters = [start_node]
+        parent_clusters = self._collect_parent_clusters(start_node)
+
+        # FIX: only treat start_node as a leaf if it is actually a leaf
+        if not parent_clusters and self._is_leaf(start_node):
+            parent_clusters = [start_node]
 
         outputs = {}
         bar = Simple_Progress_Bar(total=len(parent_clusters), enabled=True) if self.show_progress_bar else None
 
         for parent in parent_clusters:
-
-            # Validate that this parent cluster is a valid document cluster (all leaf nodes below it should be max. 2 levels lower)
-            if self.isInvalidDocumentCluster(parent):
-                raise ValueError(f"Cluster {self.branch_id} is not a valid document cluster.")            
-
             parent_id = parent["cluster_id"]
             self._log(f"Processing parent cluster {parent_id}")
 

@@ -249,34 +249,96 @@ class WordDocBuilder:
         b_context = self._load_info_file(parent_id, "B_Context")
         enrichment = self._load_info_file(parent_id, "category")
 
-        result = {
+        # Common header for ALL cases
+        header = {
             "internal_topic_name": sanitize(enrichment.get("label", "")) if enrichment else "",
             "internal_topic_summary": sanitize(enrichment.get("summary", "")) if enrichment else "",
             "internal_B_Context": sanitize(b_context.get("business_context", "")) if b_context else "",
             "data_elements": {
-                "BOs_title": "Business Objects",   # optional, avoids missing key
+                "BOs_title": "Business Objects",
                 "BOs": []
-            },
-            "leaf_entries": []
+            }
         }
 
         children = self._extract_children(parent_node)
 
         # ---------------------------------------------------------
-        # CASE 1: parent_node is a LEAF → treat it as its own leaf process
+        # CASE 1: parent_node is a LEAF
         # ---------------------------------------------------------
         if not children:
-            leaf = parent_node
-            leaf_entry = self.leafJSON_Part(result, leaf)
+            result = dict(header)
+            result["leaf_entries"] = []
+            leaf_entry = self.leafJSON_Part(result, parent_node)
             result["leaf_entries"].append(leaf_entry)
             return result
 
         # ---------------------------------------------------------
-        # CASE 2: parent_node has children → original behavior
+        # Determine child types for CASE 2 vs CASE 3
         # ---------------------------------------------------------
-        for leaf in children:
-            leaf_entry = self.leafJSON_Part(result, leaf)
-            result["leaf_entries"].append(leaf_entry)
+        child_types = []
+        for child in children:
+            grandchildren = self._extract_children(child)
+            if not grandchildren:
+                child_types.append("CASE1")
+            else:
+                # Check if this child is a CASE 2 node (all grandchildren are leaves)
+                if all(self._is_leaf(gc) for gc in grandchildren):
+                    child_types.append("CASE2")
+                else:
+                    child_types.append("DEEPER")
+
+        # If ANY child is deeper than CASE 2 → invalid cluster
+        if "DEEPER" in child_types:
+            raise ValueError(f"Cluster {parent_id} contains nodes deeper than allowed for document generation.")
+
+        # ---------------------------------------------------------
+        # CASE 2: all children are leaves
+        # ---------------------------------------------------------
+        if all(t == "CASE1" for t in child_types):
+            result = dict(header)
+            result["leaf_entries"] = []
+            for leaf in children:
+                leaf_entry = self.leafJSON_Part(result, leaf)
+                result["leaf_entries"].append(leaf_entry)
+            return result
+
+        # ---------------------------------------------------------
+        # CASE 3: MIX of CASE 1 and CASE 2 children
+        # ---------------------------------------------------------
+        result = dict(header)
+        result["mixed_entries"] = []
+
+        for child, ctype in zip(children, child_types):
+
+            # Load header for this child
+            child_b_context = self._load_info_file(child["cluster_id"], "B_Context")
+            child_enrichment = self._load_info_file(child["cluster_id"], "category")
+
+            sub = {
+                "internal_topic_name": sanitize(child_enrichment.get("label", "")) if child_enrichment else "",
+                "internal_topic_summary": sanitize(child_enrichment.get("summary", "")) if child_enrichment else "",
+                "internal_B_Context": sanitize(child_b_context.get("business_context", "")) if child_b_context else "",
+                "data_elements": {
+                    "BOs_title": "Business Objects",
+                    "BOs": []
+                },
+                "leaf_entries": []
+            }
+
+            if ctype == "CASE1":
+                # Child is a leaf → CASE 1
+                leaf_entry = self.leafJSON_Part(sub, child)
+                sub["leaf_entries"].append(leaf_entry)
+                result["mixed_entries"].append(sub)
+
+            elif ctype == "CASE2":
+                # Child is a parent whose children are all leaves → CASE 2
+                grandchildren = self._extract_children(child)
+                for leaf in grandchildren:
+                    leaf_entry = self.leafJSON_Part(sub, leaf)
+                    sub["leaf_entries"].append(leaf_entry)
+                result["mixed_entries"].append(sub)
+
         return result
 
     # ---------------------------------------------------------

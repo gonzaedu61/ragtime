@@ -12,6 +12,9 @@ def sanitize(text):
     if not isinstance(text, str):
         return ""
 
+    # Escape ampersand FIRST (to avoid double-escaping)
+    text = text.replace("&", "&amp;")
+    
     # Remove illegal XML chars
     text = re.sub(INVALID_XML_CHARS, "", text)
 

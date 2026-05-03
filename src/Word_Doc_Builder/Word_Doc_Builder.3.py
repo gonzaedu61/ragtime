@@ -163,7 +163,7 @@ class WordDocBuilder:
     # ---------------------------------------------------------
     # Leaf JSON part building
     # ---------------------------------------------------------
-    def leafJSON_Part(self, result, leaf, case):
+    def leafJSON_Part(self, result, leaf):
 
         leaf_id = leaf["cluster_id"]
 
@@ -186,7 +186,7 @@ class WordDocBuilder:
 
         # Leaf entry
         leaf_entry = {
-            "leaf_topic_name": sanitize(leaf_enrichment.get("label", "")) if leaf_enrichment and case == 2 else "",
+            "leaf_topic_name": sanitize(leaf_enrichment.get("label", "")) if leaf_enrichment else "",
             "leaf_topic_summary": sanitize(leaf_enrichment.get("summary", "")) if leaf_enrichment else "",
             "leaf_B_Context": sanitize(leaf_b_context.get("business_context", "")) if leaf_b_context else "",
             "leaf_concept": sanitize(concept.get("concept_description", "")) if concept else "",
@@ -268,7 +268,7 @@ class WordDocBuilder:
         if not children:
             result = dict(header)
             result["leaf_entries"] = []
-            leaf_entry = self.leafJSON_Part(result, parent_node, 1)
+            leaf_entry = self.leafJSON_Part(result, parent_node)
             result["leaf_entries"].append(leaf_entry)
             return result
 
@@ -298,7 +298,7 @@ class WordDocBuilder:
             result = dict(header)
             result["leaf_entries"] = []
             for leaf in children:
-                leaf_entry = self.leafJSON_Part(result, leaf, 2)
+                leaf_entry = self.leafJSON_Part(result, leaf)
                 result["leaf_entries"].append(leaf_entry)
             return result
 
@@ -327,7 +327,7 @@ class WordDocBuilder:
 
             if ctype == "CASE1":
                 # Child is a leaf → CASE 1
-                leaf_entry = self.leafJSON_Part(sub, child, 1)
+                leaf_entry = self.leafJSON_Part(sub, child)
                 sub["leaf_entries"].append(leaf_entry)
                 result["mixed_entries"].append(sub)
 
@@ -335,7 +335,7 @@ class WordDocBuilder:
                 # Child is a parent whose children are all leaves → CASE 2
                 grandchildren = self._extract_children(child)
                 for leaf in grandchildren:
-                    leaf_entry = self.leafJSON_Part(sub, leaf, 2)
+                    leaf_entry = self.leafJSON_Part(sub, leaf)
                     sub["leaf_entries"].append(leaf_entry)
                 result["mixed_entries"].append(sub)
 

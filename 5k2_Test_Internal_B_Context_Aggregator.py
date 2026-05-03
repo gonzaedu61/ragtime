@@ -1,8 +1,7 @@
 import os
 from VectorDB_Factory import create_vectordb
 from LLM_Factory import create_llm
-from Cluster_Info_Extractor import Cluster_Info_Extender
-from Embedders import HFEmbeddingBackend
+from Cluster_Info_Extractor import Cluster_Info_Extractor
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -34,13 +33,6 @@ llm = create_llm(
     api_version=LLM_API_VERSION
 )
 
-# Initialize embedding_backend
-os.environ["SENTENCE_TRANSFORMERS_HOME"] = "C:/Models"
-os.environ["TRANSFORMERS_NO_ADVISORY_WARNINGS"] = "1"
-os.environ["DISABLE_TRANSFORMERS_AVX_CHECK"] = "1"
-embedder = HFEmbeddingBackend("C:/Models/multilingual-e5-large/")
-
-
 # Initialize vector DB backend (Chroma or others)
 vectordb = create_vectordb(
     backend=VECTOR_DB_NAME,
@@ -50,62 +42,58 @@ vectordb = create_vectordb(
 
 # Prompt template (must contain {text})
 BRANCH_ID = "0.0.1.18"
-INFO_TYPE = 'WHAT'
-INFO_TYPE_INPUT = "questions"
-LEAF_PROMPT = """
-You are analyzing a set of text chunks and an input json structure all belonging to the same topic. The json file contains a field named "WHAT" with a list of questions related to the topic.
+INFO_TYPE = 'B_Context'
+LEAF_PROMPT = ""
+INTERNAL_PROMPT = """
+You are analyzing a list of json items, each one of them describing a business context.
 
-TASK:
-- For each question in the "WHAT" field list generate a 4-8 statements answer using the provided texts as the knowledge source.
-- Add also a little business context introduction taking the knowledge from the same set of texts and from other internet sources related to the Industrial Printing Industry.
-- Do not create or infere facts. Use as knoweldge sources only the given texts and relevant and trustable internet sources.
+Each input business context item in the list has this information:
+- Process Name (The process name to which the business context belongs. It may be null)
+- Context Label (A summary label for the business context)
+- Business Context (a narrative description of the business context)
+- JSON item structure:
+{
+  "process_name": "...",
+  "context_label": "...",
+  "business_context": "..."
+}
 
-Return a JSON object with the list of step details.   
+AGREGATION TASK:
+- Pick each child business context description and merge them all, generating a new single summary business context description (8-20 sentences)
 
-TEXTS:
-{text}
-
-INPUT JSON:
-{input_json}
+OUTPUT TASK: Return a json for the new aggregated business context description and from this description a short context_label (max. 6 words), with the following json format:
+{ 
+  "context_label": "..."
+  "business_context": "..."
+}
 
 OUTPUT LANGUAGE: German
 
-FORMAT RULES:
-- Respond ONLY with valid JSON.
-- Do NOT output text before or after the JSON.
-- The FIRST character must be '{' and the LAST must be '}'.
-- Return a single JSON object with this structure:
+INPUT:
+{json_list}
 
-{ "WHAT_Answers":
-  [
-    { 
-      "question": <original question>,
-      "answer": "..."
-    }
-  ]
-}
+OTHER FORMAT RULES:
+- Respond ONLY with valid JSON.
+- Do NOT output multiple JSON objects.
+- Do NOT output text before or after the JSON.
+- The FIRST character must be '{'. The LAST must be '}'.
+- Return a single JSON for the process.
 
 """
 
 
-INTERNAL_PROMPT = None
-
-
-extractor = Cluster_Info_Extender( llm,
+extractor = Cluster_Info_Extractor( llm,
                                     vectordb, 
-                                    embedder,
                                     LEAF_PROMPT,
                                     INTERNAL_PROMPT,
                                     info_type = INFO_TYPE,
-                                    info_type_input = INFO_TYPE_INPUT,
                                     output_folder = TOPICS_PATH + "/Clusters",
-                                    retrieve_semantic_chunks = True,
-                                    top_number_of_chunks = 10,
-                                    verbose=False,
+                                    verbose=True,
                                     show_progress_bar=True,                                   
                                     max_concurrent_llm_calls = 1,
                                     log_prompts = True,
                                     branch_id = BRANCH_ID )
+
 
 extractor.process_hierarchy_file(TOPICS_PATH + '/' + TOPICS_FILE)
 

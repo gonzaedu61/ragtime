@@ -48,18 +48,20 @@ vectordb = create_vectordb(
 )
 
 # Prompt template (must contain {text})
-BRANCH_ID = "0.0.1.1"
+BRANCH_ID = "0.0.1.18"
 INFO_TYPE = 'B_Context'
 INFO_TYPE_INPUT = "process_b"
-INTERNAL_PROMPT = """
+LEAF_PROMPT = """
 You are analyzing a set of text chunks and an input json structure all belonging to the same topic. The json file contains information about a business process named after the field "process_name" and another field named "process_description" summarizing in narrative form the scope of  related child subprocesses.
 
 TASK:
 - Provide a comprehensive business context narrative description (8-20 sentences) based on the knowledge from the set of texts plus other internet sources related to the Industrial Printing Industry.
 - Explain how this process fits into the business, what elements it deals with, what its objective is and why.
+- Ignore the INPUT JSON if process_name is ""
 - Do not create or infere facts. Use as knoweldge sources only the given texts and some relevant and trustable internet sources.
 
-Return a JSON object with the business context description.   
+
+Return a JSON object with the business context description and from this description a short context_label (max. 6 words).   
 
 TEXTS:
 {text}
@@ -77,11 +79,13 @@ FORMAT RULES:
 
 { 
   "process_name": <original process name>,
+  "context_label": "..."
   "business_context": "..."
 }
 
 """
-LEAF_PROMPT = INTERNAL_PROMPT
+
+INTERNAL_PROMPT = None
 
 
 extractor = Cluster_Info_Extender( llm,
@@ -92,7 +96,7 @@ extractor = Cluster_Info_Extender( llm,
                                     info_type = INFO_TYPE,
                                     info_type_input = INFO_TYPE_INPUT,
                                     output_folder = TOPICS_PATH + "/Clusters",
-                                    retrieve_semantic_chunks = True,
+                                    retrieve_semantic_chunks = False,
                                     top_number_of_chunks = 10,
                                     verbose=False,
                                     show_progress_bar=True,                                   

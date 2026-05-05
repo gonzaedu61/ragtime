@@ -125,6 +125,8 @@ class Cluster_Info_Extender:
     # JSON repair
     # -------------------------------------------------------------------------
     def _repair_json(self, text: str) -> str:
+        # Remove ASCII control characters except \t \n \r
+        text = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", text)
         text = re.sub(r",\s*([}\]])", r"\1", text)
         text = text.replace("None", "null").replace("True", "true").replace("False", "false")
         text = re.sub(r"//.*?\n", "", text)

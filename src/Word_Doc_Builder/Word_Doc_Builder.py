@@ -134,31 +134,42 @@ class WordDocBuilder:
 
     def isInvalidDocumentCluster(self, parent):
         """
-        Returns True if ANY leaf under `parent` is deeper than 2 levels below it.
-        Depth rules:
-            parent = depth 0
-            children = depth 1
-            grandchildren = depth 2
-            great‑grandchildren = depth 3  → INVALID
+        CASE 1–3: max leaf depth = 2
+        CASE 4:   max leaf depth = 3
         """
 
-        def dfs(node, depth):
-            # If this node is a leaf, check depth
-            if self._is_leaf(node):
-                return depth > 2   # invalid if deeper than 2
+        # First detect if this parent is CASE 4
+        children = self._extract_children(parent)
+        child_types = []
 
-            # Otherwise, recurse into children
+        for child in children:
+            grandchildren = self._extract_children(child)
+
+            if not grandchildren:
+                child_types.append("CASE1")
+            else:
+                if all(self._is_leaf(gc) for gc in grandchildren):
+                    child_types.append("CASE2")
+                else:
+                    child_types.append("CASE3")
+
+        is_case4 = ("CASE3" in child_types)
+
+        # CASE 4 allows one more level
+        max_depth_allowed = 3 if is_case4 else 2
+
+        def dfs(node, depth):
+            if self._is_leaf(node):
+                return depth > max_depth_allowed
+
             for child in self._extract_children(node):
                 if dfs(child, depth + 1):
                     return True
 
             return False
 
-        # Start DFS at depth 0
         return dfs(parent, 0)
     
-
-
 
     # ---------------------------------------------------------
     # Leaf JSON part building
@@ -273,23 +284,35 @@ class WordDocBuilder:
             return result
 
         # ---------------------------------------------------------
-        # Determine child types for CASE 2 vs CASE 3
+        # Determine child types (CASE1, CASE2, CASE3)
         # ---------------------------------------------------------
         child_types = []
         for child in children:
             grandchildren = self._extract_children(child)
+
             if not grandchildren:
                 child_types.append("CASE1")
             else:
-                # Check if this child is a CASE 2 node (all grandchildren are leaves)
+                # Check if this child is CASE 2 (all grandchildren are leaves)
                 if all(self._is_leaf(gc) for gc in grandchildren):
                     child_types.append("CASE2")
                 else:
-                    child_types.append("DEEPER")
+                    # This child is deeper → must be CASE 3
+                    child_types.append("CASE3")
 
-        # If ANY child is deeper than CASE 2 → invalid cluster
-        if "DEEPER" in child_types:
-            raise ValueError(f"Cluster {parent_id} contains nodes deeper than allowed for document generation.")
+        # ---------------------------------------------------------
+        # CASE 4 detection: ANY child is CASE 3
+        # ---------------------------------------------------------
+        if "CASE3" in child_types:
+            result = dict(header)
+            result["level4_entries"] = []
+
+            for child, ctype in zip(children, child_types):
+                # Recursively build JSON for each child
+                sub_json = self._build_word_json(child)
+                result["level4_entries"].append(sub_json)
+
+            return result
 
         # ---------------------------------------------------------
         # CASE 2: all children are leaves
@@ -326,13 +349,11 @@ class WordDocBuilder:
             }
 
             if ctype == "CASE1":
-                # Child is a leaf → CASE 1
                 leaf_entry = self.leafJSON_Part(sub, child, 1)
                 sub["leaf_entries"].append(leaf_entry)
                 result["mixed_entries"].append(sub)
 
             elif ctype == "CASE2":
-                # Child is a parent whose children are all leaves → CASE 2
                 grandchildren = self._extract_children(child)
                 for leaf in grandchildren:
                     leaf_entry = self.leafJSON_Part(sub, leaf, 2)

@@ -24,12 +24,13 @@ vector_db = create_vectordb(
 topics_builder = Topic_Hierarchy_Builder(
     vector_db=vector_db,
     output_dir=TOPICS_PATH,
-    #metadata_keys=["heading_path","document_name"],
-    metadata_keys=["heading_path"],
-    #metadata_keys = [],
+    metadata_keys=["heading_path","document_name"],
     metadata_weight = 0.2,
-    cutoff_decay = 0.83,
-    max_depth = 8,
+    cutoff_decay = 0.85,
+    max_depth = 6,
+    initial_cutoff=0.5,
+    min_cluster_size=5,
+    min_cutoff=0.15,
     postprocess_rules = None,
     verbose = False
 )
@@ -42,3 +43,4 @@ os.makedirs(TOPICS_PATH, exist_ok=True)
 topics_builder.save(hierarchy, filename=TOPICS_PATH + '/' + TOPICS_FILE)
 
 #topics_builder.print_tree(hierarchy)
+

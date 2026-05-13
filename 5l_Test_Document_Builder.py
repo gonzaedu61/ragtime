@@ -8,8 +8,8 @@ KB_NAME = os.getenv("KB_NAME")
 TOPICS_PATH = f"./DATA/KBs/{KB_NAME}/6_Topics_Hierarchy"
 TOPICS_FILE = "Topics_Hierarchy.json" 
 TREE_PATHNAME = f"{TOPICS_PATH}/{TOPICS_FILE}"
-BRANCH_ID = "0.0.1.15"
-WORD_TEMPLATE = "./src/Word_DOC_Builder/Word_Doc_Process_Template_CASE_4 (DE).docx"
+BRANCH_ID = "0.1.0.1"
+WORD_TEMPLATE = "./src/Word_DOC_Builder/Word_Doc_Process_Template_CASE_2 (DE).docx"
 
 docBuilder = WordDocBuilder(TOPICS_PATH + "/Clusters", TREE_PATHNAME, BRANCH_ID, show_progress_bar=True, log_json=True,
                             word_template_path = WORD_TEMPLATE,

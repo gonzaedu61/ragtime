@@ -1,7 +1,6 @@
 # embedding_backends.py
 
 from typing import List, Protocol
-import numpy as np
 
 
 # ------------------------------------------------------------
@@ -33,14 +32,15 @@ class HFEmbeddingBackend:
         from sentence_transformers import SentenceTransformer
         self.model = SentenceTransformer(model_name, device="cpu", local_files_only=False)
 
-    def embed(self, texts: List[str], progress_bar: bool = False) -> List[np.ndarray]:
+    def embed(self, texts: List[str], progress_bar: bool = False) -> List[List[float]]:
         embeddings = self.model.encode(
             texts,
             show_progress_bar=progress_bar,
-            convert_to_numpy=True   # <‑‑ IMPORTANT
+            convert_to_numpy=False
         )
-        return embeddings
 
+        # Convert PyTorch tensors → Python lists
+        return [emb.tolist() for emb in embeddings]
 
 
 

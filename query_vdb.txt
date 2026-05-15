@@ -134,7 +134,7 @@ def query_chroma(vectordb, embedder, query_text, n_results=None,
                  max_distance=None):
 
     query_emb = embedder.embed([query_text])[0]
-    #query_emb = query_emb.detach().cpu().numpy()
+    query_emb = query_emb.detach().cpu().numpy()
 
     # Determine retrieval count
     if max_distance is not None:
